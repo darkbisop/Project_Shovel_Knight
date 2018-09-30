@@ -24,6 +24,8 @@ HRESULT MapImage::init()
 	Stage_18 = IMAGEMANAGER->addImage("MainRunMap18", "image/RunAndGun_Map/Stage_18.bmp", 800, 208, true, RGB(255, 0, 255));
 	Stage_19 = IMAGEMANAGER->addImage("MainRunMap19", "image/RunAndGun_Map/Stage_19.bmp", 400, 208, true, RGB(255, 0, 255));
 	Stage_20 = IMAGEMANAGER->addImage("MainRunMap20", "image/RunAndGun_Map/Stage_20.bmp", 400, 208, true, RGB(255, 0, 255));
+	Stage_21 = IMAGEMANAGER->addImage("MainRunMap21", "image/RunAndGun_Map/Stage_21.bmp", 400, 208, true, RGB(255, 0, 255));
+	Stage_22 = IMAGEMANAGER->addImage("MainRunMap22", "image/RunAndGun_Map/Stage_22.bmp", 400, 208, true, RGB(255, 0, 255));
 
 	return S_OK;
 }

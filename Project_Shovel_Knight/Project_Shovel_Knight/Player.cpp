@@ -8,7 +8,7 @@ HRESULT Player::init()
 	
 	
 	m_fX = 30;
-	m_fY = 690;
+	m_fY = 720;
 
 	m_fSpeed = 7.0f;
 
