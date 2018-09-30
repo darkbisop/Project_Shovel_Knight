@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="메인게임">
+      <UniqueIdentifier>{977f35ad-54a6-42ae-943f-7b65e34765a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2D_FrameWork">
+      <UniqueIdentifier>{c7623c64-93e8-4d24-93a3-1f66ca8fe09f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="메인게임\플레이어">
+      <UniqueIdentifier>{6eccb3ed-bc73-442e-861a-ce87476297c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="메인게임\에너미">
+      <UniqueIdentifier>{2df3b9a3-6f98-4e67-a232-5fb88403db1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="메인게임\맵">
+      <UniqueIdentifier>{acd54fe8-cf6e-441d-816e-d601b8367e74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2D_FrameWork\UI">
+      <UniqueIdentifier>{235eabbe-1d24-4c0e-9929-1a0d2a4b0d49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2D_FrameWork\매니저">
+      <UniqueIdentifier>{0fc2e805-0960-4a0d-b524-90283b373c29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2D_FrameWork\UI\버튼">
+      <UniqueIdentifier>{8190e08d-9629-4c81-a9f3-5d04d2d1d36a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2D_FrameWork\애니메이션">
+      <UniqueIdentifier>{6215d531-4675-4583-a954-405f4b605a2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2D_FrameWork\액션">
+      <UniqueIdentifier>{f2c2b42a-f34c-45f8-a5f4-e84210ef3a24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2D_FrameWork\유틸">
+      <UniqueIdentifier>{c329ff2a-0ed4-4cf8-a691-4928a2a320f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2D_FrameWork\이미지">
+      <UniqueIdentifier>{ce29f9b7-04fe-4f51-8efe-c4ac25e95610}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2D_FrameWork\이펙트">
+      <UniqueIdentifier>{5468a97b-b4dc-423b-a164-cc4526334e27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2D_FrameWork\총알">
+      <UniqueIdentifier>{7d760dcf-36d7-44f8-abfe-3fa2a5b6ea3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2D_FrameWork\타이머">
+      <UniqueIdentifier>{911515af-d882-4710-bc3f-a6347b7da496}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2D_FrameWork\텍스트데이터">
+      <UniqueIdentifier>{43e0a83e-8b14-4ecb-9ad0-c7d4c88983a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2D_FrameWork\프로그레스바">
+      <UniqueIdentifier>{f55c4fbe-cd59-4e46-98f4-1d17411557b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="메인게임\Scene">
+      <UniqueIdentifier>{69afc59c-2232-4da1-9da3-dfd7b5563c14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2D_FrameWork\픽셀충돌">
+      <UniqueIdentifier>{f4a72796-e4d1-4775-81ab-e52091999780}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Project_Shovel_Knight.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="commonMacroFunction.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="randomFunction.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="mainGame.h">
+      <Filter>메인게임</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>메인게임\플레이어</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
+      <Filter>메인게임\에너미</Filter>
+    </ClInclude>
+    <ClInclude Include="enemyManager.h">
+      <Filter>메인게임\에너미</Filter>
+    </ClInclude>
+    <ClInclude Include="MapImage.h">
+      <Filter>메인게임\맵</Filter>
+    </ClInclude>
+    <ClInclude Include="gameNode.h">
+      <Filter>2D_FrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="scene.h">
+      <Filter>2D_FrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="button.h">
+      <Filter>2D_FrameWork\UI\버튼</Filter>
+    </ClInclude>
+    <ClInclude Include="uiButton.h">
+      <Filter>2D_FrameWork\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="uiImageView.h">
+      <Filter>2D_FrameWork\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="uiObject.h">
+      <Filter>2D_FrameWork\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="uiManager.h">
+      <Filter>2D_FrameWork\매니저</Filter>
+    </ClInclude>
+    <ClInclude Include="effectManager.h">
+      <Filter>2D_FrameWork\매니저</Filter>
+    </ClInclude>
+    <ClInclude Include="imageManager.h">
+      <Filter>2D_FrameWork\매니저</Filter>
+    </ClInclude>
+    <ClInclude Include="keyManager.h">
+      <Filter>2D_FrameWork\매니저</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneManager.h">
+      <Filter>2D_FrameWork\매니저</Filter>
+    </ClInclude>
+    <ClInclude Include="singletonBase.h">
+      <Filter>2D_FrameWork\매니저</Filter>
+    </ClInclude>
+    <ClInclude Include="soundManager.h">
+      <Filter>2D_FrameWork\매니저</Filter>
+    </ClInclude>
+    <ClInclude Include="timeManager.h">
+      <Filter>2D_FrameWork\매니저</Filter>
+    </ClInclude>
+    <ClInclude Include="animation.h">
+      <Filter>2D_FrameWork\애니메이션</Filter>
+    </ClInclude>
+    <ClInclude Include="action.h">
+      <Filter>2D_FrameWork\액션</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>2D_FrameWork\유틸</Filter>
+    </ClInclude>
+    <ClInclude Include="RunAndGunScene.h">
+      <Filter>메인게임\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="image.h">
+      <Filter>2D_FrameWork\이미지</Filter>
+    </ClInclude>
+    <ClInclude Include="effect.h">
+      <Filter>2D_FrameWork\이펙트</Filter>
+    </ClInclude>
+    <ClInclude Include="missile.h">
+      <Filter>2D_FrameWork\총알</Filter>
+    </ClInclude>
+    <ClInclude Include="missileManager.h">
+      <Filter>2D_FrameWork\총알</Filter>
+    </ClInclude>
+    <ClInclude Include="timer.h">
+      <Filter>2D_FrameWork\타이머</Filter>
+    </ClInclude>
+    <ClInclude Include="txtData.h">
+      <Filter>2D_FrameWork\텍스트데이터</Filter>
+    </ClInclude>
+    <ClInclude Include="progressBar.h">
+      <Filter>2D_FrameWork\프로그레스바</Filter>
+    </ClInclude>
+    <ClInclude Include="pixelCollision.h">
+      <Filter>2D_FrameWork\픽셀충돌</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Project_Shovel_Knight.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="mainGame.cpp">
+      <Filter>메인게임</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>메인게임\플레이어</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>메인게임\에너미</Filter>
+    </ClCompile>
+    <ClCompile Include="enemyManager.cpp">
+      <Filter>메인게임\에너미</Filter>
+    </ClCompile>
+    <ClCompile Include="MapImage.cpp">
+      <Filter>메인게임\맵</Filter>
+    </ClCompile>
+    <ClCompile Include="gameNode.cpp">
+      <Filter>2D_FrameWork</Filter>
+    </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>2D_FrameWork</Filter>
+    </ClCompile>
+    <ClCompile Include="button.cpp">
+      <Filter>2D_FrameWork\UI\버튼</Filter>
+    </ClCompile>
+    <ClCompile Include="uiButton.cpp">
+      <Filter>2D_FrameWork\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="uiImageView.cpp">
+      <Filter>2D_FrameWork\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="uiObject.cpp">
+      <Filter>2D_FrameWork\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="uiManager.cpp">
+      <Filter>2D_FrameWork\매니저</Filter>
+    </ClCompile>
+    <ClCompile Include="effectManager.cpp">
+      <Filter>2D_FrameWork\매니저</Filter>
+    </ClCompile>
+    <ClCompile Include="imageManager.cpp">
+      <Filter>2D_FrameWork\매니저</Filter>
+    </ClCompile>
+    <ClCompile Include="keyManager.cpp">
+      <Filter>2D_FrameWork\매니저</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneManager.cpp">
+      <Filter>2D_FrameWork\매니저</Filter>
+    </ClCompile>
+    <ClCompile Include="soundManager.cpp">
+      <Filter>2D_FrameWork\매니저</Filter>
+    </ClCompile>
+    <ClCompile Include="timeManager.cpp">
+      <Filter>2D_FrameWork\매니저</Filter>
+    </ClCompile>
+    <ClCompile Include="animation.cpp">
+      <Filter>2D_FrameWork\애니메이션</Filter>
+    </ClCompile>
+    <ClCompile Include="action.cpp">
+      <Filter>2D_FrameWork\액션</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>2D_FrameWork\유틸</Filter>
+    </ClCompile>
+    <ClCompile Include="RunAndGunScene.cpp">
+      <Filter>메인게임\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="image.cpp">
+      <Filter>2D_FrameWork\이미지</Filter>
+    </ClCompile>
+    <ClCompile Include="effect.cpp">
+      <Filter>2D_FrameWork\이펙트</Filter>
+    </ClCompile>
+    <ClCompile Include="missile.cpp">
+      <Filter>2D_FrameWork\총알</Filter>
+    </ClCompile>
+    <ClCompile Include="missileManager.cpp">
+      <Filter>2D_FrameWork\총알</Filter>
+    </ClCompile>
+    <ClCompile Include="timer.cpp">
+      <Filter>2D_FrameWork\타이머</Filter>
+    </ClCompile>
+    <ClCompile Include="txtData.cpp">
+      <Filter>2D_FrameWork\텍스트데이터</Filter>
+    </ClCompile>
+    <ClCompile Include="progressBar.cpp">
+      <Filter>2D_FrameWork\프로그레스바</Filter>
+    </ClCompile>
+    <ClCompile Include="pixelCollision.cpp">
+      <Filter>2D_FrameWork\픽셀충돌</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Project_Shovel_Knight.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="Project_Shovel_Knight.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
