@@ -41,7 +41,9 @@ HRESULT RunAndGunScene::init(void)
 	CheckChangeMapRect[14] = RectMake(4000, 827, 50, 3);
 	CheckChangeMapRect[15] = RectMake(4090, 621, 50, 3);
 	CheckChangeMapRect[16] = RectMake(4265, 621, 50, 3);
-	// << 4092 610   >>> 4267 624
+	CheckChangeMapRect[17] = RectMake(4393, 477, 3, 50);
+	CheckChangeMapRect[18] = RectMake(5197, 447, 3, 50);
+	CheckChangeMapRect[19] = RectMake(5600, 530, 3, 50);
 
 	CurrMapNum = 0;
 
@@ -69,7 +71,7 @@ void RunAndGunScene::render(HDC hdc)
 {
 
 	CurrMap();
-	
+
 	Rectangle(_empty->getMemDC(), CheckChangeMapRect[0].left, CheckChangeMapRect[0].top, CheckChangeMapRect[0].right, CheckChangeMapRect[0].bottom);
 	Rectangle(_empty->getMemDC(), CheckChangeMapRect[1].left, CheckChangeMapRect[1].top, CheckChangeMapRect[1].right, CheckChangeMapRect[1].bottom);
 	Rectangle(_empty->getMemDC(), CheckChangeMapRect[2].left, CheckChangeMapRect[2].top, CheckChangeMapRect[2].right, CheckChangeMapRect[2].bottom);
@@ -87,15 +89,18 @@ void RunAndGunScene::render(HDC hdc)
 	Rectangle(_empty->getMemDC(), CheckChangeMapRect[14].left, CheckChangeMapRect[14].top, CheckChangeMapRect[14].right, CheckChangeMapRect[14].bottom);
 	Rectangle(_empty->getMemDC(), CheckChangeMapRect[15].left, CheckChangeMapRect[15].top, CheckChangeMapRect[15].right, CheckChangeMapRect[15].bottom);
 	Rectangle(_empty->getMemDC(), CheckChangeMapRect[16].left, CheckChangeMapRect[16].top, CheckChangeMapRect[16].right, CheckChangeMapRect[16].bottom);
+	Rectangle(_empty->getMemDC(), CheckChangeMapRect[17].left, CheckChangeMapRect[17].top, CheckChangeMapRect[17].right, CheckChangeMapRect[17].bottom);
+	Rectangle(_empty->getMemDC(), CheckChangeMapRect[18].left, CheckChangeMapRect[18].top, CheckChangeMapRect[18].right, CheckChangeMapRect[18].bottom);
+	Rectangle(_empty->getMemDC(), CheckChangeMapRect[19].left, CheckChangeMapRect[19].top, CheckChangeMapRect[19].right, CheckChangeMapRect[19].bottom);
 
 	m_pPlayerLink->render(_empty->getMemDC());
 	m_UI->render(_empty->getMemDC(),m_Camera.x, m_Camera.y);
 	_empty->render(hdc, 0, 0, m_Camera.x, m_Camera.y, WINSIZEX, WINSIZEY);
 
 	char str[64];
-	//wsprintf(str, "x : %d, y : %d",m_Camera.x, m_Camera.y);
-	//sprintf_s(str, "x : %f, y : %f", m_pPlayerLink->getPlayerX(), m_pPlayerLink->getPlayerY());
-	//TextOut(hdc, 100, 30, str, strlen(str));
+	//wsprintf(str, "x : %d, y : %d", CurrMapNum, MovingCamera[17]);
+	sprintf_s(str, "x : %f, y : %f", m_pPlayerLink->getPlayerX(), m_pPlayerLink->getPlayerY());
+	TextOut(hdc, 100, 30, str, strlen(str));
 }
 
 void RunAndGunScene::CurrMap()
@@ -128,6 +133,20 @@ void RunAndGunScene::CurrMap()
 		else if (m_Camera.y + WINSIZEY > 1029) m_Camera.y = 1029 - WINSIZEY;
 	}
 
+	// 17¹ø¸ÊÀÏ¶§
+	if (CurrMapNum == 17 && MovingCamera[16] == false && MovingCamera[17] == false) {
+
+		if (m_pPlayerLink) {
+			m_Camera = { (int)m_pPlayerLink->getPlayerX() - 180, (int)m_pPlayerLink->getPlayerY() };
+		}
+
+		if (m_Camera.x < 4400) m_Camera.x = 4400;
+		else if (m_Camera.x + WINSIZEX > 5200) m_Camera.x = 5200 - WINSIZEX;
+
+		if (m_Camera.y < 0) m_Camera.y = 0;
+		else if (m_Camera.y + WINSIZEY > 614) m_Camera.y = 614 - WINSIZEY;
+	}
+
 	if (MapOn[0] == true) IMAGEMANAGER->findImage("MainRunMap")->render(_empty->getMemDC(), 0, 615);
 	if (MapOn[1] == true) IMAGEMANAGER->findImage("MainRunMap2")->render(_empty->getMemDC(), 1600, 615);
 	if (MapOn[2] == true) IMAGEMANAGER->findImage("MainRunMap3")->render(_empty->getMemDC(), 2002, 615);
@@ -145,6 +164,9 @@ void RunAndGunScene::CurrMap()
 	if (MapOn[14] == true) IMAGEMANAGER->findImage("MainRunMap15")->render(_empty->getMemDC(), 4398, 828);
 	if (MapOn[15] == true) IMAGEMANAGER->findImage("MainRunMap16")->render(_empty->getMemDC(), 3998, 620);
 	if (MapOn[16] == true) IMAGEMANAGER->findImage("MainRunMap17")->render(_empty->getMemDC(), 3998, 412);
+	if (MapOn[17] == true) IMAGEMANAGER->findImage("MainRunMap18")->render(_empty->getMemDC(), 4400, 412);
+	if (MapOn[18] == true) IMAGEMANAGER->findImage("MainRunMap19")->render(_empty->getMemDC(), 5202, 412);
+	if (MapOn[19] == true) IMAGEMANAGER->findImage("MainRunMap20")->render(_empty->getMemDC(), 5602, 412);
 }
 
 void RunAndGunScene::CollisionCheck_ChangeMapRect()
@@ -398,15 +420,6 @@ void RunAndGunScene::CollisionCheck_ChangeMapRect()
 		}
 	}
 
-	//// ##### 12 <-- 13  #####
-	if (CurrMapNum == 13) {
-		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[12])) {
-			MovingCamera[12] = true;
-			MapOn[12] = true;
-		}
-	}
-
 
 	// ##### 13 --> 14  #####
 	if (CurrMapNum == 13) {
@@ -436,15 +449,6 @@ void RunAndGunScene::CollisionCheck_ChangeMapRect()
 		}
 	}
 
-	//// ##### 13 <-- 15  #####
-	if (CurrMapNum == 15) {
-		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[14])) {
-			MovingCamera[14] = true;
-			MapOn[13] = true;
-		}
-	}
-
 
 	// ##### 15 --> 16 #####
 	if (CurrMapNum == 15) {
@@ -479,6 +483,36 @@ void RunAndGunScene::CollisionCheck_ChangeMapRect()
 		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[16])) {
 			MovingCamera[15] = true;
 			MapOn[15] = true;
+		}
+	}
+
+
+	// ##### 16 --> 17 #####
+	if (CurrMapNum == 16) {
+		RECT rc;
+		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[17])) {
+			MovingCamera[16] = true;
+			MapOn[17] = true;
+		}
+	}
+
+	
+	// ##### 17 --> 18 #####
+	if (CurrMapNum == 17) {
+		RECT rc;
+		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[18])) {
+			MovingCamera[17] = true;
+			MapOn[18] = true;
+		}
+	}
+
+
+	// ##### 18 --> 19 #####
+	if (CurrMapNum == 18) {
+		RECT rc;
+		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[19])) {
+			MovingCamera[18] = true;
+			MapOn[19] = true;
 		}
 	}
 
@@ -810,21 +844,6 @@ void RunAndGunScene::MovingMap()
 		}
 	}
 
-	// ##### 10 <-- 11  #####
-	if (MovingCamera[10] == true && CurrMapNum == 11) {
-		if (m_Camera.x > 3200) {
-			m_Camera.x -= 6;
-			if (3160 < m_pPlayerLink->getPlayerX()) {
-				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() - 0.5f);
-			}
-			if (m_Camera.x <= 3200) {
-				CurrMapNum = 11;
-				MovingCamera[10] = false;
-				MapOn[11] = false;
-			}
-		}
-	}
-
 
 	// ##### 11 --> 12  #####
 	if (MovingCamera[11] == true && CurrMapNum == 11) {
@@ -841,21 +860,6 @@ void RunAndGunScene::MovingMap()
 		}
 	}
 
-	// ##### 11 <-- 12  #####
-	if (MovingCamera[11] == true && CurrMapNum == 12) {
-		if (m_Camera.x > 3600) {
-			m_Camera.x -= 6;
-			if (3560 < m_pPlayerLink->getPlayerX()) {
-				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() - 0.5f);
-			}
-			if (m_Camera.x <= 3600) {
-				CurrMapNum = 11;
-				MovingCamera[11] = false;
-				MapOn[12] = false;
-			}
-		}
-	}
-
 
 	// ##### 12 --> 13  #####
 	if (MovingCamera[12] == true && CurrMapNum == 12) {
@@ -868,21 +872,6 @@ void RunAndGunScene::MovingMap()
 				CurrMapNum = 13;
 				MovingCamera[12] = false;
 				MapOn[12] = false;
-			}
-		}
-	}
-
-	// ##### 12 <-- 13  #####
-	if (MovingCamera[12] == true && CurrMapNum == 13) {
-		if (m_Camera.y < 1020) {
-			m_Camera.y += 5;
-			if (1050 > m_pPlayerLink->getPlayerY()) {
-				m_pPlayerLink->SetPlayerY(m_pPlayerLink->getPlayerY() + 0.9f);
-			}
-			if (m_Camera.y >= 1020) {
-				CurrMapNum = 12;
-				MovingCamera[12] = false;
-				MapOn[13] = false;
 			}
 		}
 	}
@@ -934,21 +923,6 @@ void RunAndGunScene::MovingMap()
 		}
 	}
 
-	// ##### 13 <-- 15  #####
-	if (MovingCamera[14] == true && CurrMapNum == 15) {
-		if (m_Camera.y < 812) {
-			m_Camera.y += 5;
-			if (833 > m_pPlayerLink->getPlayerY()) {
-				m_pPlayerLink->SetPlayerY(m_pPlayerLink->getPlayerY() + 0.9f);
-			}
-			if (m_Camera.y >= 812) {
-				CurrMapNum = 13;
-				MovingCamera[14] = false;
-				MapOn[15] = false;
-			}
-		}
-	}
-
 
 	// ##### 15 --> 16  #####
 	if (MovingCamera[15] == true && CurrMapNum == 15) {
@@ -976,6 +950,53 @@ void RunAndGunScene::MovingMap()
 				CurrMapNum = 15;
 				MovingCamera[15] = false;
 				MapOn[16] = false;
+			}
+		}
+	}
+
+
+	// ##### 16 --> 17  #####
+	if (MovingCamera[16] == true && CurrMapNum == 16) {
+		if (m_Camera.x < 4400) {
+			m_Camera.x += 6;
+			if (4600 > m_pPlayerLink->getPlayerX()) {
+				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() + 0.5f);
+			}
+			if (m_Camera.x >= 4400) {
+				CurrMapNum = 17;
+				MovingCamera[16] = false;
+				MapOn[16] = false;
+			}
+		}
+	}
+
+
+	// ##### 17 --> 18  #####
+	if (MovingCamera[17] == true && CurrMapNum == 17) {
+		if (m_Camera.x < 5200) {
+			m_Camera.x += 6;
+			if (5250 > m_pPlayerLink->getPlayerX()) {
+				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() + 0.5f);
+			}
+			if (m_Camera.x >= 5200) {
+				CurrMapNum = 18;
+				MovingCamera[17] = false;
+				MapOn[17] = false;
+			}
+		}
+	}
+
+	// ##### 18 --> 19  #####
+	if (MovingCamera[18] == true && CurrMapNum == 18) {
+		if (m_Camera.x < 5600) {
+			m_Camera.x += 6;
+			if (5650 > m_pPlayerLink->getPlayerX()) {
+				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() + 0.5f);
+			}
+			if (m_Camera.x >= 5600) {
+				CurrMapNum = 19;
+				MovingCamera[18] = false;
+				MapOn[18] = false;
 			}
 		}
 	}

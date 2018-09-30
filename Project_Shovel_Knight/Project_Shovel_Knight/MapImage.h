@@ -20,6 +20,9 @@ private:
 	image*	Stage_15;
 	image*	Stage_16;
 	image*	Stage_17;
+	image*	Stage_18;
+	image*	Stage_19;
+	image*	Stage_20;
 
 public:
 	
