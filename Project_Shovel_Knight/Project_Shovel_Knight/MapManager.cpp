@@ -52,11 +52,11 @@ void MapManager::update(void)
 void MapManager::render(HDC hdc)
 {
 	
-	m_SkyBg->render(_empty->getMemDC(), m_Camera.x, m_Camera.y);
-	BackGround_Castle->loopRender(_empty->getMemDC(), &RectMake(500, 633, 2500, 176), (int)m_Camera.x / 100 , 0);
-	Back_3_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 713, 2500, 108), (int)m_Camera.x / 30, 0);
-	Back_2_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 647, 2500, 176), (int)m_Camera.x / 16, 0);
-	Back_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 665, 2500, 199), (int)m_Camera.x / 8, 0);
+	m_SkyBg->render(_empty->getMemDC(), m_Camera.x , m_Camera.y);
+	BackGround_Castle->loopRender(_empty->getMemDC(), &RectMake(0, 633, 2500, 176), (int)m_Camera.x / 100 * 0.001f, 0);
+	Back_3_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 713, 2500, 108), (int)m_Camera.x / 40 , 0);
+	Back_2_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 647, 2500, 176), (int)m_Camera.x / 8 * 0.5f, 0);
+	Back_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 665, 2500, 199), (int)m_Camera.x / 7 * 1, 0);
 	
 	Rectangle(_empty->getMemDC(), CheckChangeMapRect[0].left, CheckChangeMapRect[0].top, CheckChangeMapRect[0].right, CheckChangeMapRect[0].bottom);
 	Rectangle(_empty->getMemDC(), CheckChangeMapRect[1].left, CheckChangeMapRect[1].top, CheckChangeMapRect[1].right, CheckChangeMapRect[1].bottom);
