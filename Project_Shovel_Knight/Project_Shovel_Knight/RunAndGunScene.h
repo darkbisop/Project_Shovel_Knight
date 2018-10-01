@@ -19,7 +19,6 @@ private:
 
 	int		CurrMapNum;
 
-	bool	temp;
 	bool	MovingCamera[24];
 	bool	MapOn[24];
 
