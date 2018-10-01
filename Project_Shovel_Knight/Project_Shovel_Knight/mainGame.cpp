@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "mainGame.h"
-#include "RunAndGunScene.h"
+#include "playScene.h"
 
 
 void mainGame::setBackBuffer()
@@ -21,10 +21,10 @@ HRESULT mainGame::init()
 
 	setBackBuffer();
 
-	m_pRunAndGunScene = new RunAndGunScene;
-	SCENEMANAGER->addScene("RunAndGun", m_pRunAndGunScene);
+	m_PlayScene = new PlayScene;
+	SCENEMANAGER->addScene("PlayScene", m_PlayScene);
 
-	SCENEMANAGER->changeScene("RunAndGun");
+	SCENEMANAGER->changeScene("PlayScene");
 
 	//m_ScreenAni->start();
 
@@ -43,6 +43,7 @@ void mainGame::release()
 	TIMEMANAGER->release();
 	SCENEMANAGER->release();
 	SOUNDMANAGER->release();
+	MAPMANAGER->release();
 
 	TXTDATA->releaseSingleton();
 	KEYMANAGER->releaseSingleton();
@@ -50,7 +51,7 @@ void mainGame::release()
 	TIMEMANAGER->releaseSingleton();
 	SCENEMANAGER->releaseSingleton();
 	SOUNDMANAGER->releaseSingleton();
-
+	MAPMANAGER->releaseSingleton();
 }
 
 LRESULT mainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)

@@ -12,6 +12,7 @@ private:
 
 	Player_State m_State;
 	image * m_PlayerImg;
+	
 
 	RECT	m_rc;
 
@@ -20,6 +21,8 @@ private:
 
 	int		m_Hp;
 	int		m_Money;
+
+	bool	m_isMoving;
 
 public:
 
@@ -34,6 +37,9 @@ public:
 
 	inline void SetPlayerX(float x) { m_fX = x; }
 	inline void SetPlayerY(float y) { m_fY = y; }
+
+	inline bool	getIsMoving() { return m_isMoving; }
+	inline void setIsMoving(bool a) { m_isMoving = a; }
 
 	Player();
 	~Player();

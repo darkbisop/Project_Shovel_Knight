@@ -1,6 +1,6 @@
 #pragma once
 
-class RunAndGunScene;
+class PlayScene;
 
 class mainGame
 {
@@ -14,7 +14,7 @@ private:
 
 	char m_szText[128];
 
-	RunAndGunScene*		m_pRunAndGunScene;
+	PlayScene*		m_PlayScene;
 
 public:
 	HRESULT init();

@@ -156,9 +156,6 @@
     <ClInclude Include="utils.h">
       <Filter>2D_FrameWork\유틸</Filter>
     </ClInclude>
-    <ClInclude Include="RunAndGunScene.h">
-      <Filter>메인게임\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="image.h">
       <Filter>2D_FrameWork\이미지</Filter>
     </ClInclude>
@@ -182,6 +179,12 @@
     </ClInclude>
     <ClInclude Include="pixelCollision.h">
       <Filter>2D_FrameWork\픽셀충돌</Filter>
+    </ClInclude>
+    <ClInclude Include="MapManager.h">
+      <Filter>메인게임\맵</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>메인게임\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -254,9 +257,6 @@
     <ClCompile Include="utils.cpp">
       <Filter>2D_FrameWork\유틸</Filter>
     </ClCompile>
-    <ClCompile Include="RunAndGunScene.cpp">
-      <Filter>메인게임\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="image.cpp">
       <Filter>2D_FrameWork\이미지</Filter>
     </ClCompile>
@@ -280,6 +280,12 @@
     </ClCompile>
     <ClCompile Include="pixelCollision.cpp">
       <Filter>2D_FrameWork\픽셀충돌</Filter>
+    </ClCompile>
+    <ClCompile Include="MapManager.cpp">
+      <Filter>메인게임\맵</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>메인게임\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

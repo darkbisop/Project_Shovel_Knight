@@ -165,11 +165,12 @@
     <ClInclude Include="missileManager.h" />
     <ClInclude Include="pixelCollision.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayScene.h" />
     <ClInclude Include="progressBar.h" />
     <ClInclude Include="Project_Shovel_Knight.h" />
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="RunAndGunScene.h" />
+    <ClInclude Include="MapManager.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="sceneManager.h" />
     <ClInclude Include="singletonBase.h" />
@@ -203,9 +204,10 @@
     <ClCompile Include="missileManager.cpp" />
     <ClCompile Include="pixelCollision.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="Project_Shovel_Knight.cpp" />
-    <ClCompile Include="RunAndGunScene.cpp" />
+    <ClCompile Include="MapManager.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="soundManager.cpp" />

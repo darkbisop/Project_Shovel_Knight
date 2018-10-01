@@ -1,10 +1,10 @@
 #pragma once
-#include "scene.h"
+#include "singletonBase.h"
 
 class Player;
 class MapImage;
 
-class RunAndGunScene : public scene
+class MapManager : public singletonBase<MapManager>
 {
 private:
 
@@ -14,11 +14,16 @@ private:
 
 	image*	_empty;
 	image*	m_UI;
+	image*	m_SkyBg;
+	image*	BackGround_Castle;
+	image*	Back_3_Ground;
+	image*	Back_2_Ground;
+	image*	Back_Ground;
 	
 	RECT	CheckChangeMapRect[24];
 
 	int		CurrMapNum;
-
+	
 	bool	MovingCamera[24];
 	bool	MapOn[24];
 
@@ -32,11 +37,12 @@ public:
 	POINT getCamera() { return m_Camera; }
 
 	void setPlayerLink(Player* player) { m_pPlayerLink = player; }
+	void CheckMapRect();
 	void CurrMap();
 	void CollisionCheck_ChangeMapRect();
 	void MovingMap();
 
-	RunAndGunScene();
-	~RunAndGunScene();
+	MapManager();
+	~MapManager();
 };
 
