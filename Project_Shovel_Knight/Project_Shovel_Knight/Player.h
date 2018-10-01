@@ -1,6 +1,14 @@
 #pragma once
 
-class RunAndGunScene;
+struct Temp
+{
+	float x;
+	float y;
+	float angle;
+	RECT rc;
+	float	gravity;
+	float speed;
+};
 
 enum Player_State
 {
@@ -10,6 +18,10 @@ class Player
 {
 private:
 
+	vector<Temp> v_VecTemp;
+	vector<Temp>::iterator v_Iter;
+
+	Temp m_Drop;
 	Player_State m_State;
 	image * m_PlayerImg;
 	
@@ -18,7 +30,8 @@ private:
 
 	float	m_fX, m_fY;
 	float	m_fSpeed;
-
+	
+	int		tempRan;
 	int		m_Hp;
 	int		m_Money;
 
