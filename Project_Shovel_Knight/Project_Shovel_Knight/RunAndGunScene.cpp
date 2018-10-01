@@ -5,7 +5,7 @@
 
 HRESULT RunAndGunScene::init(void)
 {
-	_empty = IMAGEMANAGER->addImage("MainCamera", "image/Empty.bmp", 6800, 1400, true, RGB(255, 0, 255));
+	_empty = IMAGEMANAGER->addImage("MainCamera", "image/Empty.bmp", 7200, 1400, true, RGB(255, 0, 255));
 	m_UI = IMAGEMANAGER->addImage("UI", "image/UI.bmp", 400, 18, true, RGB(255, 0, 255));
 	
 	m_pMapImage = new MapImage;
@@ -46,6 +46,8 @@ HRESULT RunAndGunScene::init(void)
 	CheckChangeMapRect[19] = RectMake(5600, 560, 3, 50);
 	CheckChangeMapRect[20] = RectMake(5930, 440, 50, 3);
 	CheckChangeMapRect[21] = RectMake(5724, 230, 50, 3);
+	CheckChangeMapRect[22] = RectMake(6000, 160, 3, 50);
+	CheckChangeMapRect[23] = RectMake(6398, 160, 3, 50);
 
 	CurrMapNum = 0;
 
@@ -90,6 +92,9 @@ void RunAndGunScene::render(HDC hdc)
 	Rectangle(_empty->getMemDC(), CheckChangeMapRect[18].left, CheckChangeMapRect[18].top, CheckChangeMapRect[18].right, CheckChangeMapRect[18].bottom);
 	Rectangle(_empty->getMemDC(), CheckChangeMapRect[19].left, CheckChangeMapRect[19].top, CheckChangeMapRect[19].right, CheckChangeMapRect[19].bottom);
 	Rectangle(_empty->getMemDC(), CheckChangeMapRect[20].left, CheckChangeMapRect[20].top, CheckChangeMapRect[20].right, CheckChangeMapRect[20].bottom);
+	Rectangle(_empty->getMemDC(), CheckChangeMapRect[21].left, CheckChangeMapRect[21].top, CheckChangeMapRect[21].right, CheckChangeMapRect[21].bottom);
+	Rectangle(_empty->getMemDC(), CheckChangeMapRect[22].left, CheckChangeMapRect[22].top, CheckChangeMapRect[22].right, CheckChangeMapRect[22].bottom);
+	Rectangle(_empty->getMemDC(), CheckChangeMapRect[23].left, CheckChangeMapRect[23].top, CheckChangeMapRect[23].right, CheckChangeMapRect[23].bottom);
 
 	m_pPlayerLink->render(_empty->getMemDC());
 	m_UI->render(_empty->getMemDC(),m_Camera.x, m_Camera.y);
@@ -145,6 +150,20 @@ void RunAndGunScene::CurrMap()
 		else if (m_Camera.y + WINSIZEY > 644) m_Camera.y = 644 - WINSIZEY;
 	}
 
+	//// 22¹ø¸ÊÀÏ¶§
+	//if (CurrMapNum == 22 && MovingCamera[21] == false && MovingCamera[22] == false) {
+
+	//	if (m_pPlayerLink) {
+	//		m_Camera = { (int)m_pPlayerLink->getPlayerX() - 180, (int)m_pPlayerLink->getPlayerY() };
+	//	}
+
+	//	if (m_Camera.x < 5200) m_Camera.x = 5200;
+	//	else if (m_Camera.x + WINSIZEX > 5694) m_Camera.x = 5694 - WINSIZEX;
+
+	//	if (m_Camera.y < 9) m_Camera.y = 9;
+	//	else if (m_Camera.y + WINSIZEY > 228) m_Camera.y = 228 - WINSIZEY;
+	//}
+
 	if (MapOn[0] == true) IMAGEMANAGER->findImage("MainRunMap")->render(_empty->getMemDC(), 0, 645);
 	if (MapOn[1] == true) IMAGEMANAGER->findImage("MainRunMap2")->render(_empty->getMemDC(), 1600, 645);
 	if (MapOn[2] == true) IMAGEMANAGER->findImage("MainRunMap3")->render(_empty->getMemDC(), 2002, 645);
@@ -157,7 +176,7 @@ void RunAndGunScene::CurrMap()
 	if (MapOn[9] == true) IMAGEMANAGER->findImage("MainRunMap10")->render(_empty->getMemDC(), 2402, 1067);
 	if (MapOn[10] == true) IMAGEMANAGER->findImage("MainRunMap11")->render(_empty->getMemDC(), 3202, 1067);
 	if (MapOn[11] == true) IMAGEMANAGER->findImage("MainRunMap12")->render(_empty->getMemDC(), 3602, 1067);
-	if (MapOn[12] == true) IMAGEMANAGER->findImage("MainRunMap13")->render(_empty->getMemDC(), 4004, 1067);
+	if (MapOn[12] == true) IMAGEMANAGER->findImage("MainRunMap13")->render(_empty->getMemDC(), 4004, 1065);
 	if (MapOn[13] == true) IMAGEMANAGER->findImage("MainRunMap14")->render(_empty->getMemDC(), 4004, 857);
 	if (MapOn[14] == true) IMAGEMANAGER->findImage("MainRunMap15")->render(_empty->getMemDC(), 4398, 857);
 	if (MapOn[15] == true) IMAGEMANAGER->findImage("MainRunMap16")->render(_empty->getMemDC(), 4003, 646);
@@ -165,8 +184,10 @@ void RunAndGunScene::CurrMap()
 	if (MapOn[17] == true) IMAGEMANAGER->findImage("MainRunMap18")->render(_empty->getMemDC(), 4403, 438);
 	if (MapOn[18] == true) IMAGEMANAGER->findImage("MainRunMap19")->render(_empty->getMemDC(), 5205, 438);
 	if (MapOn[19] == true) IMAGEMANAGER->findImage("MainRunMap20")->render(_empty->getMemDC(), 5605, 438);
-	if (MapOn[20] == true) IMAGEMANAGER->findImage("MainRunMap21")->render(_empty->getMemDC(), 5602, 232);
-	if (MapOn[21] == true) IMAGEMANAGER->findImage("MainRunMap22")->render(_empty->getMemDC(), 5602, 24);
+	if (MapOn[20] == true) IMAGEMANAGER->findImage("MainRunMap21")->render(_empty->getMemDC(), 5601, 232);
+	if (MapOn[21] == true) IMAGEMANAGER->findImage("MainRunMap22")->render(_empty->getMemDC(), 5601, 24);
+	if (MapOn[22] == true) IMAGEMANAGER->findImage("MainRunMap23")->render(_empty->getMemDC(), 6001, 24);
+	if (MapOn[23] == true) IMAGEMANAGER->findImage("MainRunMap24")->render(_empty->getMemDC(), 6401, 24);
 }
 
 void RunAndGunScene::CollisionCheck_ChangeMapRect()
@@ -534,6 +555,23 @@ void RunAndGunScene::CollisionCheck_ChangeMapRect()
 		}
 	}
 
+	// ##### 21 --> 23 #####
+	if (CurrMapNum == 21) {
+		RECT rc;
+		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[22])) {
+			MovingCamera[21] = true;
+			MapOn[22] = true;
+		}
+	}
+
+	// ##### 23 --> 24 #####
+	if (CurrMapNum == 22) {
+		RECT rc;
+		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[23])) {
+			MovingCamera[22] = true;
+			MapOn[23] = true;
+		}
+	}
 }
 
 void RunAndGunScene::MovingMap()
@@ -1046,6 +1084,37 @@ void RunAndGunScene::MovingMap()
 				CurrMapNum = 21;
 				MovingCamera[20] = false;
 				MapOn[20] = false;
+			}
+		}
+	}
+
+
+	// ##### 21 --> 22  #####
+	if (MovingCamera[21] == true && CurrMapNum == 21) {
+		if (m_Camera.x < 6000) {
+			m_Camera.x += 6;
+			if (6050 > m_pPlayerLink->getPlayerX()) {
+				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() + 0.5f);
+			}
+			if (m_Camera.x >= 6000) {
+				CurrMapNum = 22;
+				MovingCamera[21] = false;
+				MapOn[21] = false;
+			}
+		}
+	}
+
+	// ##### 22 --> 23  #####
+	if (MovingCamera[22] == true && CurrMapNum == 22) {
+		if (m_Camera.x < 6400) {
+			m_Camera.x += 6;
+			if (6450 > m_pPlayerLink->getPlayerX()) {
+				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() + 0.5f);
+			}
+			if (m_Camera.x >= 6400) {
+				CurrMapNum = 23;
+				MovingCamera[22] = false;
+				MapOn[22] = false;
 			}
 		}
 	}
