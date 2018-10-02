@@ -24,18 +24,22 @@ private:
 	Temp m_Drop;
 	Player_State m_State;
 	image * m_PlayerImg;
-	
+	image * m_InventoryImg;
 
 	RECT	m_rc;
+	RECT	m_InvenRect;
 
 	float	m_fX, m_fY;
 	float	m_fSpeed;
+
+	float	m_invenX, m_invenY;
 	
 	int		tempRan;
-	int		m_Hp;
-	int		m_Money;
+	int		m_InvenX;
+	int		m_InvenY;
 
 	bool	m_isMoving;
+	bool	m_isInventoryOn;
 
 public:
 
