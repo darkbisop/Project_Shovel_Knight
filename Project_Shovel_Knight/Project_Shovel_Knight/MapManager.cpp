@@ -47,6 +47,7 @@ void MapManager::update(void)
 	m_pPlayerLink->update();
 	CollisionCheck_ChangeMapRect();
 	MovingMap();
+	//けけけけけけけけけ
 }
 
 void MapManager::render(HDC hdc)
