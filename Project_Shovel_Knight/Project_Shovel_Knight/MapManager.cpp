@@ -52,11 +52,14 @@ void MapManager::update(void)
 void MapManager::render(HDC hdc)
 {
 	m_SkyBg->render(_empty->getMemDC(), m_Camera.x , m_Camera.y);
-	BackGround_Castle->loopRender(_empty->getMemDC(), &RectMake(0, 634, 2500, 176), -(int)m_Camera.x * 0.8f, 0);
-	Back_3_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 714, 2500, 108), -(int)m_Camera.x * 0.8f , 0);
-	Back_2_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 648, 2500, 176), -(int)m_Camera.x * 0.5f, 0);
-	Back_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 666, 2500, 199), -(int)m_Camera.x * 0.3f, 0);
 	
+	if (CurrMapNum == 0 || CurrMapNum == 1) {
+		BackGround_Castle->loopRender(_empty->getMemDC(), &RectMake(0, 634, 2500, 176), -(int)m_Camera.x * 0.8f, 0);
+		Back_3_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 714, 2500, 108), -(int)m_Camera.x * 0.8f, 0);
+		Back_2_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 648, 2500, 176), -(int)m_Camera.x * 0.5f, 0);
+		Back_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 666, 2500, 199), -(int)m_Camera.x * 0.3f, 0);
+	}
+
 	Rectangle(_empty->getMemDC(), CheckChangeMapRect[0].left, CheckChangeMapRect[0].top, CheckChangeMapRect[0].right, CheckChangeMapRect[0].bottom);
 	Rectangle(_empty->getMemDC(), CheckChangeMapRect[1].left, CheckChangeMapRect[1].top, CheckChangeMapRect[1].right, CheckChangeMapRect[1].bottom);
 	Rectangle(_empty->getMemDC(), CheckChangeMapRect[2].left, CheckChangeMapRect[2].top, CheckChangeMapRect[2].right, CheckChangeMapRect[2].bottom);
@@ -219,7 +222,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 		RECT rc;
 		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[0])) {
 			MovingCamera[0] = true;
-			//MovingCamera[1] = true;
+			MapOn[0] = true;
 		}
 	}
 
@@ -237,8 +240,8 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	if (CurrMapNum == 2) {
 		RECT rc;
 		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[1])) {
-			//MovingCamera[2] = true;
 			MovingCamera[1] = true;
+			MapOn[1] = true;
 		}
 	}
 
@@ -568,7 +571,6 @@ void MapManager::MovingMap()
 				CurrMapNum = 0;
 				MovingCamera[0] = false;
 				MapOn[1] = false;
-				MapOn[0] = true;
 			}
 		}
 	}
@@ -601,7 +603,6 @@ void MapManager::MovingMap()
 				CurrMapNum = 1;
 				MovingCamera[1] = false;
 				MapOn[2] = false;
-				MapOn[1] = true;
 			}
 		}
 	}
