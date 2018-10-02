@@ -60,31 +60,6 @@ void MapManager::render(HDC hdc)
 		Back_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 666, 2500, 199), -(int)m_Camera.x * 0.3f, 0);
 	}
 
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[0].left, CheckChangeMapRect[0].top, CheckChangeMapRect[0].right, CheckChangeMapRect[0].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[1].left, CheckChangeMapRect[1].top, CheckChangeMapRect[1].right, CheckChangeMapRect[1].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[2].left, CheckChangeMapRect[2].top, CheckChangeMapRect[2].right, CheckChangeMapRect[2].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[3].left, CheckChangeMapRect[3].top, CheckChangeMapRect[3].right, CheckChangeMapRect[3].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[4].left, CheckChangeMapRect[4].top, CheckChangeMapRect[4].right, CheckChangeMapRect[4].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[5].left, CheckChangeMapRect[5].top, CheckChangeMapRect[5].right, CheckChangeMapRect[5].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[6].left, CheckChangeMapRect[6].top, CheckChangeMapRect[6].right, CheckChangeMapRect[6].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[7].left, CheckChangeMapRect[7].top, CheckChangeMapRect[7].right, CheckChangeMapRect[7].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[8].left, CheckChangeMapRect[8].top, CheckChangeMapRect[8].right, CheckChangeMapRect[8].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[9].left, CheckChangeMapRect[9].top, CheckChangeMapRect[9].right, CheckChangeMapRect[9].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[10].left, CheckChangeMapRect[10].top, CheckChangeMapRect[10].right, CheckChangeMapRect[10].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[11].left, CheckChangeMapRect[11].top, CheckChangeMapRect[11].right, CheckChangeMapRect[11].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[12].left, CheckChangeMapRect[12].top, CheckChangeMapRect[12].right, CheckChangeMapRect[12].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[13].left, CheckChangeMapRect[13].top, CheckChangeMapRect[13].right, CheckChangeMapRect[13].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[14].left, CheckChangeMapRect[14].top, CheckChangeMapRect[14].right, CheckChangeMapRect[14].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[15].left, CheckChangeMapRect[15].top, CheckChangeMapRect[15].right, CheckChangeMapRect[15].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[16].left, CheckChangeMapRect[16].top, CheckChangeMapRect[16].right, CheckChangeMapRect[16].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[17].left, CheckChangeMapRect[17].top, CheckChangeMapRect[17].right, CheckChangeMapRect[17].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[18].left, CheckChangeMapRect[18].top, CheckChangeMapRect[18].right, CheckChangeMapRect[18].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[19].left, CheckChangeMapRect[19].top, CheckChangeMapRect[19].right, CheckChangeMapRect[19].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[20].left, CheckChangeMapRect[20].top, CheckChangeMapRect[20].right, CheckChangeMapRect[20].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[21].left, CheckChangeMapRect[21].top, CheckChangeMapRect[21].right, CheckChangeMapRect[21].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[22].left, CheckChangeMapRect[22].top, CheckChangeMapRect[22].right, CheckChangeMapRect[22].bottom);
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[23].left, CheckChangeMapRect[23].top, CheckChangeMapRect[23].right, CheckChangeMapRect[23].bottom);
-	
 	CurrMap();
 	m_pPlayerLink->render(_empty->getMemDC());
 
@@ -179,7 +154,7 @@ void MapManager::CurrMap()
 		else if (m_Camera.x + WINSIZEX > 5200) m_Camera.x = 5200 - WINSIZEX;
 
 		if (m_Camera.y < 0) m_Camera.y = 0;
-		else if (m_Camera.y + WINSIZEY > 644) m_Camera.y = 644 - WINSIZEY;
+		else if (m_Camera.y + WINSIZEY > 646) m_Camera.y = 646 - WINSIZEY;
 	}
 
 	if (MapOn[0] == true) IMAGEMANAGER->findImage("MainRunMap")->render(_empty->getMemDC(), 0, 646);
