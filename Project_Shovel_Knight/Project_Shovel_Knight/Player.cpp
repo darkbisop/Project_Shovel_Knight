@@ -9,7 +9,7 @@ HRESULT Player::init()
 	m_fX = 30;
 	m_fY = 720;
 
-	m_fSpeed = 2.0f;
+	m_fSpeed = 6.0f;
 
 	m_rc = RectMake(m_fX, m_fY, 26, 30);
 
