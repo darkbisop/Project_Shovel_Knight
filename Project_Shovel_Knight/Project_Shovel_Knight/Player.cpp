@@ -9,7 +9,7 @@ HRESULT Player::init()
 	m_fX = 30;
 	m_fY = 720;
 
-	m_fSpeed = 6.0f;
+	m_fSpeed = 2.0f;
 
 	m_rc = RectMake(m_fX, m_fY, 26, 30);
 
@@ -26,7 +26,7 @@ void Player::release()
 
 void Player::update()
 {
-	m_rc = RectMake(m_fX + 3, m_fY, 20, 30);
+	m_rc = RectMake(m_fX, m_fY, 20, 30);
 	
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT)) {
 		Player_State::MOVE;
@@ -38,7 +38,6 @@ void Player::update()
 		m_fX -= m_fSpeed;
 		m_isMoving = true;
 	}
-	else m_isMoving = false;
 
 	if (KEYMANAGER->isStayKeyDown(VK_UP)) {
 		Player_State::MOVE;
@@ -80,7 +79,6 @@ void Player::render(HDC hdc)
 	}
 
 	m_PlayerImg->render(hdc, m_fX, m_fY);
-	//m_FrontMap->render(hdc, 0, 430);
 }
 
 Player::Player()
