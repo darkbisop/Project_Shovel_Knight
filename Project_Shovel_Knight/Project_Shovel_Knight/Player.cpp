@@ -26,8 +26,6 @@ void Player::release()
 
 void Player::update()
 {
-	m_rc = RectMake(m_fX, m_fY, 20, 30);
-	
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT)) {
 		Player_State::MOVE;
 		m_fX += m_fSpeed;
@@ -57,7 +55,7 @@ void Player::update()
 			m_Drop.y = m_fY + 27;
 			m_Drop.gravity = 0;
 			m_Drop.angle = RANDOM->getFromFloatTo(1.0f, 1.9f);
-			m_Drop.speed = RANDOM->getFromFloatTo(2.1f, 3.5f);
+			m_Drop.speed = RANDOM->getFromFloatTo(2.5f, 3.5f);
 			v_VecTemp.push_back(m_Drop);
 		}
 	}
@@ -68,6 +66,8 @@ void Player::update()
 		v_Iter->y -= sinf(v_Iter->angle) * v_Iter->speed - v_Iter->gravity;
 		v_Iter->rc = RectMake(v_Iter->x, v_Iter->y, 5, 5);
 	}
+
+	m_rc = RectMake(m_fX, m_fY, 20, 30);
 }
 
 void Player::render(HDC hdc)

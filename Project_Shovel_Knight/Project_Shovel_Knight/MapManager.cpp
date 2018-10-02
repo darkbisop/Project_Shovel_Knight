@@ -51,7 +51,7 @@ void MapManager::update(void)
 
 void MapManager::render(HDC hdc)
 {
-	m_SkyBg->render(_empty->getMemDC(), m_Camera.x , m_Camera.y);
+	m_SkyBg->render(_empty->getMemDC(), (int)m_Camera.x , (int)m_Camera.y);
 	
 	if (CurrMapNum == 0 || CurrMapNum == 1) {
 		BackGround_Castle->loopRender(_empty->getMemDC(), &RectMake(0, 634, 2500, 176), -(int)m_Camera.x * 0.8f, 0);
