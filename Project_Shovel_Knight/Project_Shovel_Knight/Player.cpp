@@ -65,7 +65,7 @@ void Player::update()
 
 	for (v_Iter = v_VecTemp.begin(); v_Iter != v_VecTemp.end(); v_Iter++) {
 		v_Iter->gravity += 0.1f;
-		v_Iter->x += cosf(80 * 3.14 / 180) * v_Iter->speed;
+		v_Iter->x += cosf(75 * 3.14 / 180) * v_Iter->speed;
 		v_Iter->y -= sinf(v_Iter->angle) * v_Iter->speed - v_Iter->gravity;
 		v_Iter->rc = RectMake(v_Iter->x, v_Iter->y, 5, 5);
 	}
