@@ -47,7 +47,6 @@ void MapManager::update(void)
 	m_pPlayerLink->update();
 	CollisionCheck_ChangeMapRect();
 	MovingMap();
-	//けけけけけけけけけ
 }
 
 void MapManager::render(HDC hdc)
@@ -108,8 +107,6 @@ void MapManager::CheckMapRect()
 	CheckChangeMapRect[7] = RectMake(3136, 1062, 50, 3);
 	CheckChangeMapRect[8] = RectMake(2800, 1202, 6, 50);
 	CheckChangeMapRect[9] = RectMake(3200, 1160, 3, 50);
-	CheckChangeMapRect[10] = RectMake(3596, 1179, 3, 50);
-	CheckChangeMapRect[11] = RectMake(3998, 1179, 3, 50);
 	CheckChangeMapRect[12] = RectMake(4315, 1071, 50, 3);
 	CheckChangeMapRect[13] = RectMake(4400, 920, 3, 50);
 	CheckChangeMapRect[14] = RectMake(4000, 857, 50, 3);
@@ -182,20 +179,6 @@ void MapManager::CurrMap()
 		else if (m_Camera.y + WINSIZEY > 644) m_Camera.y = 644 - WINSIZEY;
 	}
 
-	//// 22腰己析凶
-	//if (CurrMapNum == 22 && MovingCamera[21] == false && MovingCamera[22] == false) {
-
-	//	if (m_pPlayerLink) {
-	//		m_Camera = { (int)m_pPlayerLink->getPlayerX() - 180, (int)m_pPlayerLink->getPlayerY() };
-	//	}
-
-	//	if (m_Camera.x < 5200) m_Camera.x = 5200;
-	//	else if (m_Camera.x + WINSIZEX > 5694) m_Camera.x = 5694 - WINSIZEX;
-
-	//	if (m_Camera.y < 9) m_Camera.y = 9;
-	//	else if (m_Camera.y + WINSIZEY > 228) m_Camera.y = 228 - WINSIZEY;
-	//}
-
 	if (MapOn[0] == true) IMAGEMANAGER->findImage("MainRunMap")->render(_empty->getMemDC(), 0, 646);
 	if (MapOn[1] == true) IMAGEMANAGER->findImage("MainRunMap2")->render(_empty->getMemDC(), 1600, 646);
 	if (MapOn[2] == true) IMAGEMANAGER->findImage("MainRunMap3")->render(_empty->getMemDC(), 2000, 646);
@@ -207,8 +190,6 @@ void MapManager::CurrMap()
 	if (MapOn[8] == true) IMAGEMANAGER->findImage("MainRunMap9")->render(_empty->getMemDC(), 2800, 1062);
 	if (MapOn[9] == true) IMAGEMANAGER->findImage("MainRunMap10")->render(_empty->getMemDC(), 2400, 1062);
 	if (MapOn[10] == true) IMAGEMANAGER->findImage("MainRunMap11")->render(_empty->getMemDC(), 3200, 1062);
-	//if (MapOn[11] == true) IMAGEMANAGER->findImage("MainRunMap12")->render(_empty->getMemDC(), 3601, 1067);
-	//if (MapOn[12] == true) IMAGEMANAGER->findImage("MainRunMap13")->render(_empty->getMemDC(), 4004, 1065);
 	if (MapOn[13] == true) IMAGEMANAGER->findImage("MainRunMap14")->render(_empty->getMemDC(), 4000, 854);
 	if (MapOn[14] == true) IMAGEMANAGER->findImage("MainRunMap15")->render(_empty->getMemDC(), 4400, 854);
 	if (MapOn[15] == true) IMAGEMANAGER->findImage("MainRunMap16")->render(_empty->getMemDC(), 4000, 646);
@@ -415,54 +396,6 @@ void MapManager::CollisionCheck_ChangeMapRect()
 			MapOn[10] = true;
 		}
 	}
-
-	////// ##### 8 <-- 10  #####
-	//if (CurrMapNum == 10) {
-	//	RECT rc;
-	//	if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[9])) {
-	//		MovingCamera[9] = true;
-	//		//MovingCamera[8] = true;
-	//		MapOn[8] = true;
-	//	}
-	//}
-
-	//// ##### 10 --> 11  #####
-	//if (CurrMapNum == 10) {
-	//	RECT rc;
-	//	if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[10])) {
-	//		MovingCamera[10] = true;
-	//		MapOn[11] = true;
-	//	}
-	//}
-
-	////// ##### 10 <-- 11  #####
-	//if (CurrMapNum == 11) {
-	//	RECT rc;
-	//	if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[10])) {
-	//		MovingCamera[10] = true;
-	//		MapOn[11] = true;
-	//	}
-	//}
-
-
-	//// ##### 11 --> 12  #####
-	//if (CurrMapNum == 11) {
-	//	RECT rc;
-	//	if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[11])) {
-	//		MovingCamera[11] = true;
-	//		MapOn[12] = true;
-	//	}
-	//}
-
-	////// ##### 11 <-- 12  #####
-	//if (CurrMapNum == 12) {
-	//	RECT rc;
-	//	if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[11])) {
-	//		MovingCamera[11] = true;
-	//		MapOn[11] = true;
-	//	}
-	//}
-
 
 	// ##### 12 --> 13  #####
 	if (CurrMapNum == 12) {
@@ -816,22 +749,6 @@ void MapManager::MovingMap()
 		}
 	}
 
-	//// ##### 6 <-- 7  #####
-	//if (MovingCamera[6] == true && CurrMapNum == 7) {
-	//	if (m_Camera.y > 604) {
-	//		m_Camera.y -= 5;
-	//		if (785 < m_pPlayerLink->getPlayerY()) {
-	//			m_pPlayerLink->SetPlayerY(m_pPlayerLink->getPlayerY() - 0.9f);
-	//		}
-	//		if (m_Camera.y <= 604) {
-	//			CurrMapNum = 6;
-	//			MovingCamera[6] = false;
-	//			MapOn[7] = false;
-	//		}
-	//	}
-	//}
-
-
 	// ##### 7 --> 8  #####
 	if (MovingCamera[7] == true && CurrMapNum == 7) {
 		if (m_Camera.y < 1050) {
@@ -848,22 +765,7 @@ void MapManager::MovingMap()
 		}
 	}
 
-	//// ##### 7 <-- 8  #####
-	//if (MovingCamera[7] == true && CurrMapNum == 8) {
-	//	if (m_Camera.y > 812) {
-	//		m_Camera.y -= 5;
-	//		if (995 < m_pPlayerLink->getPlayerY()) {
-	//			m_pPlayerLink->SetPlayerY(m_pPlayerLink->getPlayerY() - 0.9f);
-	//		}
-	//		if (m_Camera.y <= 812) {
-	//			CurrMapNum = 7;
-	//			MovingCamera[7] = false;
-	//			MapOn[8] = false;
-	//		}
-	//	}
-	//}
-
-
+	
 	// ##### 8 --> 9  #####
 	if (MovingCamera[8] == true && CurrMapNum == 8) {
 		if (m_Camera.x > 2400) {
@@ -913,54 +815,7 @@ void MapManager::MovingMap()
 		}
 	}
 
-	//// ##### 8 <-- 10  #####
-	//if (MovingCamera[9] == true && CurrMapNum == 10) {
-	//	if (m_Camera.x > 2800) {
-	//		m_Camera.x -= 6;
-	//		if (2760 < m_pPlayerLink->getPlayerX()) {
-	//			m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() - 0.5f);
-	//		}
-	//		if (m_Camera.x <= 2800) {
-	//			CurrMapNum = 8;
-	//			MovingCamera[9] = false;
-	//			MapOn[10] = false;
-	//		}
-	//	}
-	//}
-
-
-	//// ##### 10 --> 11  #####
-	//if (MovingCamera[10] == true && CurrMapNum == 10) {
-	//	if (m_Camera.x < 3600) {
-	//		m_Camera.x += 6;
-	//		if (3640 > m_pPlayerLink->getPlayerX()) {
-	//			m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() + 0.5f);
-	//		}
-	//		if (m_Camera.x >= 3600) {
-	//			CurrMapNum = 11;
-	//			MovingCamera[10] = false;
-	//			MapOn[10] = false;
-	//		}
-	//	}
-	//}
-
-
-	//// ##### 11 --> 12  #####
-	//if (MovingCamera[11] == true && CurrMapNum == 11) {
-	//	if (m_Camera.x < 4000) {
-	//		m_Camera.x += 6;
-	//		if (4040 > m_pPlayerLink->getPlayerX()) {
-	//			m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() + 0.5f);
-	//		}
-	//		if (m_Camera.x >= 4000) {
-	//			CurrMapNum = 12;
-	//			MovingCamera[11] = false;
-	//			MapOn[11] = false;
-	//		}
-	//	}
-	//}
-
-
+	
 	// ##### 12 --> 13  #####
 	if (MovingCamera[12] == true && CurrMapNum == 12) {
 		if (m_Camera.y > 842) {
