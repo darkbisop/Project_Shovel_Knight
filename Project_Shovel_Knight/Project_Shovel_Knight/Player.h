@@ -36,11 +36,9 @@ private:
 	float	m_invenX, m_invenY;
 	
 	int		tempRan;
-	int		m_InvenX;
+	int		Money;
 	
-
 	bool	m_isMoving;
-	bool	m_isInventoryOn;
 
 public:
 
@@ -56,8 +54,8 @@ public:
 	inline void SetPlayerX(float x) { m_fX = x; }
 	inline void SetPlayerY(float y) { m_fY = y; }
 
-	inline bool	getIsMoving() { return m_isMoving; }
-	inline void setIsMoving(bool a) { m_isMoving = a; }
+	inline int getMoney() { return Money; }
+	inline void setMoney(int a) { Money = a; }
 
 	inline Inventory* getInventory() { return m_inventory; }
 

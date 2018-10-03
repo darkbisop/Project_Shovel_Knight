@@ -19,16 +19,12 @@ HRESULT Player::init()
 	m_fX = 30;
 	m_fY = 720;
 	m_fSpeed = 2.0f;
-
-	m_InvenX = 143;
 	
-
 	m_rc = RectMake(m_fX, m_fY, 26, 30);
 	m_InvenRect = RectMake(m_invenX, m_invenY, 223, 20);
 
 	m_isMoving = false;
-	m_isInventoryOn = false;
-
+	
 	tempRan = 0;
 	
 	return S_OK;
@@ -50,11 +46,11 @@ void Player::update()
 
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT)) {
 		m_fX += m_fSpeed;
-		m_isMoving = true;
+		//m_isMoving = true;
 	}
 	else if (KEYMANAGER->isStayKeyDown(VK_LEFT)) {
 		m_fX -= m_fSpeed;
-		m_isMoving = true;
+		//m_isMoving = true;
 	}
 
 	if (KEYMANAGER->isStayKeyDown(VK_UP)) {
@@ -99,16 +95,12 @@ void Player::render(HDC hdc)
 
 	m_PlayerImg->render(hdc, m_fX, m_fY);
 
-	if (m_isInventoryOn) {
-		
-	}
-
 	m_UI->render(hdc, MAPMANAGER->getCamera().x, MAPMANAGER->getCamera().y);
 	m_inventory->render(hdc);
 	m_Equipment->render(m_UI->getMemDC());
 }
 
-Player::Player()
+Player::Player() : Money(10000)
 {
 }
 

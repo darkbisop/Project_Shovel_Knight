@@ -22,7 +22,7 @@ private:
 	Equipment* m_pEquipment;
 	RECT	m_rc;
 	RECT	Select_Rect;
-	int		Money;
+
 	int		m_InvenY;
 	Slot	m_Inventory[2][6];
 
@@ -31,7 +31,7 @@ private:
 	bool	invenOn;
 
 public:
-
+	int		Money;
 	HRESULT init(void);
 	void release(void);
 	void update(void);

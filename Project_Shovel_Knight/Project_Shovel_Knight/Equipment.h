@@ -29,6 +29,7 @@ public:
 
 	void setInventoryLink(Inventory* link) { m_Inventory = link; }
 	Item* setEquipment(Item* item);
+	void setItemEffect();
 
 	Equipment();
 	~Equipment();
