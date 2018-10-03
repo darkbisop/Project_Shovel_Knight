@@ -1,12 +1,10 @@
 #include "stdafx.h"
 #include "MapManager.h"
-#include "Player.h"
 #include "MapImage.h"
 
 HRESULT MapManager::init(void)
 {
 	_empty = IMAGEMANAGER->addImage("MainCamera", "image/Empty.bmp", 7200, 1400, true, RGB(255, 0, 255));
-	m_UI = IMAGEMANAGER->addImage("UI", "image/UI.bmp", 400, 18, true, RGB(255, 0, 255));
 	BackGround_Castle = IMAGEMANAGER->addImage("Background_Castle", "image/BackGround/Background_Castle.bmp", 2500, 176, true, RGB(255, 0, 255));
 	Back_3_Ground = IMAGEMANAGER->addImage("Back_3_Ground", "image/BackGround/Back_3_Ground.bmp", 1000, 108, true, RGB(255, 0, 255));
 	Back_2_Ground = IMAGEMANAGER->addImage("Back_2_Ground", "image/BackGround/Back_2_Ground.bmp", 1000, 176, true, RGB(255, 0, 255));
@@ -17,8 +15,7 @@ HRESULT MapManager::init(void)
 	m_pMapImage = new MapImage;
 	m_pMapImage->init();
 
-	m_pPlayerLink = new Player;
-	m_pPlayerLink->init();
+	PLAYER->init();
 
 	MapOn[0] = true;
 	
@@ -39,12 +36,12 @@ HRESULT MapManager::init(void)
 
 void MapManager::release(void)
 {
-	SAFE_DELETE(m_pPlayerLink);
+	//SAFE_DELETE(PLAYER);
 }
 
 void MapManager::update(void)
 {
-	m_pPlayerLink->update();
+	PLAYER->update();
 	CollisionCheck_ChangeMapRect();
 	MovingMap();
 }
@@ -61,15 +58,13 @@ void MapManager::render(HDC hdc)
 	}
 
 	CurrMap();
-	m_pPlayerLink->render(_empty->getMemDC());
+	PLAYER->render(_empty->getMemDC());
 
-	m_UI->render(_empty->getMemDC(), m_Camera.x, m_Camera.y);
-	
 	_empty->render(hdc, 0, 0, m_Camera.x, m_Camera.y, WINSIZEX, WINSIZEY);
 
 	char str[64];
 	wsprintf(str, "x : %d, y : %d", m_Camera.x, m_Camera.y);
-	//sprintf_s(str, "x : %f, y : %f", m_pPlayerLink->getPlayerX(), m_pPlayerLink->getPlayerY());
+	//sprintf_s(str, "x : %f, y : %f", PLAYER->getPlayerX(), PLAYER->getPlayerY());
 	TextOut(hdc, 100, 30, str, strlen(str));
 }
 
@@ -104,9 +99,7 @@ void MapManager::CurrMap()
 	// 0¹ø¸ÊÀÏ¶§
 	if (CurrMapNum == 0 && MovingCamera[0] == false) {
 
-		if (m_pPlayerLink) {
-			m_Camera = { (int)m_pPlayerLink->getPlayerX() - 180, (int)m_pPlayerLink->getPlayerY() };
-		}
+		m_Camera = { (int)PLAYER->getPlayerX() - 180, (int)PLAYER->getPlayerY() };
 		
 		if (m_Camera.x < 2) m_Camera.x = 2;
 		else if (m_Camera.x + WINSIZEX > 1600) m_Camera.x = 1600 - WINSIZEX;
@@ -118,9 +111,7 @@ void MapManager::CurrMap()
 	// 10¹ø¸ÊÀÏ¶§
 	if (CurrMapNum == 12 && MovingCamera[9] == false && MovingCamera[12] == false) {
 
-		if (m_pPlayerLink) {
-			m_Camera = { (int)m_pPlayerLink->getPlayerX() - 180, (int)m_pPlayerLink->getPlayerY() };
-		}
+		m_Camera = { (int)PLAYER->getPlayerX() - 180, (int)PLAYER->getPlayerY() };
 
 		if (m_Camera.x < 3200) m_Camera.x = 3200;
 		else if (m_Camera.x + WINSIZEX > 4397) m_Camera.x = 4397 - WINSIZEX;
@@ -132,9 +123,7 @@ void MapManager::CurrMap()
 	// 14¹ø¸ÊÀÏ¶§
 	if (CurrMapNum == 14 && MovingCamera[13] == false && MovingCamera[14] == false) {
 
-		if (m_pPlayerLink) {
-			m_Camera = { (int)m_pPlayerLink->getPlayerX() - 180, (int)m_pPlayerLink->getPlayerY() };
-		}
+		m_Camera = { (int)PLAYER->getPlayerX() - 180, (int)PLAYER->getPlayerY() };
 	
 		if (m_Camera.x < 4400) m_Camera.x = 4400;
 		else if (m_Camera.x + WINSIZEX > 4976) m_Camera.x = 4976 - WINSIZEX;
@@ -146,9 +135,7 @@ void MapManager::CurrMap()
 	// 17¹ø¸ÊÀÏ¶§
 	if (CurrMapNum == 17 && MovingCamera[16] == false && MovingCamera[17] == false) {
 
-		if (m_pPlayerLink) {
-			m_Camera = { (int)m_pPlayerLink->getPlayerX() - 180, (int)m_pPlayerLink->getPlayerY() };
-		}
+		m_Camera = { (int)PLAYER->getPlayerX() - 180, (int)PLAYER->getPlayerY() };
 
 		if (m_Camera.x < 4400) m_Camera.x = 4400;
 		else if (m_Camera.x + WINSIZEX > 5200) m_Camera.x = 5200 - WINSIZEX;
@@ -186,7 +173,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 0 --> 1  #####
 	if (CurrMapNum == 0) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[0])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[0])) {
 			MovingCamera[0] = true;
 			MapOn[1] = true;
 		}
@@ -195,7 +182,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 0 <-- 1  #####
 	if (CurrMapNum == 1) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[0])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[0])) {
 			MovingCamera[0] = true;
 			MapOn[0] = true;
 		}
@@ -204,7 +191,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 1 --> 2 #####
 	if (CurrMapNum == 1) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[1])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[1])) {
 			//MovingCamera[2] = true;
 			MovingCamera[1] = true;
 			MapOn[2] = true;
@@ -214,7 +201,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 1 <-- 2  #####
 	if (CurrMapNum == 2) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[1])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[1])) {
 			MovingCamera[1] = true;
 			MapOn[1] = true;
 		}
@@ -223,7 +210,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 2 --> 3 #####
 	if (CurrMapNum == 2) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[2])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[2])) {
 			//MovingCamera[3] = true;
 			MovingCamera[2] = true;
 			MapOn[3] = true;
@@ -233,7 +220,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 2 <-- 3  #####
 	if (CurrMapNum == 3) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[2])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[2])) {
 			//MovingCamera[3] = true;
 			MovingCamera[2] = true;
 			MapOn[2] = true;
@@ -244,7 +231,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 3 --> 4  #####
 	if (CurrMapNum == 3) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[3])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[3])) {
 			//MovingCamera[4] = true;
 			MovingCamera[3] = true;
 			MapOn[4] = true;
@@ -254,7 +241,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 3 <-- 4  #####
 	if (CurrMapNum == 4) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[3])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[3])) {
 			//MovingCamera[4] = true;
 			MovingCamera[3] = true;
 			MapOn[3] = true;
@@ -265,7 +252,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 4 --> 5  #####
 	if (CurrMapNum == 4) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[4])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[4])) {
 			//MovingCamera[5] = true;
 			MovingCamera[4] = true;
 			MapOn[5] = true;
@@ -275,7 +262,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 4 <-- 5  #####
 	if (CurrMapNum == 5) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[4])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[4])) {
 			//MovingCamera[5] = true;
 			MovingCamera[4] = true;
 			MapOn[4] = true;
@@ -286,7 +273,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 5 --> 6  #####
 	if (CurrMapNum == 5) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[5])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[5])) {
 			//MovingCamera[6] = true;
 			MovingCamera[5] = true;
 			MapOn[6] = true;
@@ -296,7 +283,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	//// ##### 5 <-- 6  #####
 	if (CurrMapNum == 6) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[5])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[5])) {
 			//MovingCamera[6] = true;
 			MovingCamera[5] = true;
 			MapOn[5] = true;
@@ -307,7 +294,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 6 --> 7  #####
 	if (CurrMapNum == 6) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[6])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[6])) {
 			//MovingCamera[7] = true;
 			MovingCamera[6] = true;
 			MapOn[7] = true;
@@ -317,7 +304,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	//// ##### 6 <-- 7  #####
 	if (CurrMapNum == 7) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[6])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[6])) {
 			//MovingCamera[7] = true;
 			MovingCamera[6] = true;
 			MapOn[6] = true;
@@ -327,7 +314,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 7 --> 8  #####
 	if (CurrMapNum == 7) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[7])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[7])) {
 			//MovingCamera[8] = true;
 			MovingCamera[7] = true;
 			MapOn[8] = true;
@@ -337,7 +324,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	//// ##### 7 <-- 8  #####
 	if (CurrMapNum == 8) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[7])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[7])) {
 			//MovingCamera[8] = true;
 			MovingCamera[7] = true;
 			MapOn[7] = true;
@@ -347,7 +334,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 8 --> 9  #####
 	if (CurrMapNum == 8) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[8])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[8])) {
 			//MovingCamera[9] = true;
 			MovingCamera[8] = true;
 			MapOn[9] = true;
@@ -357,7 +344,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	//// ##### 9 <-- 8  #####
 	if (CurrMapNum == 9) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[8])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[8])) {
 			//MovingCamera[9] = true;
 			MovingCamera[8] = true;
 			MapOn[8] = true;
@@ -368,7 +355,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 8 --> 10  #####
 	if (CurrMapNum == 8) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[9])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[9])) {
 			MovingCamera[9] = true;
 			//MovingCamera[8] = true;
 			MapOn[10] = true;
@@ -378,7 +365,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 12 --> 13  #####
 	if (CurrMapNum == 12) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[12])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[12])) {
 			MovingCamera[12] = true;
 			MapOn[13] = true;
 		}
@@ -388,7 +375,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 13 --> 14  #####
 	if (CurrMapNum == 13) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[13])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[13])) {
 			MovingCamera[13] = true;
 			MapOn[14] = true;
 		}
@@ -397,7 +384,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	//// ##### 13 <-- 14  #####
 	if (CurrMapNum == 14) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[13])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[13])) {
 			MovingCamera[13] = true;
 			MapOn[13] = true;
 		}
@@ -407,7 +394,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 13 --> 15 #####
 	if (CurrMapNum == 13) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[14])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[14])) {
 			MovingCamera[14] = true;
 			MapOn[15] = true;
 		}
@@ -417,7 +404,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 15 --> 16 #####
 	if (CurrMapNum == 15) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[15])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[15])) {
 			MovingCamera[15] = true;
 			MapOn[16] = true;
 		}
@@ -426,7 +413,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	//// ##### 15 <-- 16  #####
 	if (CurrMapNum == 16) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[15])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[15])) {
 			MovingCamera[15] = true;
 			MapOn[15] = true;
 		}
@@ -435,7 +422,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 15 --> 16 #####
 	if (CurrMapNum == 15) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[16])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[16])) {
 			MovingCamera[15] = true;
 			MapOn[16] = true;
 		}
@@ -444,7 +431,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	//// ##### 15 <-- 16  #####
 	if (CurrMapNum == 16) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[16])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[16])) {
 			MovingCamera[15] = true;
 			MapOn[15] = true;
 		}
@@ -454,7 +441,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 16 --> 17 #####
 	if (CurrMapNum == 16) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[17])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[17])) {
 			MovingCamera[16] = true;
 			MapOn[17] = true;
 		}
@@ -464,7 +451,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 17 --> 18 #####
 	if (CurrMapNum == 17) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[18])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[18])) {
 			MovingCamera[17] = true;
 			MapOn[18] = true;
 		}
@@ -474,7 +461,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 18 --> 19 #####
 	if (CurrMapNum == 18) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[19])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[19])) {
 			MovingCamera[18] = true;
 			MapOn[19] = true;
 		}
@@ -483,7 +470,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 19 --> 20 #####
 	if (CurrMapNum == 19) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[20])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[20])) {
 			MovingCamera[19] = true;
 			MapOn[20] = true;
 		}
@@ -492,7 +479,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 20 --> 21 #####
 	if (CurrMapNum == 20) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[21])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[21])) {
 			MovingCamera[20] = true;
 			MapOn[21] = true;
 		}
@@ -501,7 +488,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 21 --> 23 #####
 	if (CurrMapNum == 21) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[22])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[22])) {
 			MovingCamera[21] = true;
 			MapOn[22] = true;
 		}
@@ -510,7 +497,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	// ##### 23 --> 24 #####
 	if (CurrMapNum == 22) {
 		RECT rc;
-		if (IntersectRect(&rc, &m_pPlayerLink->getPlayerRect(), &CheckChangeMapRect[23])) {
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[23])) {
 			MovingCamera[22] = true;
 			MapOn[23] = true;
 		}
@@ -523,8 +510,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[0] == true && CurrMapNum == 0) {
 		if (m_Camera.x < 1600) {
 			m_Camera.x += 6;
-			if (1620 > m_pPlayerLink->getPlayerX()) {
-				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() + 0.5f);
+			if (1620 > PLAYER->getPlayerX()) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 1600) {
 				m_Camera.x = 1600;
@@ -539,8 +526,8 @@ void MapManager::MovingMap()
 	if (CurrMapNum == 1 && MovingCamera[0] == true) {
 		if (m_Camera.x > 1203) {
 			m_Camera.x -= 6;
-			if (1565 < m_pPlayerLink->getPlayerX()) {
-				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() - 0.5f);
+			if (1565 < PLAYER->getPlayerX()) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() - 0.5f);
 			}
 			if (m_Camera.x <= 1203) {
 				CurrMapNum = 0;
@@ -555,8 +542,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[1] == true && CurrMapNum == 1) {
 		if (m_Camera.x < 2000) {
 			m_Camera.x += 6;
-			if (2004 > m_pPlayerLink->getPlayerX()) {
-				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() + 0.5f);
+			if (2004 > PLAYER->getPlayerX()) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 2000) {
 				m_Camera.x = 2000;
@@ -571,8 +558,8 @@ void MapManager::MovingMap()
 	if (CurrMapNum == 2 && MovingCamera[1] == true) {
 		if (m_Camera.x > 1600) {
 			m_Camera.x -= 6;
-			if (1973 < m_pPlayerLink->getPlayerX()) {
-				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() - 0.5f);
+			if (1973 < PLAYER->getPlayerX()) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() - 0.5f);
 			}
 			if (m_Camera.x <= 1600) {
 				CurrMapNum = 1;
@@ -587,8 +574,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[2] == true && CurrMapNum == 2) {
 		if (m_Camera.y > 426) {
 			m_Camera.y -= 5;
-			if (580 < m_pPlayerLink->getPlayerY()) {
-				m_pPlayerLink->SetPlayerY(m_pPlayerLink->getPlayerY() - 0.9f);
+			if (580 < PLAYER->getPlayerY()) {
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 0.9f);
 			}
 			if (m_Camera.y <= 426) {
 				m_Camera.y = 424;
@@ -602,8 +589,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[2] == true && CurrMapNum == 3) {
 		if (m_Camera.y < 634) {
 			m_Camera.y += 5;
-			if (620 > m_pPlayerLink->getPlayerY()) {
-				m_pPlayerLink->SetPlayerY(m_pPlayerLink->getPlayerY() + 0.9f);
+			if (620 > PLAYER->getPlayerY()) {
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() + 0.9f);
 			}
 			if (m_Camera.y >= 634) {
 				m_Camera.y = 634;
@@ -619,8 +606,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[3] == true && CurrMapNum == 3) {
 		if (m_Camera.x < 2400) {
 			m_Camera.x += 6;
-			if (2410 > m_pPlayerLink->getPlayerX()) {
-				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() + 0.5f);
+			if (2410 > PLAYER->getPlayerX()) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 2400) {
 				CurrMapNum = 4;
@@ -633,8 +620,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[3] == true && CurrMapNum == 4) {
 		if (m_Camera.x > 2000) {
 			m_Camera.x -= 6;
-			if (2350 < m_pPlayerLink->getPlayerX()) {
-				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() - 0.5f);
+			if (2350 < PLAYER->getPlayerX()) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() - 0.5f);
 			}
 			if (m_Camera.x <= 2000) {
 				MapOn[4] = false;
@@ -649,8 +636,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[4] == true && CurrMapNum == 4) {
 		if (m_Camera.x < 2800) {
 			m_Camera.x += 6;
-			if (2810 > m_pPlayerLink->getPlayerX()) {
-				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() + 0.5f);
+			if (2810 > PLAYER->getPlayerX()) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 2800) {
 				m_Camera.x = 2800;
@@ -664,8 +651,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[4] == true && CurrMapNum == 5) {
 		if (m_Camera.x > 2400) {
 			m_Camera.x -= 6;
-			if (2760 < m_pPlayerLink->getPlayerX()) {
-				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() - 0.5f);
+			if (2760 < PLAYER->getPlayerX()) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() - 0.5f);
 			}
 			if (m_Camera.x <= 2400) {
 				MapOn[5] = false;
@@ -681,8 +668,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[5] == true && CurrMapNum == 5) {
 		if (m_Camera.y < 634) {
 			m_Camera.y += 5;
-			if (670 > m_pPlayerLink->getPlayerY()) {
-				m_pPlayerLink->SetPlayerY(m_pPlayerLink->getPlayerY() + 0.9f);
+			if (670 > PLAYER->getPlayerY()) {
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() + 0.9f);
 			}
 			if (m_Camera.y >= 634) {
 				m_Camera.y = 634;
@@ -697,8 +684,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[5] == true && CurrMapNum == 6) {
 		if (m_Camera.y > 426) {
 			m_Camera.y -= 5;
-			if (580 < m_pPlayerLink->getPlayerY()) {
-				m_pPlayerLink->SetPlayerY(m_pPlayerLink->getPlayerY() - 0.9f);
+			if (580 < PLAYER->getPlayerY()) {
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 0.9f);
 			}
 			if (m_Camera.y <= 426) {
 				m_Camera.y = 426;
@@ -713,8 +700,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[6] == true && CurrMapNum == 6) {
 		if (m_Camera.y < 842) {
 			m_Camera.y += 5;
-			if (863 > m_pPlayerLink->getPlayerY()) {
-				m_pPlayerLink->SetPlayerY(m_pPlayerLink->getPlayerY() + 0.9f);
+			if (863 > PLAYER->getPlayerY()) {
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() + 0.9f);
 			}
 			if (m_Camera.y >= 842) {
 				m_Camera.y = 842;
@@ -729,8 +716,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[7] == true && CurrMapNum == 7) {
 		if (m_Camera.y < 1050) {
 			m_Camera.y += 5;
-			if (1070 > m_pPlayerLink->getPlayerY()) {
-				m_pPlayerLink->SetPlayerY(m_pPlayerLink->getPlayerY() + 0.9f);
+			if (1070 > PLAYER->getPlayerY()) {
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() + 0.9f);
 			}
 			if (m_Camera.y >= 1050) {
 				m_Camera.y = 1050;
@@ -746,8 +733,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[8] == true && CurrMapNum == 8) {
 		if (m_Camera.x > 2400) {
 			m_Camera.x -= 6;
-			if (2760 < m_pPlayerLink->getPlayerX()) {
-				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() - 0.5f);
+			if (2760 < PLAYER->getPlayerX()) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() - 0.5f);
 			}
 			if (m_Camera.x <= 2400) {
 				m_Camera.x = 2400;
@@ -762,8 +749,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[8] == true && CurrMapNum == 9) {
 		if (m_Camera.x < 2800) {
 			m_Camera.x += 6;
-			if (2810 > m_pPlayerLink->getPlayerX()) {
-				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() + 0.5f);
+			if (2810 > PLAYER->getPlayerX()) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 2800) {
 				m_Camera.x = 2800;
@@ -779,8 +766,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[9] == true && CurrMapNum == 8) {
 		if (m_Camera.x < 3200) {
 			m_Camera.x += 6;
-			if (3240 > m_pPlayerLink->getPlayerX()) {
-				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() + 0.5f);
+			if (3240 > PLAYER->getPlayerX()) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 3200) {
 				m_Camera.x = 3200;
@@ -796,8 +783,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[12] == true && CurrMapNum == 12) {
 		if (m_Camera.y > 842) {
 			m_Camera.y -= 5;
-			if (995 < m_pPlayerLink->getPlayerY()) {
-				m_pPlayerLink->SetPlayerY(m_pPlayerLink->getPlayerY() - 0.9f);
+			if (995 < PLAYER->getPlayerY()) {
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 0.9f);
 			}
 			if (m_Camera.y <= 842) {
 				m_Camera.y = 842;
@@ -814,8 +801,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[13] == true && CurrMapNum == 13) {
 		if (m_Camera.x < 4400) {
 			m_Camera.x += 6;
-			if (4600 > m_pPlayerLink->getPlayerX()) {
-				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() + 0.5f);
+			if (4600 > PLAYER->getPlayerX()) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 4400) {
 				m_Camera.x = 4400;
@@ -830,8 +817,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[13] == true && CurrMapNum == 14) {
 		if (m_Camera.x > 4000) {
 			m_Camera.x -= 6;
-			if (4365 < m_pPlayerLink->getPlayerX()) {
-				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() - 0.5f);
+			if (4365 < PLAYER->getPlayerX()) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() - 0.5f);
 			}
 			if (m_Camera.x <= 4000) {
 				m_Camera.x = 4000;
@@ -847,8 +834,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[14] == true && CurrMapNum == 13) {
 		if (m_Camera.y > 634) {
 			m_Camera.y -= 5;
-			if (785 < m_pPlayerLink->getPlayerY()) {
-				m_pPlayerLink->SetPlayerY(m_pPlayerLink->getPlayerY() - 0.9f);
+			if (785 < PLAYER->getPlayerY()) {
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 0.9f);
 			}
 			if (m_Camera.y <= 634) {
 				m_Camera.y = 634;
@@ -864,8 +851,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[15] == true && CurrMapNum == 15) {
 		if (m_Camera.y > 426) {
 			m_Camera.y -= 5;
-			if (360 < m_pPlayerLink->getPlayerY()) {
-				m_pPlayerLink->SetPlayerY(m_pPlayerLink->getPlayerY() - 0.9f);
+			if (360 < PLAYER->getPlayerY()) {
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 0.9f);
 			}
 			if (m_Camera.y <= 426) {
 				m_Camera.y = 426;
@@ -880,8 +867,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[15] == true && CurrMapNum == 16) {
 		if (m_Camera.y < 634) {
 			m_Camera.y += 5;
-			if (660 > m_pPlayerLink->getPlayerY()) {
-				m_pPlayerLink->SetPlayerY(m_pPlayerLink->getPlayerY() + 0.9f);
+			if (660 > PLAYER->getPlayerY()) {
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() + 0.9f);
 			}
 			if (m_Camera.y >= 634) {
 				m_Camera.y = 634;
@@ -897,8 +884,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[16] == true && CurrMapNum == 16) {
 		if (m_Camera.x < 4400) {
 			m_Camera.x += 6;
-			if (4600 > m_pPlayerLink->getPlayerX()) {
-				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() + 0.5f);
+			if (4600 > PLAYER->getPlayerX()) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 4400) {
 				m_Camera.x = 4400;
@@ -914,8 +901,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[17] == true && CurrMapNum == 17) {
 		if (m_Camera.x < 5200) {
 			m_Camera.x += 6;
-			if (5250 > m_pPlayerLink->getPlayerX()) {
-				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() + 0.5f);
+			if (5250 > PLAYER->getPlayerX()) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 5200) {
 				m_Camera.x = 5200;
@@ -930,8 +917,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[18] == true && CurrMapNum == 18) {
 		if (m_Camera.x < 5600) {
 			m_Camera.x += 6;
-			if (5650 > m_pPlayerLink->getPlayerX()) {
-				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() + 0.5f);
+			if (5650 > PLAYER->getPlayerX()) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 5600) {
 				m_Camera.x = 5600;
@@ -946,8 +933,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[19] == true && CurrMapNum == 19) {
 		if (m_Camera.y > 218) {
 			m_Camera.y -= 5;
-			if (150 < m_pPlayerLink->getPlayerY()) {
-				m_pPlayerLink->SetPlayerY(m_pPlayerLink->getPlayerY() - 0.9f);
+			if (150 < PLAYER->getPlayerY()) {
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 0.9f);
 			}
 			if (m_Camera.y <= 218) {
 				m_Camera.y = 218;
@@ -963,8 +950,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[20] == true && CurrMapNum == 20) {
 		if (m_Camera.y > 10) {
 			m_Camera.y -= 5;
-			if (0 < m_pPlayerLink->getPlayerY()) {
-				m_pPlayerLink->SetPlayerY(m_pPlayerLink->getPlayerY() - 0.9f);
+			if (0 < PLAYER->getPlayerY()) {
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 0.9f);
 			}
 			if (m_Camera.y <= 10) {
 				m_Camera.y = 10;
@@ -980,8 +967,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[21] == true && CurrMapNum == 21) {
 		if (m_Camera.x < 6000) {
 			m_Camera.x += 6;
-			if (6050 > m_pPlayerLink->getPlayerX()) {
-				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() + 0.5f);
+			if (6050 > PLAYER->getPlayerX()) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 6000) {
 				m_Camera.x = 6000;
@@ -996,8 +983,8 @@ void MapManager::MovingMap()
 	if (MovingCamera[22] == true && CurrMapNum == 22) {
 		if (m_Camera.x < 6400) {
 			m_Camera.x += 6;
-			if (6450 > m_pPlayerLink->getPlayerX()) {
-				m_pPlayerLink->SetPlayerX(m_pPlayerLink->getPlayerX() + 0.5f);
+			if (6450 > PLAYER->getPlayerX()) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 6400) {
 				m_Camera.x = 6400;
@@ -1009,7 +996,7 @@ void MapManager::MovingMap()
 	}
 }
 
-MapManager::MapManager() : m_pPlayerLink(NULL), m_Camera({ 0 , 0 }),  _empty(new image)
+MapManager::MapManager() :m_Camera({ 0 , 0 }),  _empty(new image)
 {
 }
 

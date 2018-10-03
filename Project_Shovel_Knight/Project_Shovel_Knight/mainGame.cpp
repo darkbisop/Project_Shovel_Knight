@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "mainGame.h"
+#include "ShopScene.h"
 #include "playScene.h"
-
 
 void mainGame::setBackBuffer()
 {
@@ -21,10 +21,13 @@ HRESULT mainGame::init()
 
 	setBackBuffer();
 
+	m_ShopScene = new ShopScene;
+	SCENEMANAGER->addScene("ShopScene", m_ShopScene);
+
 	m_PlayScene = new PlayScene;
 	SCENEMANAGER->addScene("PlayScene", m_PlayScene);
 
-	SCENEMANAGER->changeScene("PlayScene");
+	SCENEMANAGER->changeScene("ShopScene");
 
 	//m_ScreenAni->start();
 
@@ -44,6 +47,7 @@ void mainGame::release()
 	SCENEMANAGER->release();
 	SOUNDMANAGER->release();
 	MAPMANAGER->release();
+	PLAYER->release();
 
 	TXTDATA->releaseSingleton();
 	KEYMANAGER->releaseSingleton();
@@ -52,6 +56,7 @@ void mainGame::release()
 	SCENEMANAGER->releaseSingleton();
 	SOUNDMANAGER->releaseSingleton();
 	MAPMANAGER->releaseSingleton();
+	PLAYER->releaseSingleton();
 }
 
 LRESULT mainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)

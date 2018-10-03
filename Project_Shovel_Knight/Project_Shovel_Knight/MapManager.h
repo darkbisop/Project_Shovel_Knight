@@ -1,7 +1,5 @@
 #pragma once
 #include "singletonBase.h"
-
-class Player;
 class MapImage;
 
 class MapManager : public singletonBase<MapManager>
@@ -9,11 +7,9 @@ class MapManager : public singletonBase<MapManager>
 private:
 
 	MapImage* m_pMapImage;
-	Player * m_pPlayerLink;
 	POINT	m_Camera;
 
 	image*	_empty;
-	image*	m_UI;
 	image*	m_SkyBg;
 	image*	BackGround_Castle;
 	image*	Back_3_Ground;
@@ -36,7 +32,7 @@ public:
 
 	POINT getCamera() { return m_Camera; }
 
-	void setPlayerLink(Player* player) { m_pPlayerLink = player; }
+	//void setPlayerLink(Player* player) { m_pPlayerLink = player; }
 	void CheckMapRect();
 	void CurrMap();
 	void CollisionCheck_ChangeMapRect();

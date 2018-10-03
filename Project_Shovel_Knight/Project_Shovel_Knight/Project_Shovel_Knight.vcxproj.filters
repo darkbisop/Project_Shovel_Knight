@@ -73,10 +73,10 @@
     <Filter Include="메인게임\상점">
       <UniqueIdentifier>{83187a6f-428e-41be-95c6-3226045793e3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="메인게임\아이템">
+    <Filter Include="메인게임\상점\아이템">
       <UniqueIdentifier>{90caa2e4-f30a-40ae-9eea-0352aa0dc6ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="메인게임\인벤토리">
+    <Filter Include="메인게임\상점\아이템\인벤토리">
       <UniqueIdentifier>{21a28c85-1e7f-4c13-848f-483058a6a496}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -195,6 +195,24 @@
     <ClInclude Include="PlayScene.h">
       <Filter>메인게임\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>메인게임\상점\아이템</Filter>
+    </ClInclude>
+    <ClInclude Include="Flame_Wand.h">
+      <Filter>메인게임\상점\아이템</Filter>
+    </ClInclude>
+    <ClInclude Include="Inventory.h">
+      <Filter>메인게임\상점\아이템\인벤토리</Filter>
+    </ClInclude>
+    <ClInclude Include="ShopScene.h">
+      <Filter>메인게임\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Shop.h">
+      <Filter>메인게임\상점</Filter>
+    </ClInclude>
+    <ClInclude Include="Equipment.h">
+      <Filter>메인게임\상점\아이템\인벤토리</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -295,6 +313,24 @@
     </ClCompile>
     <ClCompile Include="PlayScene.cpp">
       <Filter>메인게임\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>메인게임\상점\아이템</Filter>
+    </ClCompile>
+    <ClCompile Include="Flame_Wand.cpp">
+      <Filter>메인게임\상점\아이템</Filter>
+    </ClCompile>
+    <ClCompile Include="Inventory.cpp">
+      <Filter>메인게임\상점\아이템\인벤토리</Filter>
+    </ClCompile>
+    <ClCompile Include="ShopScene.cpp">
+      <Filter>메인게임\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Shop.cpp">
+      <Filter>메인게임\상점</Filter>
+    </ClCompile>
+    <ClCompile Include="Equipment.cpp">
+      <Filter>메인게임\상점\아이템\인벤토리</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

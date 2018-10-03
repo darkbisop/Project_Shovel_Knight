@@ -1,5 +1,6 @@
 #pragma once
 
+class ShopScene;
 class PlayScene;
 
 class mainGame
@@ -14,6 +15,7 @@ private:
 
 	char m_szText[128];
 
+	ShopScene*		m_ShopScene;
 	PlayScene*		m_PlayScene;
 
 public:

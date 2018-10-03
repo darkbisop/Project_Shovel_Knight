@@ -5,19 +5,26 @@
 HRESULT Player::init()
 {
 	m_PlayerImg = IMAGEMANAGER->addImage("space", "image/Player_idle_right.bmp", 34, 32, true, RGB(255, 0, 255));
-	m_InventoryImg = IMAGEMANAGER->addImage("Inventory", "image/Item/Inventory.bmp", 223, 143, true, RGB(255, 0, 255));
+	m_UI = IMAGEMANAGER->addImage("UI", "image/UI.bmp", 400, 18, true, RGB(255, 0, 255));
+
+	m_inventory = new Inventory;
+	m_inventory->init();
+
+	m_Equipment = new Equipment;
+	m_Equipment->init();
+
+	m_inventory->SetEquipmentLink(m_Equipment);
+	m_Equipment->setInventoryLink(m_inventory);
 
 	m_fX = 30;
 	m_fY = 720;
 	m_fSpeed = 2.0f;
 
 	m_InvenX = 143;
-	m_InvenY = 0;
+	
 
 	m_rc = RectMake(m_fX, m_fY, 26, 30);
 	m_InvenRect = RectMake(m_invenX, m_invenY, 223, 20);
-
-	m_State = Player_State::IDLE;
 
 	m_isMoving = false;
 	m_isInventoryOn = false;
@@ -29,51 +36,33 @@ HRESULT Player::init()
 
 void Player::release()
 {
+	m_inventory->release();
+	SAFE_DELETE(m_inventory);
+
+	m_Equipment->release();
+	SAFE_DELETE(m_Equipment);
 }
 
 void Player::update()
 {
+	m_inventory->update();
+	m_Equipment->update();
+
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT)) {
-		Player_State::MOVE;
 		m_fX += m_fSpeed;
 		m_isMoving = true;
 	}
 	else if (KEYMANAGER->isStayKeyDown(VK_LEFT)) {
-		Player_State::MOVE;
 		m_fX -= m_fSpeed;
 		m_isMoving = true;
 	}
 
 	if (KEYMANAGER->isStayKeyDown(VK_UP)) {
-		Player_State::MOVE;
 		m_fY -= m_fSpeed;
 	}
 
 	if (KEYMANAGER->isStayKeyDown(VK_DOWN)) {
-		Player_State::MOVE;
 		m_fY += m_fSpeed;
-	}
-
-	if (m_isInventoryOn == false && KEYMANAGER->isOnceKeyDown('E')) {
-		m_isInventoryOn = true;
-	}
-	else if (m_isInventoryOn == true && KEYMANAGER->isOnceKeyDown('E')) {
-		m_isInventoryOn = false;
-		m_InvenY = 0;
-	}
-
-	if (m_isInventoryOn) {
-		/*if (m_InvenRect.bottom - m_InvenRect.top < 143) {
-			m_InvenRect.top -= 1;
-			m_InvenRect.bottom += 1;
-			m_InvenY--;
-		}*/
-		if (m_InvenY < 143) {
-			m_InvenY += 19;
-		}
-		if (m_InvenY >= 143) {
-			m_InvenY = 143;
-		}
 	}
 
 	
@@ -111,8 +100,12 @@ void Player::render(HDC hdc)
 	m_PlayerImg->render(hdc, m_fX, m_fY);
 
 	if (m_isInventoryOn) {
-		m_InventoryImg->render(hdc, 100, 670, 223, m_InvenY);
+		
 	}
+
+	m_UI->render(hdc, MAPMANAGER->getCamera().x, MAPMANAGER->getCamera().y);
+	m_inventory->render(hdc);
+	m_Equipment->render(m_UI->getMemDC());
 }
 
 Player::Player()

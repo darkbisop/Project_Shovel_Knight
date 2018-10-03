@@ -1,4 +1,7 @@
 #pragma once
+#include "singletonBase.h"
+#include "Equipment.h"
+#include "Inventory.h"
 
 struct Temp
 {
@@ -10,21 +13,19 @@ struct Temp
 	float speed;
 };
 
-enum Player_State
-{
-	IDLE, MOVE
-};
-class Player
+class Player : public singletonBase<Player>
 {
 private:
 
 	vector<Temp> v_VecTemp;
 	vector<Temp>::iterator v_Iter;
 
+	Inventory*	m_inventory;
+	Equipment*	m_Equipment;
+
 	Temp m_Drop;
-	Player_State m_State;
 	image * m_PlayerImg;
-	image * m_InventoryImg;
+	image*	m_UI;
 
 	RECT	m_rc;
 	RECT	m_InvenRect;
@@ -36,7 +37,7 @@ private:
 	
 	int		tempRan;
 	int		m_InvenX;
-	int		m_InvenY;
+	
 
 	bool	m_isMoving;
 	bool	m_isInventoryOn;
@@ -57,6 +58,8 @@ public:
 
 	inline bool	getIsMoving() { return m_isMoving; }
 	inline void setIsMoving(bool a) { m_isMoving = a; }
+
+	inline Inventory* getInventory() { return m_inventory; }
 
 	Player();
 	~Player();
