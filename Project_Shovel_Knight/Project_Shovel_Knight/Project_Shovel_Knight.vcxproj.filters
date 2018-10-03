@@ -79,6 +79,9 @@
     <Filter Include="메인게임\상점\아이템\인벤토리">
       <UniqueIdentifier>{21a28c85-1e7f-4c13-848f-483058a6a496}</UniqueIdentifier>
     </Filter>
+    <Filter Include="메인게임\오브젝트">
+      <UniqueIdentifier>{90e73606-e534-4edf-b9d9-eb8495bb871e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

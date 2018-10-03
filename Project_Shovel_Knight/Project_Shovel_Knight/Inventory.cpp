@@ -111,9 +111,7 @@ void Inventory::render(HDC hdc)
 		}
 	}
 
-	char str[64];
-	wsprintf(str, "money : %d", PLAYER->getMoney());
-	TextOut(hdc, WINSIZEX / 2 - 90, 150, str, strlen(str));
+	
 }
 
 void Inventory::buyItem(Item * item)

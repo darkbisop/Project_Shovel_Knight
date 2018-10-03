@@ -37,8 +37,6 @@ private:
 	
 	int		tempRan;
 	int		Money;
-	
-	bool	m_isMoving;
 
 public:
 
