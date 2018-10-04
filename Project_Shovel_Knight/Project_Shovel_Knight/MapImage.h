@@ -27,6 +27,8 @@ private:
 	image*	Stage_24;
 
 
+	
+
 public:
 	
 	HRESULT init();

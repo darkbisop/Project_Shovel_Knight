@@ -30,13 +30,13 @@ HRESULT MapManager::init(void)
 	CurrMapNum = 0;
 
 	CheckMapRect();
+	PushRect();
 
 	return S_OK;
 }
 
 void MapManager::release(void)
 {
-	//SAFE_DELETE(PLAYER);
 }
 
 void MapManager::update(void)
@@ -49,7 +49,6 @@ void MapManager::update(void)
 void MapManager::render(HDC hdc)
 {
 	m_SkyBg->render(_empty->getMemDC(), (int)m_Camera.x , (int)m_Camera.y);
-	
 	if (CurrMapNum == 0 || CurrMapNum == 1) {
 		BackGround_Castle->loopRender(_empty->getMemDC(), &RectMake(0, 634, 2500, 176), -(int)m_Camera.x * 0.8f, 0);
 		Back_3_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 714, 2500, 108), -(int)m_Camera.x * 0.8f, 0);
@@ -60,12 +59,15 @@ void MapManager::render(HDC hdc)
 	CurrMap();
 	PLAYER->render(_empty->getMemDC());
 
+	for (vIterRC = vRect.begin(); vIterRC != vRect.end(); vIterRC++) {
+		Rectangle(_empty->getMemDC(), vIterRC->_rc.left, vIterRC->_rc.top, vIterRC->_rc.right, vIterRC->_rc.bottom);
+	}
 	_empty->render(hdc, 0, 0, m_Camera.x, m_Camera.y, WINSIZEX, WINSIZEY);
 
-	char str[64];
-	wsprintf(str, "x : %d, y : %d", m_Camera.x, m_Camera.y);
-	//sprintf_s(str, "x : %f, y : %f", PLAYER->getPlayerX(), PLAYER->getPlayerY());
-	TextOut(hdc, 100, 30, str, strlen(str));
+	//char str[64];
+	//wsprintf(str, "x : %d, y : %d", m_Camera.x, m_Camera.y);
+	////sprintf_s(str, "x : %f, y : %f", PLAYER->getPlayerX(), PLAYER->getPlayerY());
+	//TextOut(hdc, 100, 30, str, strlen(str));
 }
 
 void MapManager::CheckMapRect()
@@ -994,6 +996,55 @@ void MapManager::MovingMap()
 			}
 		}
 	}
+}
+
+void MapManager::PushRect()
+{
+	// 0¹ø¸Ê
+	if (CurrMapNum == 0) {
+		_RectInfo._rc = RectMake(0, 823, 1440, 50);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(608, 789, 65, 35);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(673, 759, 47, 66);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(720, 789, 65, 35);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(830, 759, 130, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(1009, 759, 47, 66);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(1120, 743, 80, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(1230, 807, 50, 17);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(1280, 786, 65, 40);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(1345, 807, 94, 17);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(1472, 790, 140, 60);
+		vRect.push_back(_RectInfo);
+	}
+
+
+	// 1¹ø¸Ê
+	_RectInfo._rc = RectMake(1612, 790, 140, 60);
+	vRect.push_back(_RectInfo);
+}
+
+void MapManager::EraseRect(int i)
+{
+	vRect.erase(vRect.begin() + i);
 }
 
 MapManager::MapManager() :m_Camera({ 0 , 0 }),  _empty(new image)

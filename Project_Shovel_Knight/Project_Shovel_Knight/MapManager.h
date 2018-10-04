@@ -1,10 +1,20 @@
 #pragma once
 #include "singletonBase.h"
+
+struct tagMapInfo
+{
+	RECT _rc;
+};
+
 class MapImage;
 
 class MapManager : public singletonBase<MapManager>
 {
 private:
+
+	tagMapInfo _RectInfo;
+	vector<tagMapInfo> vRect;
+	vector<tagMapInfo>::iterator vIterRC;
 
 	MapImage* m_pMapImage;
 	POINT	m_Camera;
@@ -17,6 +27,7 @@ private:
 	image*	Back_Ground;
 	
 	RECT	CheckChangeMapRect[24];
+	RECT	m_Floor;
 
 	int		CurrMapNum;
 	
@@ -37,6 +48,13 @@ public:
 	void CurrMap();
 	void CollisionCheck_ChangeMapRect();
 	void MovingMap();
+	void PushRect();
+	void EraseRect(int i);
+
+	RECT getMapVectorRc(int i) { return vRect.at(i)._rc; }
+	int getMapVectorRcSize() { return vRect.size(); }
+
+	inline bool getMapNum() { return CurrMapNum; }
 
 	MapManager();
 	~MapManager();

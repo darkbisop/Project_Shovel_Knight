@@ -13,6 +13,11 @@ struct Temp
 	float speed;
 };
 
+enum PlayerState
+{
+	P_APPEAR, P_IDLE, P_MOVERIGHT, P_MOVELEFT, P_ATTACK, P_MAGIC, P_JUMP, P_NUM
+};
+
 class Player : public singletonBase<Player>
 {
 private:
@@ -26,14 +31,38 @@ private:
 	Temp m_Drop;
 	image * m_PlayerImg;
 	image*	m_UI;
+	image * m_img;
+	image *	m_magicimg;
+	image *	m_ballimg;
+	image *	m_startimg;
+	image * m_moveimg;
+	image * m_attackimg;
+	image * m_jumpimg;
+	image *	m_jumpdownimg;
+	image *	m_jumpatkimg;
 
 	RECT	m_rc;
-	RECT	m_InvenRect;
 
-	float	m_fX, m_fY;
+	PlayerState		State;
+
+	
+	int		m_nCurrFrameX;
+	int		m_nCurrFrameY;
+	int		m_nCount;
+	int		m_nleftCount;
+	int		m_nrightCount;
+	int		m_nShotCount;
 	float	m_fSpeed;
+	float	m_fX;
+	float	m_fY;
 
-	float	m_invenX, m_invenY;
+	bool		m_bIsAppear;
+	bool		m_bIsAttck = false;
+	bool		m_bIsjumpAtk = false;
+	bool		m_bIsjump = false;
+
+	float gravity;
+	float Jumpspeed;
 	
 	int		tempRan;
 	int		Money;
@@ -44,6 +73,10 @@ public:
 	void release();
 	void update();
 	void render(HDC hdc);
+
+	void Attack();
+	void Move();
+	void RectColliosion(RECT x);
 
 	inline RECT getPlayerRect() { return m_rc; }
 	inline float getPlayerX() { return m_fX; }
