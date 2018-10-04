@@ -53,7 +53,6 @@ void Equipment::setItemEffect()
 		if (m_Equipment[i]._item != NULL) {
 			if (m_Equipment[i]._item->getType() == ITEM_WEAPON) {
 				// 여기다 지팡이 착용했을때 총알 발사하기
-				PLAYER->setMMM(true);
 			}
 		}
 	}

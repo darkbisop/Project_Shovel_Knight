@@ -19,6 +19,7 @@ HRESULT Player::init()
 	m_fX = 30;
 	m_fY = 720;
 	m_fSpeed = 2.0f;
+	Money = 10000;
 	
 	m_rc = RectMake(m_fX, m_fY, 26, 30);
 	m_InvenRect = RectMake(m_invenX, m_invenY, 223, 20);
