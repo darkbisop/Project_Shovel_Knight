@@ -13,9 +13,9 @@ struct Temp
 	float speed;
 };
 
-enum PlayerState
+enum State
 {
-	P_APPEAR, P_IDLE, P_MOVERIGHT, P_MOVELEFT, P_ATTACK, P_MAGIC, P_JUMP, P_NUM
+	P_APPEAR, P_IDLE, P_MOVERIGHT, P_MOVELEFT, P_ATTACK, P_DOWNATTACK, P_MAGIC, P_JUMP, P_NUM
 };
 
 class Player : public singletonBase<Player>
@@ -28,41 +28,37 @@ private:
 	Inventory*	m_inventory;
 	Equipment*	m_Equipment;
 
-	Temp m_Drop;
-	image * m_PlayerImg;
-	image*	m_UI;
-	image * m_img;
-	image *	m_magicimg;
-	image *	m_ballimg;
-	image *	m_startimg;
-	image * m_moveimg;
-	image * m_attackimg;
-	image * m_jumpimg;
-	image *	m_jumpdownimg;
-	image *	m_jumpatkimg;
-
+	Temp	m_Drop;
 	RECT	m_rc;
+	State	m_State;
 
-	PlayerState		State;
+	image*	m_UI;
+	image*	m_IdleImg;
+	image*	m_MoveImg;
+	image*	m_JumpImg;
+	image*	m_JumpLeftImg;
+	image*	m_JumpDown;
+	image*	m_JumpDownLeft;
+	image*	m_AttackImg;
+	image*	m_AttackDownImg;
+	image*	m_DownLeftImg;
 
-	
-	int		m_nCurrFrameX;
-	int		m_nCurrFrameY;
-	int		m_nCount;
-	int		m_nleftCount;
-	int		m_nrightCount;
-	int		m_nShotCount;
+	int		m_CurrFrameX;
+	int		m_CurrFrameY;
+	int		m_FrameCount;
+	int		m_AtkFrameCount;
+
 	float	m_fSpeed;
 	float	m_fX;
 	float	m_fY;
 
-	bool		m_bIsAppear;
-	bool		m_bIsAttck = false;
-	bool		m_bIsjumpAtk = false;
-	bool		m_bIsjump = false;
+	float	gravity;
+	float	jumpSpeed;
 
-	float gravity;
-	float Jumpspeed;
+	bool	m_isRight;
+	bool	m_isAttack;
+	bool	m_isAirAttack;
+	bool	m_isGround;
 	
 	int		tempRan;
 	int		Money;
@@ -74,9 +70,11 @@ public:
 	void update();
 	void render(HDC hdc);
 
-	void Attack();
-	void Move();
+	void KeyProcess();
+	void Animation();
+	void ShovelRender(HDC hdc);
 	void RectColliosion(RECT x);
+	void LadderColliosion(RECT x);
 
 	inline RECT getPlayerRect() { return m_rc; }
 	inline float getPlayerX() { return m_fX; }

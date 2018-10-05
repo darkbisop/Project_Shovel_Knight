@@ -16,8 +16,9 @@ void PlayScene::release(void)
 
 void PlayScene::update(void)
 {
-	MAPMANAGER->update();
 	PlayerMapCollision();
+	MAPMANAGER->update();
+	
 }
 
 void PlayScene::render(HDC hdc)
@@ -31,10 +32,16 @@ void PlayScene::PlayerMapCollision()
 	{
 		PLAYER->RectColliosion(MAPMANAGER->getMapVectorRc(i));
 
-		/*if (MAPMANAGER->getMapNum() == 1 && MAPMANAGER->getMapVectorRcSize() > 2) {
+		/*if (MAPMANAGER->getMapNum() == 1 && MAPMANAGER->getMapVectorRcSize() > 5) {
 			MAPMANAGER->EraseRect(i);
 		}*/
 	}
+
+	for (int i = 0; i < MAPMANAGER->getLadderVECRcSize(); i++)
+	{
+		PLAYER->LadderColliosion(MAPMANAGER->getLadderVECRc(i));
+	}
+
 }
 
 PlayScene::PlayScene()

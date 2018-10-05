@@ -6,6 +6,11 @@ struct tagMapInfo
 	RECT _rc;
 };
 
+struct MapLadder
+{
+	RECT _rc;
+};
+
 class MapImage;
 
 class MapManager : public singletonBase<MapManager>
@@ -15,6 +20,10 @@ private:
 	tagMapInfo _RectInfo;
 	vector<tagMapInfo> vRect;
 	vector<tagMapInfo>::iterator vIterRC;
+
+	MapLadder  _RectLadder;
+	vector<MapLadder> vLadderRect;
+	vector<MapLadder>::iterator vIterLDRRC;
 
 	MapImage* m_pMapImage;
 	POINT	m_Camera;
@@ -53,6 +62,9 @@ public:
 
 	RECT getMapVectorRc(int i) { return vRect.at(i)._rc; }
 	int getMapVectorRcSize() { return vRect.size(); }
+
+	RECT getLadderVECRc(int i) { return vLadderRect.at(i)._rc; }
+	int getLadderVECRcSize() { return vLadderRect.size(); }
 
 	inline bool getMapNum() { return CurrMapNum; }
 

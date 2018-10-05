@@ -57,11 +57,15 @@ void MapManager::render(HDC hdc)
 	}
 
 	CurrMap();
+	for (vIterLDRRC = vLadderRect.begin(); vIterLDRRC != vLadderRect.end(); vIterLDRRC++) {
+		Rectangle(_empty->getMemDC(), vIterLDRRC->_rc.left, vIterLDRRC->_rc.top, vIterLDRRC->_rc.right, vIterLDRRC->_rc.bottom);
+	}
 	PLAYER->render(_empty->getMemDC());
 
 	for (vIterRC = vRect.begin(); vIterRC != vRect.end(); vIterRC++) {
 		Rectangle(_empty->getMemDC(), vIterRC->_rc.left, vIterRC->_rc.top, vIterRC->_rc.right, vIterRC->_rc.bottom);
 	}
+
 	_empty->render(hdc, 0, 0, m_Camera.x, m_Camera.y, WINSIZEX, WINSIZEY);
 
 	//char str[64];
@@ -1032,13 +1036,58 @@ void MapManager::PushRect()
 		_RectInfo._rc = RectMake(1345, 807, 94, 17);
 		vRect.push_back(_RectInfo);
 
-		_RectInfo._rc = RectMake(1472, 790, 140, 60);
+		_RectInfo._rc = RectMake(1472, 790, 280, 60);
 		vRect.push_back(_RectInfo);
 	}
 
 
 	// 1번맵
-	_RectInfo._rc = RectMake(1612, 790, 140, 60);
+	_RectInfo._rc = RectMake(1729, 759, 35, 80);
+	vRect.push_back(_RectInfo);
+
+	_RectInfo._rc = RectMake(1760, 727, 31, 80);
+	vRect.push_back(_RectInfo);
+
+	_RectInfo._rc = RectMake(1791, 823, 163, 30);
+	vRect.push_back(_RectInfo);
+
+	_RectInfo._rc = RectMake(1823, 674, 30, 100);
+	vRect.push_back(_RectInfo);
+
+	_RectInfo._rc = RectMake(1951, 791, 177, 52);
+	vRect.push_back(_RectInfo);
+
+
+	// 2번맵
+	_RectInfo._rc = RectMake(2126, 822, 100, 52);
+	vRect.push_back(_RectInfo);
+	_RectInfo._rc = RectMake(2225, 742, 80, 122);
+	vRect.push_back(_RectInfo);
+	// 비눗방울 대신 밟을 임시 렉트, 지울거임
+	_RectInfo._rc = RectMake(2126, 780, 50, 52);
+	vRect.push_back(_RectInfo);
+	_RectInfo._rc = RectMake(2306, 615, 20, 132);
+	vRect.push_back(_RectInfo);
+	// 사다리
+	_RectLadder._rc = RectMake(2294, 614, 6, 132);
+	vLadderRect.push_back(_RectLadder);
+
+
+	// 3번맵
+	_RectInfo._rc = RectMake(2019, 615, 270, 40);
+	vRect.push_back(_RectInfo);
+
+	_RectLadder._rc = RectMake(2037, 465, 6, 132);
+	vLadderRect.push_back(_RectLadder);
+
+	_RectInfo._rc = RectMake(2050, 518, 29, 20);
+	vRect.push_back(_RectInfo);
+
+	// 임시렉트. 이녀석은 좌우로 움직여야 하는 녀석
+	_RectInfo._rc = RectMake(2170, 518, 45, 20);
+	vRect.push_back(_RectInfo);
+
+	_RectInfo._rc = RectMake(2305, 518, 143, 60);
 	vRect.push_back(_RectInfo);
 }
 
