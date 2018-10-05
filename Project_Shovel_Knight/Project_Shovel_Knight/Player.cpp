@@ -273,15 +273,14 @@ void Player::RectColliosion(RECT x)
 	RECT rc;
 	if (IntersectRect(&rc, &m_rc, &x)) {
 
-		if (m_rc.right - 5 < x.left + 10) {
+		if (m_rc.right  < x.left + 4) {
 			m_fX -= 2.0f;
 			m_State = P_IDLE;
 		}
 
-		else if (m_rc.left + 5 > x.right - 10) {
+		else if (m_rc.left > x.right - 4) {
 			m_fX += 2.0f;
 			m_State = P_IDLE;
-
 		}
 
 		else if (m_rc.bottom > x.bottom + 10) {
@@ -291,7 +290,7 @@ void Player::RectColliosion(RECT x)
 			m_rc.top = x.bottom;
 			m_rc.bottom = m_rc.top + 25;
 		}
-		else if (m_rc.bottom > x.top) {
+		else /*if (m_rc.bottom > x.top)*/ {
 			m_State = P_IDLE;
 			m_fY = x.top - 24;
 			gravity = 0;
@@ -306,30 +305,21 @@ void Player::RectColliosion(RECT x)
 void Player::LadderColliosion(RECT x)
 {
 	RECT rc;
-	if (IntersectRect(&rc, &m_rc, &x)) {
-		gravity = 0;
-		jumpSpeed = 0;
-		m_isGround = true;
+	if (m_State != P_JUMP) {
+		if (IntersectRect(&rc, &m_rc, &x)) {
+			gravity = 0;
+			jumpSpeed = 0;
+			m_isGround = true;
 
-		if (KEYMANAGER->isStayKeyDown(VK_UP)) {
-			m_fX = x.left - 12;
-			m_fY -= m_fSpeed;
-		}
+			if (KEYMANAGER->isStayKeyDown(VK_UP)) {
+				m_fX = x.left - 12;
+				m_fY -= m_fSpeed;
+			}
 
-		else if (KEYMANAGER->isStayKeyDown(VK_DOWN)) {
-			m_fX = x.left - 12;
-			m_fY += m_fSpeed;
-		}
-
-		
-	}
-
-	if (KEYMANAGER->isOnceKeyDown('C') && gravity <= 0) {
-		m_isGround = false;
-		jumpSpeed += 5.0f;
-		if (jumpSpeed > 0.1f) {
-			m_State = P_JUMP;
-			
+			else if (KEYMANAGER->isStayKeyDown(VK_DOWN)) {
+				m_fX = x.left - 12;
+				m_fY += m_fSpeed;
+			}
 		}
 	}
 }

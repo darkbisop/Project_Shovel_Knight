@@ -516,7 +516,7 @@ void MapManager::MovingMap()
 	if (MovingCamera[0] == true && CurrMapNum == 0) {
 		if (m_Camera.x < 1600) {
 			m_Camera.x += 6;
-			if (1620 > PLAYER->getPlayerX()) {
+			if (1605 > PLAYER->getPlayerX()) {
 				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 1600) {
