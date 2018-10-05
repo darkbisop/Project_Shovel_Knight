@@ -110,6 +110,18 @@ void effectManager::addEffect(string effectName,
 
 void effectManager::play(string effectName, int x, int y)
 {
+	name = effectName;
+	//pEffect->startEffect(x, y);
+
+	vector<effect*>::iterator iterVE;
+
+	for (m_iter = m_mapEffects.begin(); m_iter != m_mapEffects.end(); m_iter++) {
+		for (iterVE = (m_iter->second).begin(); iterVE != (m_iter->second).end(); iterVE++) {
+			if ((*iterVE)) {
+				(*iterVE)->startEffect(x, y);
+			}
+		}
+	}
 }
 
 effectManager::effectManager()

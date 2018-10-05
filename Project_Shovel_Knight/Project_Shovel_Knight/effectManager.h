@@ -9,7 +9,7 @@ private:
 	//map<string, vector<effect*>>	m_mapEffects;
 	map<string, vecEffect>			m_mapEffects;
 	map<string, vecEffect>::iterator	m_iter;
-
+	std::string name;
 public:
 	HRESULT init();
 	void release();

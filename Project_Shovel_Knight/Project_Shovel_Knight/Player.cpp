@@ -8,12 +8,9 @@ HRESULT Player::init()
 	m_IdleImg = IMAGEMANAGER->addImage("Player_Idle", "image/Player/Player_Idle.bmp", 34, 64, 1, 2, true, RGB(255, 0, 255));
 	m_MoveImg = IMAGEMANAGER->addImage("Player_move", "image/Player/Player_move.bmp", 240, 70, 6, 2, true, RGB(255, 0, 255));
 	m_AttackImg = IMAGEMANAGER->addImage("Player_attack", "image/Player/Player_attack.bmp", 270, 70, 5, 2, true, RGB(255, 0, 255));
-	m_JumpImg = IMAGEMANAGER->addImage("Player_jump_right", "image/Player/Player_jump_right.bmp", 31, 34, true, RGB(255, 0, 255));
-	m_JumpLeftImg = IMAGEMANAGER->addImage("Player_jump_left", "image/Player/Player_jump_left.bmp", 31, 34, true, RGB(255, 0, 255));
-	m_AttackDownImg = IMAGEMANAGER->addImage("Player_jumpattck_right", "image/Player/Player_jumpattck_right.bmp", 24, 36, true, RGB(255, 0, 255));
-	m_DownLeftImg = IMAGEMANAGER->addImage("Player_jumpattck_left", "image/Player/Player_jumpattck_left.bmp", 24, 36, true, RGB(255, 0, 255));
-	m_JumpDown = IMAGEMANAGER->addImage("Player_rightdown", "image/Player/Player_rightdown.bmp", 33, 34, true, RGB(255, 0, 255));
-	m_JumpDownLeft = IMAGEMANAGER->addImage("Player_leftdown", "image/Player/Player_leftdown.bmp", 33, 34, true, RGB(255, 0, 255));
+	m_JumpImg = IMAGEMANAGER->addImage("Player_jump", "image/Player/Player_jump.bmp", 31, 68, 1, 2, true, RGB(255, 0, 255));
+	m_AttackDownImg = IMAGEMANAGER->addImage("Player_AttackDown", "image/Player/Player_AttackDown.bmp", 24, 72, 1, 2, true, RGB(255, 0, 255));
+	m_JumpDown = IMAGEMANAGER->addImage("Player_JumpDown", "image/Player/Player_JumpDown.bmp", 33, 68, 1, 2, true, RGB(255, 0, 255));
 	
 	m_UI = IMAGEMANAGER->addImage("UI", "image/UI.bmp", 400, 18, true, RGB(255, 0, 255));
 
@@ -37,6 +34,7 @@ HRESULT Player::init()
 	m_CurrFrameX = 0;
 	m_CurrFrameY = 0;
 	m_AtkFrameCount = 0;
+	m_AttackCount = 0;
 
 	m_isRight = true;
 	m_isAttack = false;
@@ -81,11 +79,16 @@ void Player::update()
 	}
 
 	m_rc = RectMake(m_fX + 5, m_fY, 20, 25);
+
+	if (m_State == P_DOWNATTACK) m_AttackDownRc = RectMake(m_fX + 7, m_fY + 20, 10, 10);
+	else  m_AttackDownRc = RectMake(-1000, -1000, -1, -1);
 }
 
 void Player::render(HDC hdc)
 {
 	Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
+	Rectangle(hdc, m_AttackRc.left, m_AttackRc.top, m_AttackRc.right, m_AttackRc.bottom);
+	Rectangle(hdc, m_AttackDownRc.left, m_AttackDownRc.top, m_AttackDownRc.right, m_AttackDownRc.bottom);
 
 	for (v_Iter = v_VecTemp.begin(); v_Iter != v_VecTemp.end(); v_Iter++) {
 		Rectangle(hdc, v_Iter->rc.left, v_Iter->rc.top, v_Iter->rc.right, v_Iter->rc.bottom);
@@ -106,11 +109,11 @@ void Player::render(HDC hdc)
 void Player::KeyProcess()
 {
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT)) {
-		if (m_State != P_JUMP && m_State != P_MOVERIGHT) {
+		if (m_State != P_JUMP && m_State != P_MOVE) {
 			m_State = P_ATTACK;
 		}
 		if (m_State != P_JUMP) {
-			m_State = P_MOVERIGHT;
+			m_State = P_MOVE;
 			m_isAirAttack = false;
 		}
 
@@ -119,12 +122,12 @@ void Player::KeyProcess()
 	}
 
 	else if (KEYMANAGER->isStayKeyDown(VK_LEFT)) {
-		if (m_State != P_JUMP && m_State != P_MOVELEFT) {
+		if (m_State != P_JUMP && m_State != P_MOVE) {
 			m_State = P_ATTACK;
 		}
 
 		if (m_State != P_JUMP) {
-			m_State = P_MOVELEFT;
+			m_State = P_MOVE;
 			m_isAirAttack = false;
 		}
 
@@ -142,6 +145,7 @@ void Player::KeyProcess()
 
 	if (jumpSpeed > 1.0f && KEYMANAGER->isStayKeyDown(VK_DOWN)) {
 		m_State = P_DOWNATTACK;
+		m_AttackDownRc = RectMake(m_fX + 7, m_fY + 20, 10, 10);
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('X')) {
@@ -172,7 +176,7 @@ void Player::KeyProcess()
 
 void Player::Animation()
 {
-	if (m_State == P_MOVERIGHT && m_isRight == true) {
+	if (m_State == P_MOVE && m_isRight == true) {
 		m_FrameCount++;
 		
 		if (m_FrameCount % 7 == 0) {
@@ -185,7 +189,7 @@ void Player::Animation()
 		}
 	}
 
-	else if (m_State == P_MOVELEFT && m_isRight == false) {
+	else if (m_State == P_MOVE && m_isRight == false) {
 		m_FrameCount++;
 		m_CurrFrameY = 1;
 		if (m_FrameCount % 7 == 0) {
@@ -202,13 +206,23 @@ void Player::Animation()
 		m_State = P_ATTACK;
 		if (m_isRight == true) {
 			m_CurrFrameY = 0;
+			m_AttackCount++;
 			m_FrameCount++;
+
+			if (m_AttackCount > 10) {
+				m_AttackRc = RectMake(m_fX + 35, m_fY + 10 , 10, 10);
+			}
+			if (m_AttackCount > 11) {
+				m_AttackRc = RectMake(-1000, -1000, -1, -1);
+			}
+
 			if (m_FrameCount % 5 == 0) {
 				m_AtkFrameCount++;
 				m_AttackImg->setFrameX(m_AtkFrameCount);
 
 				if (m_AtkFrameCount > m_AttackImg->getMaxFrameX()) {
 					m_AtkFrameCount = 0;
+					m_AttackCount = 0;
 					m_isAttack = false;
 					m_State = P_IDLE;
 				}
@@ -217,12 +231,22 @@ void Player::Animation()
 		else if (m_isRight == false) {
 			m_CurrFrameY = 1;
 			m_FrameCount++;
+			m_AttackCount++;
+
+			if (m_AttackCount > 10) {
+				m_AttackRc = RectMake(m_fX - 10, m_fY + 10, 10, 10);
+			}
+			if (m_AttackCount > 11) {
+				m_AttackRc = RectMake(-1000, -1000, -1, -1);
+			}
+
 			if (m_FrameCount % 5 == 0) {
 				m_AtkFrameCount++;
 				m_AttackImg->setFrameX(m_AtkFrameCount);
 
 				if (m_AtkFrameCount > m_AttackImg->getMaxFrameX()) {
 					m_AtkFrameCount = 0;
+					m_AttackCount = 0;
 					m_isAttack = false;
 					m_State = P_IDLE;
 				}
@@ -238,12 +262,9 @@ void Player::ShovelRender(HDC hdc)
 		else if (!m_isRight) m_IdleImg->frameRender(hdc, m_fX - 2, m_fY - 7, 0, 1);
 	}
 	
-	else if (m_State == P_MOVERIGHT && m_isRight == true) {
-		m_MoveImg->frameRender(hdc, m_fX, m_fY - 7, m_CurrFrameX, 0);
-	}
-
-	else if (m_State == P_MOVELEFT && m_isRight == false) {
-		m_MoveImg->frameRender(hdc, m_fX - 8, m_fY - 7, m_CurrFrameX, 1);
+	else if (m_State == P_MOVE) {
+		if (m_isRight) m_MoveImg->frameRender(hdc, m_fX, m_fY - 7, m_CurrFrameX, 0);
+		else if (!m_isRight) m_MoveImg->frameRender(hdc, m_fX - 8, m_fY - 7, m_CurrFrameX, 1);
 	}
 	
 	else if (m_isAttack) {
@@ -253,18 +274,18 @@ void Player::ShovelRender(HDC hdc)
 
 	else if (m_State == P_JUMP) {
 		if (m_isRight) {
-			if (jumpSpeed - gravity >= 0)m_JumpImg->render(hdc, m_fX - 3, m_fY - 8);
-			else if (jumpSpeed - gravity <= 0) m_JumpDown->render(hdc, m_fX, m_fY - 8);
+			if (jumpSpeed - gravity >= 0)m_JumpImg->frameRender(hdc, m_fX - 3, m_fY - 8, 0, 0);
+			else if (jumpSpeed - gravity <= 0) m_JumpDown->frameRender(hdc, m_fX, m_fY - 8, 0, 0);
 		}
 		else if (!m_isRight) {
-			if (jumpSpeed - gravity >= 0)m_JumpLeftImg->render(hdc, m_fX, m_fY - 8);
-			else if (jumpSpeed - gravity <= 0) m_JumpDownLeft->render(hdc, m_fX - 3, m_fY - 8);
+			if (jumpSpeed - gravity >= 0)m_JumpImg->frameRender(hdc, m_fX, m_fY - 8, 0, 1);
+			else if (jumpSpeed - gravity <= 0) m_JumpDown->frameRender(hdc, m_fX - 3, m_fY - 8, 0, 1);
 		}
 	}
 
 	else if (m_State == P_DOWNATTACK) {
-		if (m_isRight) m_AttackDownImg->render(hdc, m_fX + 2, m_fY - 8);
-		else if (!m_isRight) m_DownLeftImg->render(hdc, m_fX + 2, m_fY - 8);
+		if (m_isRight) m_AttackDownImg->frameRender(hdc, m_fX + 2, m_fY - 8, 0, 0);
+		else if (!m_isRight) m_AttackDownImg->frameRender(hdc, m_fX + 2, m_fY - 8, 0, 1);
 	}
 }
 
@@ -321,6 +342,21 @@ void Player::LadderColliosion(RECT x)
 				m_fY += m_fSpeed;
 			}
 		}
+	}
+}
+
+void Player::DownATKCollision(RECT x)
+{
+	RECT rc;
+	if (IntersectRect(&rc, &m_AttackDownRc, &x)) {
+		if (m_AttackDownRc.bottom > x.top - 20) {
+			gravity = 0;
+			jumpSpeed += 0.1f;
+			if (jumpSpeed > 0.1f) {
+				m_isGround = false;
+			}
+		}
+	
 	}
 }
 

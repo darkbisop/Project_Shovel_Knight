@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "MapManager.h"
 #include "MapImage.h"
+#include "enemyManager.h"
+#include "effectManager.h"
 
 HRESULT MapManager::init(void)
 {
@@ -14,6 +16,12 @@ HRESULT MapManager::init(void)
 
 	m_pMapImage = new MapImage;
 	m_pMapImage->init();
+
+	m_pEnemyMgr = new enemyManager;
+	m_pEnemyMgr->init();
+	m_pEnemyMgr->setBug();
+
+	EFFECTMANAGER->addEffect("enemy_effect", "image/effect/enemy_effect.bmp", 120, 16, 24, 16, 10, 10);
 
 	PLAYER->init();
 
@@ -37,6 +45,7 @@ HRESULT MapManager::init(void)
 
 void MapManager::release(void)
 {
+	SAFE_DELETE(m_pEnemyMgr);
 }
 
 void MapManager::update(void)
@@ -44,6 +53,9 @@ void MapManager::update(void)
 	PLAYER->update();
 	CollisionCheck_ChangeMapRect();
 	MovingMap();
+	m_pEnemyMgr->update();
+	EFFECTMANAGER->update();
+	CollisionEnemy();
 }
 
 void MapManager::render(HDC hdc)
@@ -60,6 +72,9 @@ void MapManager::render(HDC hdc)
 	for (vIterLDRRC = vLadderRect.begin(); vIterLDRRC != vLadderRect.end(); vIterLDRRC++) {
 		Rectangle(_empty->getMemDC(), vIterLDRRC->_rc.left, vIterLDRRC->_rc.top, vIterLDRRC->_rc.right, vIterLDRRC->_rc.bottom);
 	}
+
+	m_pEnemyMgr->render(_empty->getMemDC());
+	EFFECTMANAGER->render(_empty->getMemDC());
 	PLAYER->render(_empty->getMemDC());
 
 	for (vIterRC = vRect.begin(); vIterRC != vRect.end(); vIterRC++) {
@@ -1094,6 +1109,24 @@ void MapManager::PushRect()
 void MapManager::EraseRect(int i)
 {
 	vRect.erase(vRect.begin() + i);
+}
+
+void MapManager::CollisionEnemy()
+{
+	vector<bug*> vBug = m_pEnemyMgr->getVecBug();
+	vector<bug*>::iterator iter;
+
+	for (iter = vBug.begin(); iter != vBug.end(); iter++) {
+		RECT rc;
+		if (IntersectRect(&rc, &PLAYER->getAttacRect(), &(*iter)->getRect())) {
+			(*iter)->damage(1);
+		}
+
+		else if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iter)->getRect())) {
+			(*iter)->damage(1);
+			PLAYER->DownATKCollision((*iter)->getRect());
+		}
+	}
 }
 
 MapManager::MapManager() :m_Camera({ 0 , 0 }),  _empty(new image)

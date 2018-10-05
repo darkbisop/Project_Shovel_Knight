@@ -15,7 +15,7 @@ struct Temp
 
 enum State
 {
-	P_APPEAR, P_IDLE, P_MOVERIGHT, P_MOVELEFT, P_ATTACK, P_DOWNATTACK, P_MAGIC, P_JUMP, P_NUM
+	P_APPEAR, P_IDLE, P_MOVE, P_ATTACK, P_DOWNATTACK, P_MAGIC, P_JUMP, P_NUM
 };
 
 class Player : public singletonBase<Player>
@@ -30,23 +30,23 @@ private:
 
 	Temp	m_Drop;
 	RECT	m_rc;
+	RECT	m_AttackRc;
+	RECT	m_AttackDownRc;
 	State	m_State;
 
 	image*	m_UI;
 	image*	m_IdleImg;
 	image*	m_MoveImg;
 	image*	m_JumpImg;
-	image*	m_JumpLeftImg;
 	image*	m_JumpDown;
-	image*	m_JumpDownLeft;
 	image*	m_AttackImg;
 	image*	m_AttackDownImg;
-	image*	m_DownLeftImg;
 
 	int		m_CurrFrameX;
 	int		m_CurrFrameY;
 	int		m_FrameCount;
 	int		m_AtkFrameCount;
+	int		m_AttackCount;
 
 	float	m_fSpeed;
 	float	m_fX;
@@ -75,8 +75,11 @@ public:
 	void ShovelRender(HDC hdc);
 	void RectColliosion(RECT x);
 	void LadderColliosion(RECT x);
+	void DownATKCollision(RECT x);
 
 	inline RECT getPlayerRect() { return m_rc; }
+	inline RECT getAttacRect() { return m_AttackRc; }
+	inline RECT getAttacDWRect() { return m_AttackDownRc; }
 	inline float getPlayerX() { return m_fX; }
 	inline float getPlayerY() { return m_fY; }
 

@@ -10,30 +10,26 @@ HRESULT enemyManager::init()
 
 void enemyManager::release()
 {
-	// vector의 첫 원소부터 마지막 원소까지 순회하며 각 원소를 delete한다
-	for (m_iter = m_vecEnemy.begin(); m_iter != m_vecEnemy.end(); m_iter++)
+	for (m_IterBug = m_VecBug.begin(); m_IterBug != m_VecBug.end(); m_IterBug++)
 	{
-		delete (*m_iter);
+		delete (*m_IterBug);
 	}
-	// vector 자체를 삭제한다
-	m_vecEnemy.clear();
+	m_VecBug.clear();
 }
 
 void enemyManager::update()
 {
-	// vector의 첫 원소부터 마지막 원소까지 순회하며 각 원소를 update한다
-	for (m_iter = m_vecEnemy.begin(); m_iter != m_vecEnemy.end(); m_iter++)
+	for (m_IterBug = m_VecBug.begin(); m_IterBug != m_VecBug.end(); m_IterBug++)
 	{
-		(*m_iter)->update();
+		(*m_IterBug)->update();
 	}
 }
 
 void enemyManager::render(HDC hdc)
 {
-	// vector의 첫 원소부터 마지막 원소까지 순회하며 각 원소를 render한다
-	for (m_iter = m_vecEnemy.begin(); m_iter != m_vecEnemy.end(); m_iter++)
+	for (m_IterBug = m_VecBug.begin(); m_IterBug != m_VecBug.end(); m_IterBug++)
 	{
-		(*m_iter)->render(hdc);
+		(*m_IterBug)->render(hdc);
 	}
 }
 
@@ -51,6 +47,14 @@ void enemyManager::setEnemy(int countX, int countY)
 			m_vecEnemy.push_back(pEnemy);
 		}
 	}
+}
+
+void enemyManager::setBug()
+{
+	bug* pBug;
+	pBug = new bug;
+	pBug->init(550, 809);
+	m_VecBug.push_back(pBug);
 }
 
 void enemyManager::setTarget(spaceShip * pTarget)

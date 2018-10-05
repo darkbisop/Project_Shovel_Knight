@@ -18,6 +18,7 @@ HRESULT mainGame::init()
 	TIMEMANAGER->init();
 	SCENEMANAGER->init();
 	SOUNDMANAGER->init();
+	EFFECTMANAGER->init();
 
 	setBackBuffer();
 
@@ -46,6 +47,7 @@ void mainGame::release()
 	TIMEMANAGER->release();
 	SCENEMANAGER->release();
 	SOUNDMANAGER->release();
+	EFFECTMANAGER->release();
 	MAPMANAGER->release();
 	PLAYER->release();
 
@@ -55,6 +57,7 @@ void mainGame::release()
 	TIMEMANAGER->releaseSingleton();
 	SCENEMANAGER->releaseSingleton();
 	SOUNDMANAGER->releaseSingleton();
+	EFFECTMANAGER->releaseSingleton();
 	MAPMANAGER->releaseSingleton();
 	PLAYER->releaseSingleton();
 }

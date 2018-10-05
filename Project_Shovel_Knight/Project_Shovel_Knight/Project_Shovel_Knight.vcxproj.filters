@@ -216,6 +216,9 @@
     <ClInclude Include="Equipment.h">
       <Filter>메인게임\상점\아이템\인벤토리</Filter>
     </ClInclude>
+    <ClInclude Include="bug.h">
+      <Filter>메인게임\에너미</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -334,6 +337,9 @@
     </ClCompile>
     <ClCompile Include="Equipment.cpp">
       <Filter>메인게임\상점\아이템\인벤토리</Filter>
+    </ClCompile>
+    <ClCompile Include="bug.cpp">
+      <Filter>메인게임\에너미</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

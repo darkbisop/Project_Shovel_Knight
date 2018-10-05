@@ -1,5 +1,8 @@
 #pragma once
 #include "singletonBase.h"
+#include "enemyManager.h"
+
+class effectManager;
 
 struct tagMapInfo
 {
@@ -25,6 +28,8 @@ private:
 	vector<MapLadder> vLadderRect;
 	vector<MapLadder>::iterator vIterLDRRC;
 
+	enemyManager * m_pEnemyMgr;
+	effectManager*	m_pEffectMgr;
 	MapImage* m_pMapImage;
 	POINT	m_Camera;
 
@@ -60,6 +65,8 @@ public:
 	void PushRect();
 	void EraseRect(int i);
 
+	void CollisionEnemy();
+
 	RECT getMapVectorRc(int i) { return vRect.at(i)._rc; }
 	int getMapVectorRcSize() { return vRect.size(); }
 
@@ -67,6 +74,7 @@ public:
 	int getLadderVECRcSize() { return vLadderRect.size(); }
 
 	inline bool getMapNum() { return CurrMapNum; }
+	inline bool getMapOn(int x) { return MapOn[x]; }
 
 	MapManager();
 	~MapManager();
