@@ -219,6 +219,15 @@
     <ClInclude Include="bug.h">
       <Filter>메인게임\에너미</Filter>
     </ClInclude>
+    <ClInclude Include="PileOfRocks.h">
+      <Filter>메인게임\오브젝트</Filter>
+    </ClInclude>
+    <ClInclude Include="objectManager.h">
+      <Filter>메인게임\오브젝트</Filter>
+    </ClInclude>
+    <ClInclude Include="obejectBasicInfo.h">
+      <Filter>메인게임\오브젝트</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -340,6 +349,15 @@
     </ClCompile>
     <ClCompile Include="bug.cpp">
       <Filter>메인게임\에너미</Filter>
+    </ClCompile>
+    <ClCompile Include="PileOfRocks.cpp">
+      <Filter>메인게임\오브젝트</Filter>
+    </ClCompile>
+    <ClCompile Include="objectManager.cpp">
+      <Filter>메인게임\오브젝트</Filter>
+    </ClCompile>
+    <ClCompile Include="obejectBasicInfo.cpp">
+      <Filter>메인게임\오브젝트</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

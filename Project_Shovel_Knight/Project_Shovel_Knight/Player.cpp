@@ -74,7 +74,7 @@ void Player::update()
 	}
 
 	if (m_isGround == false) {
-		gravity += 9.8f / 60.0f;
+		gravity += 0.3f;
 		m_fY -= jumpSpeed - gravity;
 	}
 
@@ -109,12 +109,11 @@ void Player::render(HDC hdc)
 void Player::KeyProcess()
 {
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT)) {
-		if (m_State != P_JUMP && m_State != P_MOVE) {
+		if (m_State != P_JUMP && m_State != P_MOVE && m_State != P_DOWNATTACK) {
 			m_State = P_ATTACK;
 		}
-		if (m_State != P_JUMP) {
+		if (m_State != P_JUMP && m_State != P_DOWNATTACK) {
 			m_State = P_MOVE;
-			m_isAirAttack = false;
 		}
 
 		m_fX += m_fSpeed;
@@ -122,13 +121,12 @@ void Player::KeyProcess()
 	}
 
 	else if (KEYMANAGER->isStayKeyDown(VK_LEFT)) {
-		if (m_State != P_JUMP && m_State != P_MOVE) {
+		if (m_State != P_JUMP && m_State != P_MOVE && m_State != P_DOWNATTACK) {
 			m_State = P_ATTACK;
 		}
 
-		if (m_State != P_JUMP) {
+		if (m_State != P_JUMP && m_State != P_DOWNATTACK) {
 			m_State = P_MOVE;
-			m_isAirAttack = false;
 		}
 
 		m_fX -= m_fSpeed;
@@ -136,7 +134,7 @@ void Player::KeyProcess()
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('C') && gravity <= 0) {
-		jumpSpeed += 5.0f;
+		jumpSpeed += 7.0f;
 		if (jumpSpeed > 0.1f) {
 			m_State = P_JUMP;
 			m_isGround = false;
@@ -304,12 +302,11 @@ void Player::RectColliosion(RECT x)
 			m_State = P_IDLE;
 		}
 
-		else if (m_rc.bottom > x.bottom + 10) {
+		else if (m_rc.bottom > x.bottom ) {
 			gravity = 0;
 			jumpSpeed = 0;
 			m_isGround = false;
-			m_rc.top = x.bottom;
-			m_rc.bottom = m_rc.top + 25;
+			m_fY += 2.0f;
 		}
 		else /*if (m_rc.bottom > x.top)*/ {
 			m_State = P_IDLE;

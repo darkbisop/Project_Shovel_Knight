@@ -171,6 +171,7 @@ void bug::dieFrame()
 					m_nDieFrameX = 0;
 					m_nDieFrameCount = 0;
 
+					m_rc = RectMake(-1000, -1000, -1, -1);
 					EFFECTMANAGER->play("enemy_effect", m_fX, m_fY);
 					m_isAlive = false;
 				}

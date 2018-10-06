@@ -3,6 +3,7 @@
 #include "MapImage.h"
 #include "enemyManager.h"
 #include "effectManager.h"
+#include "objectManager.h"
 
 HRESULT MapManager::init(void)
 {
@@ -20,6 +21,10 @@ HRESULT MapManager::init(void)
 	m_pEnemyMgr = new enemyManager;
 	m_pEnemyMgr->init();
 	m_pEnemyMgr->setBug();
+
+	m_pObjectMgr = new objectManager;
+	m_pObjectMgr->init();
+	m_pObjectMgr->setPileOfRocks();
 
 	EFFECTMANAGER->addEffect("enemy_effect", "image/effect/enemy_effect.bmp", 120, 16, 24, 16, 10, 10);
 
@@ -46,6 +51,7 @@ HRESULT MapManager::init(void)
 void MapManager::release(void)
 {
 	SAFE_DELETE(m_pEnemyMgr);
+	SAFE_DELETE(m_pObjectMgr);
 }
 
 void MapManager::update(void)
@@ -54,8 +60,10 @@ void MapManager::update(void)
 	CollisionCheck_ChangeMapRect();
 	MovingMap();
 	m_pEnemyMgr->update();
+	m_pObjectMgr->update();
 	EFFECTMANAGER->update();
 	CollisionEnemy();
+	CollisionObject();
 }
 
 void MapManager::render(HDC hdc)
@@ -72,8 +80,9 @@ void MapManager::render(HDC hdc)
 	for (vIterLDRRC = vLadderRect.begin(); vIterLDRRC != vLadderRect.end(); vIterLDRRC++) {
 		Rectangle(_empty->getMemDC(), vIterLDRRC->_rc.left, vIterLDRRC->_rc.top, vIterLDRRC->_rc.right, vIterLDRRC->_rc.bottom);
 	}
-
+	
 	m_pEnemyMgr->render(_empty->getMemDC());
+	m_pObjectMgr->render(_empty->getMemDC());
 	EFFECTMANAGER->render(_empty->getMemDC());
 	PLAYER->render(_empty->getMemDC());
 
@@ -1125,6 +1134,19 @@ void MapManager::CollisionEnemy()
 		else if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iter)->getRect())) {
 			(*iter)->damage(1);
 			PLAYER->DownATKCollision((*iter)->getRect());
+		}
+	}
+}
+
+void MapManager::CollisionObject()
+{
+	vector<PileOfRocks*> vPOR = m_pObjectMgr->getVecPOR();
+	vector<PileOfRocks*>::iterator iter;
+
+	for (iter = vPOR.begin(); iter != vPOR.end(); iter++) {
+		RECT rc;
+		if (IntersectRect(&rc, &PLAYER->getAttacRect(), &(*iter)->getRect())) {
+			(*iter)->DigOut();
 		}
 	}
 }

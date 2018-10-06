@@ -168,6 +168,9 @@
     <ClInclude Include="MapImage.h" />
     <ClInclude Include="missile.h" />
     <ClInclude Include="missileManager.h" />
+    <ClInclude Include="obejectBasicInfo.h" />
+    <ClInclude Include="objectManager.h" />
+    <ClInclude Include="PileOfRocks.h" />
     <ClInclude Include="pixelCollision.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayScene.h" />
@@ -214,6 +217,9 @@
     <ClCompile Include="MapImage.cpp" />
     <ClCompile Include="missile.cpp" />
     <ClCompile Include="missileManager.cpp" />
+    <ClCompile Include="obejectBasicInfo.cpp" />
+    <ClCompile Include="objectManager.cpp" />
+    <ClCompile Include="PileOfRocks.cpp" />
     <ClCompile Include="pixelCollision.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />

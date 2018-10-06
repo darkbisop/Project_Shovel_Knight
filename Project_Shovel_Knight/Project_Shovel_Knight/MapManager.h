@@ -1,6 +1,7 @@
 #pragma once
 #include "singletonBase.h"
 #include "enemyManager.h"
+#include "objectManager.h"
 
 class effectManager;
 
@@ -30,6 +31,7 @@ private:
 
 	enemyManager * m_pEnemyMgr;
 	effectManager*	m_pEffectMgr;
+	objectManager* m_pObjectMgr;
 	MapImage* m_pMapImage;
 	POINT	m_Camera;
 
@@ -66,6 +68,7 @@ public:
 	void EraseRect(int i);
 
 	void CollisionEnemy();
+	void CollisionObject();
 
 	RECT getMapVectorRc(int i) { return vRect.at(i)._rc; }
 	int getMapVectorRcSize() { return vRect.size(); }
