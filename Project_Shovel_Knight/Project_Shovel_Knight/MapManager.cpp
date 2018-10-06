@@ -78,7 +78,7 @@ void MapManager::render(HDC hdc)
 
 	CurrMap();
 	for (vIterLDRRC = vLadderRect.begin(); vIterLDRRC != vLadderRect.end(); vIterLDRRC++) {
-		Rectangle(_empty->getMemDC(), vIterLDRRC->_rc.left, vIterLDRRC->_rc.top, vIterLDRRC->_rc.right, vIterLDRRC->_rc.bottom);
+		//Rectangle(_empty->getMemDC(), vIterLDRRC->_rc.left, vIterLDRRC->_rc.top, vIterLDRRC->_rc.right, vIterLDRRC->_rc.bottom);
 	}
 	
 	m_pEnemyMgr->render(_empty->getMemDC());
@@ -87,7 +87,7 @@ void MapManager::render(HDC hdc)
 	PLAYER->render(_empty->getMemDC());
 
 	for (vIterRC = vRect.begin(); vIterRC != vRect.end(); vIterRC++) {
-		Rectangle(_empty->getMemDC(), vIterRC->_rc.left, vIterRC->_rc.top, vIterRC->_rc.right, vIterRC->_rc.bottom);
+		//Rectangle(_empty->getMemDC(), vIterRC->_rc.left, vIterRC->_rc.top, vIterRC->_rc.right, vIterRC->_rc.bottom);
 	}
 
 	_empty->render(hdc, 0, 0, m_Camera.x, m_Camera.y, WINSIZEX, WINSIZEY);

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "bug.h"
-
+#include "effectManager.h"
 
 HRESULT bug::init(float x, float y)
 {
@@ -10,7 +10,7 @@ HRESULT bug::init(float x, float y)
 		48, 34, 2, 2, true, RGB(255, 0, 255));
 	m_nLife = 1;
 	m_nPower = 1;
-	m_fRange = 80.0f;
+	m_fRange = 100.0f;
 	m_fX = x;
 	m_fY = y;
 	m_destX = m_fX;
@@ -18,7 +18,7 @@ HRESULT bug::init(float x, float y)
 	m_fRightAngle = 0.0f;// *PI / 180;
 	m_fLeftAngle = 180.0f * PI / 180;
 	m_rc = RectMakeCenter(m_fX, m_fY, m_pImg_Move->getFrameWidth(), m_pImg_Move->getFrameHeight());
-	m_fSpeed = 0.5f;
+	m_fSpeed = 0.7f;
 	m_isAlive = true;
 	m_isRight = false;
 	m_isDying = false;
@@ -29,11 +29,13 @@ HRESULT bug::init(float x, float y)
 	m_nDieFrameX = 0;
 	m_nDieFrameY = 0;
 	m_nScalar = 1;
-
+	m_fGravity = 0;
+	m_fJumpSpeed = 3.0f;
 	m_rcRange = RectMakeCenter(m_fX, m_fY, m_fRange, m_pImg_Move->getFrameHeight() * 2);	// 범위는 임의로 설정
 	m_tempRc = RectMakeCenter(WINSIZEX / 2, 330, m_fRange, 20);
-	
-	
+	m_pEffectMgr = new effectManager;
+	m_pEffectMgr->init();
+	m_pEffectMgr->addEffect("enemy_effect", "image/effect/enemy_effect.bmp", 120, 16, 24, 16, 10, 10);
 	return S_OK;
 }
 
@@ -47,7 +49,10 @@ void bug::update()
 	{
 		damage(1);
 	}
-	
+	if (m_pEffectMgr)
+	{
+		m_pEffectMgr->update();
+	}
 	moveFrame();	// 움직일 때 프레임 카운트함수
 	dieFrame();		// 죽을 때 프레임 카운트함수
 	frameChange();	// 프레임 변경함수
@@ -58,11 +63,12 @@ void bug::update()
 
 void bug::render(HDC hdc)
 {
-	Rectangle(hdc, m_tempRc.left, m_tempRc.top, m_tempRc.right, m_tempRc.bottom);
-	Rectangle(hdc, m_rcRange.left, m_rcRange.top, m_rcRange.right, m_rcRange.bottom);
+
 	if (m_isAlive)
 	{
-		Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
+		//Rectangle(hdc, m_tempRc.left, m_tempRc.top, m_tempRc.right, m_tempRc.bottom);
+		//Rectangle(hdc, m_rcRange.left, m_rcRange.top, m_rcRange.right, m_rcRange.bottom);
+		//Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
 		if (!m_isDying)
 		{
 			m_pImg_Move->frameRender(hdc, m_fX, m_fY, m_nCurrFrameX, m_nCurrFrameY);
@@ -71,6 +77,10 @@ void bug::render(HDC hdc)
 		{
 			m_pImg_Die->frameRender(hdc, m_fX, m_fY, m_nDieFrameX, m_nDieFrameY);
 		}
+	}
+	else
+	{
+		m_pEffectMgr->render(hdc);
 	}
 }
 
@@ -86,14 +96,6 @@ void bug::move()
 		{
 			m_isRight = false;
 		}
-		//if (m_fX <= 0)
-		//{
-		//	m_isRight = true;
-		//}
-		//if (m_fX >= WINSIZEX - m_pImg_Move->getWidth()*2)
-		//{
-		//	m_isRight = false;
-		//}
 		if (m_isRight)
 		{
 			m_fX += m_fSpeed;
@@ -116,21 +118,22 @@ void bug::dieMove()
 {
 	if (m_isAlive && m_isDying)
 	{
-		if (m_isRight)	// 오른쪽방향상태에서 죽었을 때
+		if (m_isRight)
 		{
-			m_fX = m_destX + cosf(m_fRightAngle) * 15.0f;
-			m_fY = m_destY - sinf(m_fRightAngle) * 20.0f;
-			m_rc = RectMakeCenter(m_fX + m_pImg_Move->getFrameWidth() / 2 * m_nScalar,
-				m_fY + m_pImg_Move->getFrameHeight() / 2 * m_nScalar,
+			m_fGravity += 0.2f;
+			m_fX -= 1.0f;
+			m_fY -= m_fJumpSpeed - m_fGravity;
+			m_rc = RectMakeCenter(m_fX + m_pImg_Move->getFrameWidth() / 2 * m_nScalar, m_fY + m_pImg_Move->getFrameHeight() / 2 * m_nScalar,
 				m_pImg_Move->getFrameWidth() * m_nScalar, m_pImg_Move->getFrameHeight() * m_nScalar);
 		}
-		else if (!m_isRight)	// 왼쪽방향상태에서 죽었을 때
+		else
 		{
-			m_fX = m_destX + cosf(m_fLeftAngle) * 15.0f;
-			m_fY = m_destY - sinf(m_fLeftAngle) * 20.0f;
-			m_rc = RectMakeCenter(m_fX + m_pImg_Move->getFrameWidth() / 2 * m_nScalar,
-				m_fY + m_pImg_Move->getFrameHeight() / 2 * m_nScalar,
+			m_fGravity += 0.2f;
+			m_fX += 1.0f;
+			m_fY -= m_fJumpSpeed - m_fGravity;
+			m_rc = RectMakeCenter(m_fX + m_pImg_Move->getFrameWidth() / 2 * m_nScalar, m_fY + m_pImg_Move->getFrameHeight() / 2 * m_nScalar,
 				m_pImg_Move->getFrameWidth() * m_nScalar, m_pImg_Move->getFrameHeight() * m_nScalar);
+
 		}
 	}
 }
@@ -146,7 +149,7 @@ void bug::moveFrame()
 			if (m_nFrameCount % 10 == 0)	// move상태 프레임카운트
 			{
 				m_nCurrFrameX++;
-				if (m_nCurrFrameX >= 4)
+				if (m_nCurrFrameX > 4)
 				{
 					m_nCurrFrameX = 0;
 					m_nFrameCount = 0;
@@ -166,7 +169,7 @@ void bug::dieFrame()
 			if (m_nDieFrameCount % 10 == 0)	// die상태 프레임 카운트
 			{
 				m_nDieFrameX++;
-				if (m_nDieFrameX >= 4)
+				if (m_nDieFrameX > 2)
 				{
 					m_nDieFrameX = 0;
 					m_nDieFrameCount = 0;
@@ -217,7 +220,7 @@ void bug::frameChange()
 
 void bug::collide()
 {
-	/*if (m_isAlive)
+	if (m_isAlive)
 	{
 		RECT rc;
 		if (IntersectRect(&rc, &m_rc, &m_tempRc))
@@ -225,9 +228,9 @@ void bug::collide()
 			m_isAlive = false;
 			m_pEffectMgr->play("enemy_effect", m_fX, m_fY);
 		}
-	}*/
+	}
 
-	
+
 }
 
 void bug::damage(int damage)

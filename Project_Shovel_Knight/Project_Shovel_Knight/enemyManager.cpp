@@ -53,7 +53,7 @@ void enemyManager::setBug()
 {
 	bug* pBug;
 	pBug = new bug;
-	pBug->init(550, 809);
+	pBug->init(550, 808);
 	m_VecBug.push_back(pBug);
 }
 

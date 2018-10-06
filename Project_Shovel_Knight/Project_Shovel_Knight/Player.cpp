@@ -79,9 +79,9 @@ void Player::update()
 
 void Player::render(HDC hdc)
 {
-	Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
-	Rectangle(hdc, m_AttackRc.left, m_AttackRc.top, m_AttackRc.right, m_AttackRc.bottom);
-	Rectangle(hdc, m_AttackDownRc.left, m_AttackDownRc.top, m_AttackDownRc.right, m_AttackDownRc.bottom);
+	//Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
+	//Rectangle(hdc, m_AttackRc.left, m_AttackRc.top, m_AttackRc.right, m_AttackRc.bottom);
+	//Rectangle(hdc, m_AttackDownRc.left, m_AttackDownRc.top, m_AttackDownRc.right, m_AttackDownRc.bottom);
 
 	ShovelRender(hdc);
 
@@ -238,8 +238,8 @@ void Player::ShovelRender(HDC hdc)
 	}
 	
 	else if (m_State == P_MOVE) {
-		if (m_isRight) m_MoveImg->frameRender(hdc, m_fX, m_fY - 7, m_CurrFrameX, 0);
-		else if (!m_isRight) m_MoveImg->frameRender(hdc, m_fX - 8, m_fY - 7, m_CurrFrameX, 1);
+		if (m_isRight) m_MoveImg->frameRender(hdc, m_fX, m_fY - 10, m_CurrFrameX, 0);
+		else if (!m_isRight) m_MoveImg->frameRender(hdc, m_fX - 8, m_fY - 10, m_CurrFrameX, 1);
 	}
 	
 	else if (m_isAttack) {

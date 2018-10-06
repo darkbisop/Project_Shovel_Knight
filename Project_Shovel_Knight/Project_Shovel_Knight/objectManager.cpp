@@ -37,7 +37,7 @@ void objectManager::setPileOfRocks()
 {
 	PileOfRocks* pPOR;
 	pPOR = new PileOfRocks;
-	pPOR->init(450, 809);
+	pPOR->init(400, 808);
 	v_PileOfRocks.push_back(pPOR);
 }
 

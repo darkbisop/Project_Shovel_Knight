@@ -10,6 +10,7 @@ struct tagJewelInfo
 	float gravity;
 	float speed;
 	bool isAlive;
+	int RandGem;
 };
 
 class PileOfRocks : obejectBasicInfo
@@ -21,8 +22,14 @@ private:
 
 	tagJewelInfo m_Drop;
 
-	float m_fX, m_fY, m_angle, m_gravity;
+	image* m_Img;
+	image* m_Gems;
+
 	int RanD;
+	int RandGems;
+
+	float m_fX, m_fY, m_angle, m_gravity;
+	
 
 public:
 
