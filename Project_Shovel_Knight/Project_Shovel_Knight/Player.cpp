@@ -11,7 +11,8 @@ HRESULT Player::init()
 	m_JumpImg = IMAGEMANAGER->addImage("Player_jump", "image/Player/Player_jump.bmp", 31, 68, 1, 2, true, RGB(255, 0, 255));
 	m_AttackDownImg = IMAGEMANAGER->addImage("Player_AttackDown", "image/Player/Player_AttackDown.bmp", 24, 72, 1, 2, true, RGB(255, 0, 255));
 	m_JumpDown = IMAGEMANAGER->addImage("Player_JumpDown", "image/Player/Player_JumpDown.bmp", 33, 68, 1, 2, true, RGB(255, 0, 255));
-	
+	m_LadderUpImg = IMAGEMANAGER->addImage("Player_ladder", "image/Player/Player_ladder.bmp", 100, 32, 4, 1, true, RGB(255, 0, 255));
+
 	m_UI = IMAGEMANAGER->addImage("UI", "image/UI.bmp", 400, 18, true, RGB(255, 0, 255));
 
 	m_inventory = new Inventory;
@@ -79,7 +80,7 @@ void Player::update()
 
 void Player::render(HDC hdc)
 {
-	//Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
+	Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
 	//Rectangle(hdc, m_AttackRc.left, m_AttackRc.top, m_AttackRc.right, m_AttackRc.bottom);
 	//Rectangle(hdc, m_AttackDownRc.left, m_AttackDownRc.top, m_AttackDownRc.right, m_AttackDownRc.bottom);
 
@@ -89,37 +90,39 @@ void Player::render(HDC hdc)
 	m_inventory->render(hdc);
 	m_Equipment->render(m_UI->getMemDC());
 
-	//char str[64];
+	char str[64];
 	//wsprintf(str, "money : %d", m_isGround);
-	////sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
-	//TextOut(hdc, m_fX, m_fY, str, strlen(str));
+	sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
+	TextOut(hdc, m_fX, m_fY, str, strlen(str));
 }
 
 void Player::KeyProcess()
 {
-	if (KEYMANAGER->isStayKeyDown(VK_RIGHT)) {
-		if (m_State != P_JUMP && m_State != P_MOVE && m_State != P_DOWNATTACK) {
-			m_State = P_ATTACK;
-		}
-		if (m_State != P_JUMP && m_State != P_DOWNATTACK) {
-			m_State = P_MOVE;
-		}
+	if (m_State != P_LADDERUP) {
+		if (KEYMANAGER->isStayKeyDown(VK_RIGHT)) {
+			if (m_State != P_JUMP && m_State != P_MOVE && m_State != P_DOWNATTACK) {
+				m_State = P_ATTACK;
+			}
+			if (m_State != P_JUMP && m_State != P_DOWNATTACK) {
+				m_State = P_MOVE;
+			}
 
-		m_fX += m_fSpeed;
-		m_isRight = true;
-	}
-
-	else if (KEYMANAGER->isStayKeyDown(VK_LEFT)) {
-		if (m_State != P_JUMP && m_State != P_MOVE && m_State != P_DOWNATTACK) {
-			m_State = P_ATTACK;
+			m_fX += m_fSpeed;
+			m_isRight = true;
 		}
 
-		if (m_State != P_JUMP && m_State != P_DOWNATTACK) {
-			m_State = P_MOVE;
-		}
+		else if (KEYMANAGER->isStayKeyDown(VK_LEFT)) {
+			if (m_State != P_JUMP && m_State != P_MOVE && m_State != P_DOWNATTACK) {
+				m_State = P_ATTACK;
+			}
 
-		m_fX -= m_fSpeed;
-		m_isRight = false;
+			if (m_State != P_JUMP && m_State != P_DOWNATTACK) {
+				m_State = P_MOVE;
+			}
+
+			m_fX -= m_fSpeed;
+			m_isRight = false;
+		}
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('C') && gravity <= 0) {
@@ -228,6 +231,18 @@ void Player::Animation()
 			}
 		}
 	}
+
+	else if (m_State == P_LADDERUP) {
+		m_FrameCount++;
+		if (m_FrameCount % 9 == 0) {
+			m_CurrFrameX++;
+			m_MoveImg->setFrameX(m_CurrFrameX);
+
+			if (m_CurrFrameX >= 3) {
+				m_CurrFrameX = 0;
+			}
+		}
+	}
 }
 
 void Player::ShovelRender(HDC hdc)
@@ -261,6 +276,14 @@ void Player::ShovelRender(HDC hdc)
 	else if (m_State == P_DOWNATTACK) {
 		if (m_isRight) m_AttackDownImg->frameRender(hdc, m_fX + 2, m_fY - 8, 0, 0);
 		else if (!m_isRight) m_AttackDownImg->frameRender(hdc, m_fX + 2, m_fY - 8, 0, 1);
+	}
+
+	else if (m_State == P_LADDERUP) {
+		m_LadderUpImg->frameRender(hdc, m_fX + 3, m_fY - 10, m_CurrFrameX, 0);
+	}
+
+	else if (m_State == P_LADDERSTOP) {
+		m_LadderUpImg->frameRender(hdc, m_fX + 5, m_fY - 10, 0, 0);
 	}
 }
 
@@ -305,16 +328,19 @@ void Player::LadderColliosion(RECT x)
 			gravity = 0;
 			jumpSpeed = 0;
 			m_isGround = true;
-
+			
 			if (KEYMANAGER->isStayKeyDown(VK_UP)) {
+				m_State = P_LADDERUP;
 				m_fX = x.left - 12;
-				m_fY -= m_fSpeed;
+				m_fY -= 1.0f;
 			}
 
 			else if (KEYMANAGER->isStayKeyDown(VK_DOWN)) {
+				m_State = P_LADDERUP;
 				m_fX = x.left - 12;
-				m_fY += m_fSpeed;
-			}
+				m_fY += 1.0f;
+			} 
+			else m_State = P_LADDERSTOP;
 		}
 	}
 }

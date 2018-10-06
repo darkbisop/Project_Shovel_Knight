@@ -5,7 +5,7 @@
 
 enum State
 {
-	P_APPEAR, P_IDLE, P_MOVE, P_ATTACK, P_DOWNATTACK, P_MAGIC, P_JUMP, P_NUM
+	P_APPEAR, P_IDLE, P_MOVE, P_ATTACK, P_DOWNATTACK, P_MAGIC, P_JUMP, P_LADDERUP, P_LADDERSTOP
 };
 
 class Player : public singletonBase<Player>
@@ -27,6 +27,7 @@ private:
 	image*	m_JumpDown;
 	image*	m_AttackImg;
 	image*	m_AttackDownImg;
+	image*	m_LadderUpImg;
 
 	int		m_CurrFrameX;
 	int		m_CurrFrameY;

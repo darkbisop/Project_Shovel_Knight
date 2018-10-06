@@ -56,14 +56,15 @@ void MapManager::release(void)
 
 void MapManager::update(void)
 {
-	PLAYER->update();
 	CollisionCheck_ChangeMapRect();
 	MovingMap();
 	m_pEnemyMgr->update();
 	m_pObjectMgr->update();
 	EFFECTMANAGER->update();
+	CollisionMap();
 	CollisionEnemy();
 	CollisionObject();
+	PLAYER->update();
 }
 
 void MapManager::render(HDC hdc)
@@ -78,7 +79,7 @@ void MapManager::render(HDC hdc)
 
 	CurrMap();
 	for (vIterLDRRC = vLadderRect.begin(); vIterLDRRC != vLadderRect.end(); vIterLDRRC++) {
-		//Rectangle(_empty->getMemDC(), vIterLDRRC->_rc.left, vIterLDRRC->_rc.top, vIterLDRRC->_rc.right, vIterLDRRC->_rc.bottom);
+		Rectangle(_empty->getMemDC(), vIterLDRRC->_rc.left, vIterLDRRC->_rc.top, vIterLDRRC->_rc.right, vIterLDRRC->_rc.bottom);
 	}
 	
 	m_pEnemyMgr->render(_empty->getMemDC());
@@ -87,7 +88,7 @@ void MapManager::render(HDC hdc)
 	PLAYER->render(_empty->getMemDC());
 
 	for (vIterRC = vRect.begin(); vIterRC != vRect.end(); vIterRC++) {
-		//Rectangle(_empty->getMemDC(), vIterRC->_rc.left, vIterRC->_rc.top, vIterRC->_rc.right, vIterRC->_rc.bottom);
+		Rectangle(_empty->getMemDC(), vIterRC->_rc.left, vIterRC->_rc.top, vIterRC->_rc.right, vIterRC->_rc.bottom);
 	}
 
 	_empty->render(hdc, 0, 0, m_Camera.x, m_Camera.y, WINSIZEX, WINSIZEY);
@@ -1033,13 +1034,13 @@ void MapManager::PushRect()
 		_RectInfo._rc = RectMake(0, 823, 1440, 50);
 		vRect.push_back(_RectInfo);
 
-		_RectInfo._rc = RectMake(608, 789, 65, 35);
+		_RectInfo._rc = RectMake(608, 790, 65, 35);
 		vRect.push_back(_RectInfo);
 
 		_RectInfo._rc = RectMake(673, 759, 47, 66);
 		vRect.push_back(_RectInfo);
 
-		_RectInfo._rc = RectMake(720, 789, 65, 35);
+		_RectInfo._rc = RectMake(720, 790, 65, 35);
 		vRect.push_back(_RectInfo);
 
 		_RectInfo._rc = RectMake(830, 759, 130, 15);
@@ -1054,7 +1055,7 @@ void MapManager::PushRect()
 		_RectInfo._rc = RectMake(1230, 807, 50, 17);
 		vRect.push_back(_RectInfo);
 
-		_RectInfo._rc = RectMake(1280, 786, 65, 40);
+		_RectInfo._rc = RectMake(1280, 790, 65, 40);
 		vRect.push_back(_RectInfo);
 
 		_RectInfo._rc = RectMake(1345, 807, 94, 17);
@@ -1113,11 +1114,56 @@ void MapManager::PushRect()
 
 	_RectInfo._rc = RectMake(2305, 518, 143, 60);
 	vRect.push_back(_RectInfo);
+
+
+
+	// 4¹ø¸Ê 
+	_RectInfo._rc = RectMake(2447, 615, 80, 40);
+	vRect.push_back(_RectInfo);
+
+	_RectInfo._rc = RectMake(2547, 615, 100, 40);
+	vRect.push_back(_RectInfo);
+
+	_RectInfo._rc = RectMake(2688, 615, 430, 40);
+	vRect.push_back(_RectInfo);
+
+	_RectLadder._rc = RectMake(3140, 615, 6, 27);
+	vLadderRect.push_back(_RectLadder);
+
+
+	// 5¹ø¸Ê
+	_RectInfo._rc = RectMake(2868,790, 300, 15);
+	vRect.push_back(_RectInfo);
+
+	_RectInfo._rc = RectMake(2830, 839, 45, 15);
+	vRect.push_back(_RectInfo);
+
+	_RectLadder._rc = RectMake(2884, 839, 6, 40);
+	vLadderRect.push_back(_RectLadder);
+
+	// 6¹ø¸Ê
 }
 
 void MapManager::EraseRect(int i)
 {
 	vRect.erase(vRect.begin() + i);
+}
+
+void MapManager::CollisionMap()
+{
+	for (int i = 0; i < vRect.size(); i++)
+	{
+		PLAYER->RectColliosion(MAPMANAGER->getMapVectorRc(i));
+
+		/*if (MAPMANAGER->getMapNum() == 1 && MAPMANAGER->getMapVectorRcSize() > 5) {
+			MAPMANAGER->EraseRect(i);
+		}*/
+	}
+
+	for (int i = 0; i < vLadderRect.size(); i++)
+	{
+		PLAYER->LadderColliosion(MAPMANAGER->getLadderVECRc(i));
+	}
 }
 
 void MapManager::CollisionEnemy()

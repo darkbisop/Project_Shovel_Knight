@@ -43,11 +43,16 @@ void PileOfRocks::update()
 				v_Iter->gravity = 0;
 				v_Iter->y = MAPMANAGER->getMapVectorRc(i).top - 7;
 			}
-
-			if (IntersectRect(&rc, &v_Iter->rc, &PLAYER->getPlayerRect())) {
-				v_Iter->isAlive = false;
-			}
 		}
+	}
+
+	for (v_Iter = v_VecJewel.begin(); v_Iter != v_VecJewel.end();) {
+		RECT rc;
+		if (IntersectRect(&rc, &v_Iter->rc, &PLAYER->getPlayerRect())) {
+			v_Iter->isAlive = false;
+			v_Iter = v_VecJewel.erase(v_Iter);
+		}
+		else v_Iter++;
 	}
 
 	_rc = RectMake(m_fX, m_fY, 20, 20);

@@ -67,6 +67,7 @@ public:
 	void PushRect();
 	void EraseRect(int i);
 
+	void CollisionMap();
 	void CollisionEnemy();
 	void CollisionObject();
 

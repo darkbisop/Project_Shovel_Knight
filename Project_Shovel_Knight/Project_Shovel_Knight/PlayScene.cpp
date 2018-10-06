@@ -28,7 +28,6 @@ void PlayScene::release(void)
 
 void PlayScene::update(void)
 {
-	PlayerMapCollision();
 	MAPMANAGER->update();
 	//m_pEnemyMgr->update();
 }
@@ -41,23 +40,6 @@ void PlayScene::render(HDC hdc)
 	//m_pEnemyMgr->render(_empty->getMemDC());
 }
 
-void PlayScene::PlayerMapCollision()
-{
-	for (int i = 0; i < MAPMANAGER->getMapVectorRcSize(); i++)
-	{
-		PLAYER->RectColliosion(MAPMANAGER->getMapVectorRc(i));
-
-		/*if (MAPMANAGER->getMapNum() == 1 && MAPMANAGER->getMapVectorRcSize() > 5) {
-			MAPMANAGER->EraseRect(i);
-		}*/
-	}
-
-	for (int i = 0; i < MAPMANAGER->getLadderVECRcSize(); i++)
-	{
-		PLAYER->LadderColliosion(MAPMANAGER->getLadderVECRc(i));
-	}
-
-}
 
 void PlayScene::DrawMap()
 {

@@ -24,7 +24,6 @@ public:
 	void update(void);
 	void render(HDC hdc);
 
-	void PlayerMapCollision();
 	void DrawMap();
 
 	PlayScene();
