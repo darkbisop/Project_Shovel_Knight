@@ -3,16 +3,6 @@
 #include "Equipment.h"
 #include "Inventory.h"
 
-struct Temp
-{
-	float x;
-	float y;
-	float angle;
-	RECT rc;
-	float	gravity;
-	float speed;
-};
-
 enum State
 {
 	P_APPEAR, P_IDLE, P_MOVE, P_ATTACK, P_DOWNATTACK, P_MAGIC, P_JUMP, P_NUM
@@ -22,13 +12,9 @@ class Player : public singletonBase<Player>
 {
 private:
 
-	vector<Temp> v_VecTemp;
-	vector<Temp>::iterator v_Iter;
-
 	Inventory*	m_inventory;
 	Equipment*	m_Equipment;
 
-	Temp	m_Drop;
 	RECT	m_rc;
 	RECT	m_AttackRc;
 	RECT	m_AttackDownRc;

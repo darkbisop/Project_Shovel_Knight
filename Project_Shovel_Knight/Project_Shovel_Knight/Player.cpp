@@ -66,13 +66,6 @@ void Player::update()
 	KeyProcess();
 	Animation();
 
-	for (v_Iter = v_VecTemp.begin(); v_Iter != v_VecTemp.end(); v_Iter++) {
-		v_Iter->gravity += 0.1f;
-		v_Iter->x += cosf(75 * 3.14 / 180) * v_Iter->speed;
-		v_Iter->y -= sinf(v_Iter->angle) * v_Iter->speed - v_Iter->gravity;
-		v_Iter->rc = RectMake(v_Iter->x, v_Iter->y, 5, 5);
-	}
-
 	if (m_isGround == false) {
 		gravity += 0.3f;
 		m_fY -= jumpSpeed - gravity;
@@ -89,10 +82,6 @@ void Player::render(HDC hdc)
 	Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
 	Rectangle(hdc, m_AttackRc.left, m_AttackRc.top, m_AttackRc.right, m_AttackRc.bottom);
 	Rectangle(hdc, m_AttackDownRc.left, m_AttackDownRc.top, m_AttackDownRc.right, m_AttackDownRc.bottom);
-
-	for (v_Iter = v_VecTemp.begin(); v_Iter != v_VecTemp.end(); v_Iter++) {
-		Rectangle(hdc, v_Iter->rc.left, v_Iter->rc.top, v_Iter->rc.right, v_Iter->rc.bottom);
-	}
 
 	ShovelRender(hdc);
 
@@ -157,18 +146,6 @@ void Player::KeyProcess()
 	}
 	else if (KEYMANAGER->isOnceKeyUp(VK_LEFT) && m_isRight == false) {
 		m_State = P_IDLE;
-	}
-
-	if (KEYMANAGER->isOnceKeyDown(VK_SPACE)) {
-		tempRan = RANDOM->getFromIntTo(3, 6);
-		for (int i = 0; i < tempRan; i++) {
-			m_Drop.x = m_fX + 22;
-			m_Drop.y = m_fY + 27;
-			m_Drop.gravity = 0;
-			m_Drop.angle = RANDOM->getFromFloatTo(1.0f, 1.9f);
-			m_Drop.speed = RANDOM->getFromFloatTo(2.5f, 3.5f);
-			v_VecTemp.push_back(m_Drop);
-		}
 	}
 }
 
