@@ -55,6 +55,16 @@ void enemyManager::setBug()
 	pBug = new bug;
 	pBug->init(550, 808);
 	m_VecBug.push_back(pBug);
+
+	bug* pBug2;
+	pBug2 = new bug;
+	pBug2->init(920, 808);
+	m_VecBug.push_back(pBug2);
+
+	bug* pBug3;
+	pBug3 = new bug;
+	pBug3->init(1140, 808);
+	m_VecBug.push_back(pBug3);
 }
 
 void enemyManager::setTarget(spaceShip * pTarget)

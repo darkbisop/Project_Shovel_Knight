@@ -27,9 +27,10 @@ void ShopScene::update(void)
 	PLAYER->update();
 
 	if (KEYMANAGER->isOnceKeyDown('1')) {
-		PLAYER->SetPlayerX(30);
-		PLAYER->SetPlayerY(730);
+		PLAYER->SetPlayerX(-30);
+		PLAYER->SetPlayerY(790);
 		SCENEMANAGER->changeScene("PlayScene");
+		PLAYER->setAppear(true);
 	}
 }
 

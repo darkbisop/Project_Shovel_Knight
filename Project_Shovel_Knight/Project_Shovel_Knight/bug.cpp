@@ -45,14 +45,11 @@ void bug::release()
 
 void bug::update()
 {
-	if (KEYMANAGER->isOnceKeyDown('A'))
-	{
-		damage(1);
-	}
 	if (m_pEffectMgr)
 	{
 		m_pEffectMgr->update();
 	}
+
 	moveFrame();	// 움직일 때 프레임 카운트함수
 	dieFrame();		// 죽을 때 프레임 카운트함수
 	frameChange();	// 프레임 변경함수
@@ -68,7 +65,7 @@ void bug::render(HDC hdc)
 	{
 		//Rectangle(hdc, m_tempRc.left, m_tempRc.top, m_tempRc.right, m_tempRc.bottom);
 		//Rectangle(hdc, m_rcRange.left, m_rcRange.top, m_rcRange.right, m_rcRange.bottom);
-		//Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
+		Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
 		if (!m_isDying)
 		{
 			m_pImg_Move->frameRender(hdc, m_fX, m_fY, m_nCurrFrameX, m_nCurrFrameY);
@@ -123,17 +120,14 @@ void bug::dieMove()
 			m_fGravity += 0.2f;
 			m_fX -= 1.0f;
 			m_fY -= m_fJumpSpeed - m_fGravity;
-			m_rc = RectMakeCenter(m_fX + m_pImg_Move->getFrameWidth() / 2 * m_nScalar, m_fY + m_pImg_Move->getFrameHeight() / 2 * m_nScalar,
-				m_pImg_Move->getFrameWidth() * m_nScalar, m_pImg_Move->getFrameHeight() * m_nScalar);
+			m_rc = RectMake(-1000, -1000, -1, -1);
 		}
 		else
 		{
 			m_fGravity += 0.2f;
 			m_fX += 1.0f;
 			m_fY -= m_fJumpSpeed - m_fGravity;
-			m_rc = RectMakeCenter(m_fX + m_pImg_Move->getFrameWidth() / 2 * m_nScalar, m_fY + m_pImg_Move->getFrameHeight() / 2 * m_nScalar,
-				m_pImg_Move->getFrameWidth() * m_nScalar, m_pImg_Move->getFrameHeight() * m_nScalar);
-
+			m_rc = RectMake(-1000, -1000, -1, -1);
 		}
 	}
 }
@@ -174,7 +168,6 @@ void bug::dieFrame()
 					m_nDieFrameX = 0;
 					m_nDieFrameCount = 0;
 
-					m_rc = RectMake(-1000, -1000, -1, -1);
 					EFFECTMANAGER->play("enemy_effect", m_fX, m_fY);
 					m_isAlive = false;
 				}

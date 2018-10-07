@@ -84,6 +84,8 @@ public:
 	inline int getMoney() { return Money; }
 	inline void setMoney(int a) { Money = a; }
 
+	inline void setAppear(bool a) { m_isAppear = a; }
+
 	inline bool getInvincibleTime() { return m_invincibleTime; }
 	inline void setInvincibleTime(bool a) { m_invincibleTime = a; }
 

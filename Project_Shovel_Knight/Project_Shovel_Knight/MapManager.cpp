@@ -82,8 +82,8 @@ void MapManager::render(HDC hdc)
 		Rectangle(_empty->getMemDC(), vIterLDRRC->_rc.left, vIterLDRRC->_rc.top, vIterLDRRC->_rc.right, vIterLDRRC->_rc.bottom);
 	}
 	
-	m_pEnemyMgr->render(_empty->getMemDC());
 	m_pObjectMgr->render(_empty->getMemDC());
+	m_pEnemyMgr->render(_empty->getMemDC());
 	EFFECTMANAGER->render(_empty->getMemDC());
 	PLAYER->render(_empty->getMemDC());
 

@@ -31,7 +31,7 @@ HRESULT Player::init()
 	m_Equipment->setInventoryLink(m_inventory);
 
 	m_fX = -35;
-	m_fY = 799;
+	m_fY = 790;
 	m_fSpeed = 2.0f;
 	jumpSpeed = 0;
 	gravity = 0;
@@ -52,7 +52,7 @@ HRESULT Player::init()
 	m_isGround = false;
 	m_invincibleTime = false;
 	m_isDamaged = false;
-	m_isAppear = true;
+	m_isAppear = false;
 
 	m_State = P_IDLE;
 	
@@ -74,45 +74,12 @@ void Player::update()
 	m_inventory->update();
 	m_Equipment->update();
 
-	if (m_isAppear) {
-		m_AppearTime++;
-		m_State = P_APPEAR;
-		if (!SOUNDMANAGER->isPlaySound("플레이어등장")) {
-			SOUNDMANAGER->play("플레이어등장");
-		}
-		if (m_AppearTime < 30) {
-
-			m_fX -= cosf(10) * 6.0f;
-			m_fY -= sinf(40) * 6.0f;
-		}
-		else if (m_AppearTime >= 110) {
-			m_isAppear = false;
-			m_AppearTime = 0;
-			SOUNDMANAGER->play("게임배경음", 0.9f);
-		}
-	}
-
 	KeyProcess();
 	Animation();
 
 	if (m_isGround == false) {
 		gravity += 0.3f;
 		m_fY -= jumpSpeed - gravity;
-	}
-
-	if (m_isDamaged == true) {
-		m_State = P_DAMAGED;
-		m_DamagedTime++;
-		if (m_DamagedTime < 17) {
-			m_fX += cosf(10) * 4.0f;
-			m_fY -= sinf(40) * 4.0f;
-		}
-
-		else if (m_DamagedTime >= 18) {
-			m_State = P_IDLE;
-			m_DamagedTime = 0;
-			m_isDamaged = false;
-		}
 	}
 
 	m_rc = RectMake(m_fX + 5, m_fY, 20, 25);
@@ -134,8 +101,8 @@ void Player::render(HDC hdc)
 	m_Equipment->render(m_UI->getMemDC());
 
 	char str[64];
-	wsprintf(str, "money : %d", m_AppearTime);
-	//sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
+	//wsprintf(str, "money : %d", m_AppearTime);
+	sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
 	TextOut(hdc, m_fX, m_fY - 20, str, strlen(str));
 }
 
@@ -195,17 +162,28 @@ void Player::KeyProcess()
 	else if (KEYMANAGER->isOnceKeyUp(VK_LEFT) && m_isRight == false) {
 		m_State = P_IDLE;
 	}
-
-	if (m_invincibleTime == false && KEYMANAGER->isOnceKeyDown('1')) {
-		m_invincibleTime = true;
-	}
-	else if (m_invincibleTime == true && KEYMANAGER->isOnceKeyDown('1')) {
-		m_invincibleTime = false;
-	}
 }
 
 void Player::Animation()
 {
+	if (m_isAppear) {
+		m_AppearTime++;
+		m_State = P_APPEAR;
+		if (!SOUNDMANAGER->isPlaySound("플레이어등장")) {
+			SOUNDMANAGER->play("플레이어등장");
+		}
+		if (m_AppearTime < 30) {
+
+			m_fX -= cosf(10) * 6.0f;
+			m_fY -= sinf(40) * 6.0f;
+		}
+		else if (m_AppearTime >= 110) {
+			m_isAppear = false;
+			m_AppearTime = 0;
+			SOUNDMANAGER->play("게임배경음", 0.9f);
+		}
+	}
+
 	if (m_State == P_MOVE && m_isRight == true) {
 		m_FrameCount++;
 		
@@ -304,14 +282,25 @@ void Player::Animation()
 
 			if (m_CurrFrameX >= 8) {
 				m_CurrFrameX = 8;
-				
-				/*	if (m_CurrFrameX >= 8) {
-						SOUNDMANAGER->play("게임배경음", 0.9f);
-						m_State = P_IDLE;
-					}*/
 			}
 		}
 	}
+
+	if (m_isDamaged == true) {
+		m_State = P_DAMAGED;
+		m_DamagedTime++;
+		if (m_DamagedTime < 17) {
+			m_fX += cosf(10) * 4.0f;
+			m_fY -= sinf(40) * 4.0f;
+		}
+
+		else if (m_DamagedTime >= 18) {
+			m_State = P_IDLE;
+			m_DamagedTime = 0;
+			m_isDamaged = false;
+		}
+	}
+	
 
 	if (m_invincibleTime == true) {
 		m_invincibleCount--;
