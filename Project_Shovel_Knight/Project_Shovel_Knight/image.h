@@ -90,8 +90,8 @@ public:
 		int sourX, int sourY, int sourWidth, int sourHeight, int scalar = 1);
 
 	// ÇÁ·¹ÀÓ ·»´õ
-	void frameRender(HDC hdc, int destX, int destY,
-		int currFrameX, int currFrameY);
+	void frameRender(HDC hdc, int destX, int destY, int currFrameX, int currFrameY);
+	void frameAlphaRender(HDC hdc, int destX, int destY, int currFrameX, int currFrameY, BYTE alpha);
 
 	// ¾ËÆÄ ºí·»µå ·»´õ
 	void alphaRender(HDC hdc, BYTE alpha);

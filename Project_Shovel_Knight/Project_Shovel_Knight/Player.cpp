@@ -36,15 +36,16 @@ HRESULT Player::init()
 	m_CurrFrameY = 0;
 	m_AtkFrameCount = 0;
 	m_AttackCount = 0;
+	m_invincibleCount = 100;
+	m_invincibleAlpha = 0;
 
 	m_isRight = true;
 	m_isAttack = false;
 	m_isAirAttack = false;
 	m_isGround = false;
+	m_invincibleTime = false;
 
 	m_State = P_IDLE;
-
-	tempRan = 0;
 	
 	return S_OK;
 }
@@ -72,6 +73,23 @@ void Player::update()
 		m_fY -= jumpSpeed - gravity;
 	}
 
+	if (m_invincibleTime == true) {
+		m_invincibleCount--;
+		if (m_invincibleCount >= 0) {
+			if (m_invincibleAlpha <= 255) {
+				m_invincibleAlpha += 80;
+			}
+
+			if (m_invincibleAlpha >= 255) {
+				m_invincibleAlpha = 0;
+			}
+		}
+		else if (m_invincibleCount <= 0) {
+			m_invincibleTime = false;
+			m_invincibleCount = 100;
+		}
+	}
+
 	m_rc = RectMake(m_fX + 5, m_fY, 20, 25);
 
 	if (m_State == P_DOWNATTACK) m_AttackDownRc = RectMake(m_fX + 7, m_fY + 20, 10, 10);
@@ -91,8 +109,8 @@ void Player::render(HDC hdc)
 	m_Equipment->render(m_UI->getMemDC());
 
 	char str[64];
-	//wsprintf(str, "money : %d", m_isGround);
-	sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
+	wsprintf(str, "money : %d", m_invincibleCount);
+	//sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
 	TextOut(hdc, m_fX, m_fY, str, strlen(str));
 }
 
@@ -149,6 +167,13 @@ void Player::KeyProcess()
 	}
 	else if (KEYMANAGER->isOnceKeyUp(VK_LEFT) && m_isRight == false) {
 		m_State = P_IDLE;
+	}
+
+	if (m_invincibleTime == false && KEYMANAGER->isOnceKeyDown('1')) {
+		m_invincibleTime = true;
+	}
+	else if (m_invincibleTime == true && KEYMANAGER->isOnceKeyDown('1')) {
+		m_invincibleTime = false;
 	}
 }
 
@@ -248,13 +273,25 @@ void Player::Animation()
 void Player::ShovelRender(HDC hdc)
 {
 	if (m_State == P_IDLE) {
-		if (m_isRight) m_IdleImg->frameRender(hdc, m_fX, m_fY - 7, 0, 0);
-		else if (!m_isRight) m_IdleImg->frameRender(hdc, m_fX - 2, m_fY - 7, 0, 1);
+		if (m_invincibleTime == true) {
+			if (m_isRight) m_IdleImg->frameAlphaRender(hdc, m_fX, m_fY - 7, 0, 0, m_invincibleAlpha);
+			else if (!m_isRight) m_IdleImg->frameAlphaRender(hdc, m_fX - 2, m_fY - 7, 0, 1, m_invincibleAlpha);
+		}
+		else {
+			if (m_isRight) m_IdleImg->frameRender(hdc, m_fX, m_fY - 7, 0, 0);
+			else if (!m_isRight) m_IdleImg->frameRender(hdc, m_fX - 2, m_fY - 7, 0, 1);
+		}
 	}
 	
 	else if (m_State == P_MOVE) {
-		if (m_isRight) m_MoveImg->frameRender(hdc, m_fX, m_fY - 10, m_CurrFrameX, 0);
-		else if (!m_isRight) m_MoveImg->frameRender(hdc, m_fX - 8, m_fY - 10, m_CurrFrameX, 1);
+		if (m_invincibleTime == true) {
+			if (m_isRight) m_MoveImg->frameAlphaRender(hdc, m_fX, m_fY - 10, m_CurrFrameX, 0, m_invincibleAlpha);
+			else if (!m_isRight) m_MoveImg->frameAlphaRender(hdc, m_fX - 8, m_fY - 10, m_CurrFrameX, 1, m_invincibleAlpha);
+		}
+		else {
+			if (m_isRight) m_MoveImg->frameRender(hdc, m_fX, m_fY - 10, m_CurrFrameX, 0);
+			else if (!m_isRight) m_MoveImg->frameRender(hdc, m_fX - 8, m_fY - 10, m_CurrFrameX, 1);
+		}
 	}
 	
 	else if (m_isAttack) {

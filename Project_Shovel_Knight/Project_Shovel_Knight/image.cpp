@@ -381,6 +381,71 @@ void image::frameRender(HDC hdc, int destX, int destY, int currFrameX, int currF
 	}
 }
 
+void image::frameAlphaRender(HDC hdc, int destX, int destY, int currFrameX, int currFrameY, BYTE alpha)
+{
+	m_pImageInfo->nCurrFrameX = currFrameX;
+	m_pImageInfo->nCurrFrameY = currFrameY;
+	m_blendFunc.SourceConstantAlpha = alpha;
+
+	if (currFrameX > m_pImageInfo->nMaxFrameX)
+		m_pImageInfo->nCurrFrameX = m_pImageInfo->nMaxFrameX;
+	if (currFrameY > m_pImageInfo->nMaxFrameY)
+		m_pImageInfo->nCurrFrameY = m_pImageInfo->nMaxFrameY;
+
+	if (m_isTransparent)
+	{
+		BitBlt(
+			// 목적지
+			m_pBlendImage->hMemDC,
+			0, 0,
+			m_pImageInfo->nWidth, m_pImageInfo->nHeight,
+
+			// 대상
+			hdc,
+			destX, destY,
+			SRCCOPY);
+		GdiTransparentBlt(
+			hdc,	// 복사될 목적지 DC
+			destX, destY,		// 복사될 좌표 시작점
+			m_pImageInfo->nFrameWidth,
+			m_pImageInfo->nFrameHeight,	// 복사될 크기
+
+									// 대상
+			m_pImageInfo->hMemDC,	// 복사할 대상 DC
+			m_pImageInfo->nFrameWidth * m_pImageInfo->nCurrFrameX,
+			m_pImageInfo->nFrameHeight * m_pImageInfo->nCurrFrameY,					// 복사될 영역 시작좌표
+			m_pImageInfo->nFrameWidth,
+			m_pImageInfo->nFrameHeight,	// 복사될 영역지정 좌표
+
+			m_transColor);			// 복사에서 제외할 색상
+		AlphaBlend(
+			// 목적지
+			hdc,
+			destX, destY,
+			m_pImageInfo->nWidth, m_pImageInfo->nHeight,
+
+			// 대상
+			m_pBlendImage->hMemDC,
+			0, 0,
+			m_pImageInfo->nWidth, m_pImageInfo->nHeight,
+			m_blendFunc);
+	}
+
+	else
+	{
+		AlphaBlend(
+			// 복사할 목표
+			hdc,
+			destX, destY,
+			m_pImageInfo->nWidth, m_pImageInfo->nHeight,
+			// 복사할 대상
+			m_pImageInfo->hMemDC,
+			0, 0,
+			m_pImageInfo->nWidth, m_pImageInfo->nHeight,
+			m_blendFunc);
+	}
+}
+
 void image::alphaRender(HDC hdc, BYTE alpha)
 {
 	m_blendFunc.SourceConstantAlpha = alpha;

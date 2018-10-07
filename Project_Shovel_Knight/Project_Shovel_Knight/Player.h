@@ -46,9 +46,11 @@ private:
 	bool	m_isAttack;
 	bool	m_isAirAttack;
 	bool	m_isGround;
+	bool	m_invincibleTime;
 	
-	int		tempRan;
 	int		Money;
+	int		m_invincibleCount;
+	int		m_invincibleAlpha;
 
 public:
 
