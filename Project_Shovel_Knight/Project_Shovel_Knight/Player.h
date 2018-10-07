@@ -29,6 +29,7 @@ private:
 	image*	m_AttackDownImg;
 	image*	m_LadderUpImg;
 	image*	m_DamagedImg;
+	image*	m_AppearImg;
 
 	int		m_CurrFrameX;
 	int		m_CurrFrameY;
@@ -45,13 +46,14 @@ private:
 
 	bool	m_isRight;
 	bool	m_isAttack;
-	bool	m_isAirAttack;
 	bool	m_isGround;
 	bool	m_invincibleTime;
 	bool	m_isDamaged;
+	bool	m_isAppear;
 	
 	int		Money;
 	int		m_DamagedTime;
+	int		m_AppearTime;
 	int		m_invincibleCount;
 	int		m_invincibleAlpha;
 

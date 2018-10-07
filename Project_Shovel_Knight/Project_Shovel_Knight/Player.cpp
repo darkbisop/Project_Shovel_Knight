@@ -4,7 +4,6 @@
 
 HRESULT Player::init()
 {
-	//m_startimg = IMAGEMANAGER->addImage("appear", "image/Player/Player_appear.bmp", 540, 51, 9, 1, true, RGB(255, 0, 255));
 	m_IdleImg = IMAGEMANAGER->addImage("Player_Idle", "image/Player/Player_Idle.bmp", 34, 64, 1, 2, true, RGB(255, 0, 255));
 	m_MoveImg = IMAGEMANAGER->addImage("Player_move", "image/Player/Player_move.bmp", 240, 70, 6, 2, true, RGB(255, 0, 255));
 	m_AttackImg = IMAGEMANAGER->addImage("Player_attack", "image/Player/Player_attack.bmp", 270, 70, 5, 2, true, RGB(255, 0, 255));
@@ -13,8 +12,14 @@ HRESULT Player::init()
 	m_JumpDown = IMAGEMANAGER->addImage("Player_JumpDown", "image/Player/Player_JumpDown.bmp", 33, 68, 1, 2, true, RGB(255, 0, 255));
 	m_LadderUpImg = IMAGEMANAGER->addImage("Player_ladder", "image/Player/Player_ladder.bmp", 100, 32, 4, 1, true, RGB(255, 0, 255));
 	m_DamagedImg = IMAGEMANAGER->addImage("Player_damaged", "image/Player/Player_damaged.bmp", 35, 78, 1, 2, true, RGB(255, 0, 255));
+	m_AppearImg = IMAGEMANAGER->addImage("Player_appear", "image/Player/Player_appear.bmp", 540, 51, 9, 1, true, RGB(255, 0, 255));
 
 	m_UI = IMAGEMANAGER->addImage("UI", "image/UI.bmp", 400, 18, true, RGB(255, 0, 255));
+
+	SOUNDMANAGER->addSound("플레이어등장", "Sound/Player_Appear.mp3", false, false);
+	SOUNDMANAGER->addSound("플레이어점프", "Sound/JumpSFX.mp3", false, false);
+	SOUNDMANAGER->addSound("플레이어공격", "Sound/AttackSFX.mp3", false, false);
+	SOUNDMANAGER->addSound("플레이어착지", "Sound/LandingSFX.mp3", false, false);
 
 	m_inventory = new Inventory;
 	m_inventory->init();
@@ -25,8 +30,8 @@ HRESULT Player::init()
 	m_inventory->SetEquipmentLink(m_Equipment);
 	m_Equipment->setInventoryLink(m_inventory);
 
-	m_fX = 30;
-	m_fY = 720;
+	m_fX = -35;
+	m_fY = 799;
 	m_fSpeed = 2.0f;
 	jumpSpeed = 0;
 	gravity = 0;
@@ -40,13 +45,14 @@ HRESULT Player::init()
 	m_invincibleCount = 100;
 	m_invincibleAlpha = 0;
 	m_DamagedTime = 0;
+	m_AppearTime = 0;
 
 	m_isRight = true;
 	m_isAttack = false;
-	m_isAirAttack = false;
 	m_isGround = false;
 	m_invincibleTime = false;
 	m_isDamaged = false;
+	m_isAppear = true;
 
 	m_State = P_IDLE;
 	
@@ -67,6 +73,24 @@ void Player::update()
 	m_FrameCount++;
 	m_inventory->update();
 	m_Equipment->update();
+
+	if (m_isAppear) {
+		m_AppearTime++;
+		m_State = P_APPEAR;
+		if (!SOUNDMANAGER->isPlaySound("플레이어등장")) {
+			SOUNDMANAGER->play("플레이어등장");
+		}
+		if (m_AppearTime < 30) {
+
+			m_fX -= cosf(10) * 6.0f;
+			m_fY -= sinf(40) * 6.0f;
+		}
+		else if (m_AppearTime >= 110) {
+			m_isAppear = false;
+			m_AppearTime = 0;
+			SOUNDMANAGER->play("게임배경음", 0.9f);
+		}
+	}
 
 	KeyProcess();
 	Animation();
@@ -91,23 +115,6 @@ void Player::update()
 		}
 	}
 
-	if (m_invincibleTime == true) {
-		m_invincibleCount--;
-		if (m_invincibleCount >= 0) {
-			if (m_invincibleAlpha <= 255) {
-				m_invincibleAlpha += 80;
-			}
-
-			if (m_invincibleAlpha >= 255) {
-				m_invincibleAlpha = 0;
-			}
-		}
-		else if (m_invincibleCount <= 0) {
-			m_invincibleTime = false;
-			m_invincibleCount = 100;
-		}
-	}
-
 	m_rc = RectMake(m_fX + 5, m_fY, 20, 25);
 
 	if (m_State == P_DOWNATTACK) m_AttackDownRc = RectMake(m_fX + 7, m_fY + 20, 10, 10);
@@ -127,7 +134,7 @@ void Player::render(HDC hdc)
 	m_Equipment->render(m_UI->getMemDC());
 
 	char str[64];
-	wsprintf(str, "money : %d", m_DamagedTime);
+	wsprintf(str, "money : %d", m_AppearTime);
 	//sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
 	TextOut(hdc, m_fX, m_fY - 20, str, strlen(str));
 }
@@ -162,6 +169,7 @@ void Player::KeyProcess()
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('C') && gravity <= 0) {
+		SOUNDMANAGER->play("플레이어점프", 1.0f);
 		jumpSpeed += 7.0f;
 		if (jumpSpeed > 0.1f) {
 			m_State = P_JUMP;
@@ -175,6 +183,7 @@ void Player::KeyProcess()
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('X')) {
+		SOUNDMANAGER->play("플레이어공격", 1.0f);
 		m_State = P_ATTACK;
 		m_isAttack = true;
 	}
@@ -279,11 +288,45 @@ void Player::Animation()
 		m_FrameCount++;
 		if (m_FrameCount % 9 == 0) {
 			m_CurrFrameX++;
-			m_MoveImg->setFrameX(m_CurrFrameX);
+			m_LadderUpImg->setFrameX(m_CurrFrameX);
 
 			if (m_CurrFrameX >= 3) {
 				m_CurrFrameX = 0;
 			}
+		}
+	}
+
+	else if (m_State == P_APPEAR) {
+		m_FrameCount++;
+		if (m_FrameCount % 7 == 0) {
+			m_CurrFrameX++;
+			m_AppearImg->setFrameX(m_CurrFrameX);
+
+			if (m_CurrFrameX >= 8) {
+				m_CurrFrameX = 8;
+				
+				/*	if (m_CurrFrameX >= 8) {
+						SOUNDMANAGER->play("게임배경음", 0.9f);
+						m_State = P_IDLE;
+					}*/
+			}
+		}
+	}
+
+	if (m_invincibleTime == true) {
+		m_invincibleCount--;
+		if (m_invincibleCount >= 0) {
+			if (m_invincibleAlpha <= 255) {
+				m_invincibleAlpha += 80;
+			}
+
+			if (m_invincibleAlpha >= 255) {
+				m_invincibleAlpha = 0;
+			}
+		}
+		else if (m_invincibleCount <= 0) {
+			m_invincibleTime = false;
+			m_invincibleCount = 100;
 		}
 	}
 }
@@ -376,6 +419,10 @@ void Player::ShovelRender(HDC hdc)
 	else if (m_State == P_LADDERSTOP) {
 		m_LadderUpImg->frameRender(hdc, m_fX + 5, m_fY - 10, 0, 0);
 	}
+
+	else if (m_State == P_APPEAR) {
+		m_AppearImg->frameRender(hdc, m_fX - 22, m_fY - 23, m_CurrFrameX, 0);
+	}
 }
 
 void Player::RectColliosion(RECT x)
@@ -400,6 +447,9 @@ void Player::RectColliosion(RECT x)
 			m_fY += 2.0f;
 		}
 		else /*if (m_rc.bottom > x.top)*/ {
+			/*if (!SOUNDMANAGER->isPlaySound("플레이어착지") && m_State == P_JUMP) {
+				SOUNDMANAGER->play("플레이어착지", 1.0f);
+			}*/
 			m_State = P_IDLE;
 			m_fY = x.top - 24;
 			gravity = 0;

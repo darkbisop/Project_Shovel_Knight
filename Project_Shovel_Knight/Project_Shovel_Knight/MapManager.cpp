@@ -1031,7 +1031,7 @@ void MapManager::PushRect()
 {
 	// 0¹ø¸Ê
 	if (CurrMapNum == 0) {
-		_RectInfo._rc = RectMake(0, 823, 1440, 50);
+		_RectInfo._rc = RectMake(-30, 823, 1470, 50);
 		vRect.push_back(_RectInfo);
 
 		_RectInfo._rc = RectMake(608, 790, 65, 35);
