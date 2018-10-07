@@ -19,7 +19,6 @@ public:
 	void update();
 	void render(HDC hdc);
 
-	void setEnemy(int countX, int countY);
 	void setBug();
 	void setTarget(spaceShip* pTarget);
 

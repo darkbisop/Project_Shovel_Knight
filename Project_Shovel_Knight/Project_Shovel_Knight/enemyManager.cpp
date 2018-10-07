@@ -33,21 +33,7 @@ void enemyManager::render(HDC hdc)
 	}
 }
 
-void enemyManager::setEnemy(int countX, int countY)
-{
-	for (int i = 0; i < countY; i++)
-	{
-		for (int j = 0; j < countX; j++)
-		{
-			enemy* pEnemy;
-			pEnemy = new enemy;
-			pEnemy->init("image/ufo.bmp", PointMake(130 + 70 * j, 100 + 60 * i));
 
-			// vector의 마지막 원소 뒤에 새로운 데이터를 추가한다
-			m_vecEnemy.push_back(pEnemy);
-		}
-	}
-}
 
 void enemyManager::setBug()
 {
@@ -65,6 +51,11 @@ void enemyManager::setBug()
 	pBug3 = new bug;
 	pBug3->init(1140, 808);
 	m_VecBug.push_back(pBug3);
+
+	bug* pBug4;
+	pBug4 = new bug;
+	pBug4->init(1850, 808);
+	m_VecBug.push_back(pBug4);
 }
 
 void enemyManager::setTarget(spaceShip * pTarget)

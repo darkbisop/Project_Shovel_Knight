@@ -19,9 +19,6 @@
     <Filter Include="2D_FrameWork">
       <UniqueIdentifier>{c7623c64-93e8-4d24-93a3-1f66ca8fe09f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="메인게임\플레이어">
-      <UniqueIdentifier>{6eccb3ed-bc73-442e-861a-ce87476297c3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="메인게임\에너미">
       <UniqueIdentifier>{2df3b9a3-6f98-4e67-a232-5fb88403db1a}</UniqueIdentifier>
     </Filter>
@@ -81,6 +78,9 @@
     </Filter>
     <Filter Include="메인게임\오브젝트">
       <UniqueIdentifier>{90e73606-e534-4edf-b9d9-eb8495bb871e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="메인게임\플레이어">
+      <UniqueIdentifier>{6eccb3ed-bc73-442e-861a-ce87476297c3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

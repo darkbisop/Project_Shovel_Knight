@@ -89,7 +89,7 @@ void PileOfRocks::DigOut()
 			m_Drop.y = m_fY + 2;
 			m_Drop.gravity = 0;
 			m_Drop.angle = RANDOM->getFromFloatTo(1.0f, 1.3f);
-			m_Drop.speed = RANDOM->getFromFloatTo(2.2f, 3.0f);
+			m_Drop.speed = RANDOM->getFromFloatTo(1.3f, 3.0f);
 			m_Drop.RandGem = RANDOM->getFromIntTo(0, 3);
 			v_VecJewel.push_back(m_Drop);
 		}
