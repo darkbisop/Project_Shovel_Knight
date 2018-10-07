@@ -5,7 +5,7 @@
 
 enum State
 {
-	P_APPEAR, P_IDLE, P_MOVE, P_ATTACK, P_DOWNATTACK, P_MAGIC, P_JUMP, P_LADDERUP, P_LADDERSTOP
+	P_APPEAR, P_IDLE, P_MOVE, P_ATTACK, P_DOWNATTACK, P_MAGIC, P_JUMP, P_LADDERUP, P_LADDERSTOP, P_DAMAGED
 };
 
 class Player : public singletonBase<Player>
@@ -28,6 +28,7 @@ private:
 	image*	m_AttackImg;
 	image*	m_AttackDownImg;
 	image*	m_LadderUpImg;
+	image*	m_DamagedImg;
 
 	int		m_CurrFrameX;
 	int		m_CurrFrameY;
@@ -47,8 +48,10 @@ private:
 	bool	m_isAirAttack;
 	bool	m_isGround;
 	bool	m_invincibleTime;
+	bool	m_isDamaged;
 	
 	int		Money;
+	int		m_DamagedTime;
 	int		m_invincibleCount;
 	int		m_invincibleAlpha;
 
@@ -69,6 +72,7 @@ public:
 	inline RECT getPlayerRect() { return m_rc; }
 	inline RECT getAttacRect() { return m_AttackRc; }
 	inline RECT getAttacDWRect() { return m_AttackDownRc; }
+
 	inline float getPlayerX() { return m_fX; }
 	inline float getPlayerY() { return m_fY; }
 
@@ -77,6 +81,12 @@ public:
 
 	inline int getMoney() { return Money; }
 	inline void setMoney(int a) { Money = a; }
+
+	inline bool getInvincibleTime() { return m_invincibleTime; }
+	inline void setInvincibleTime(bool a) { m_invincibleTime = a; }
+
+	inline bool getIsDamaged() { return m_isDamaged; }
+	inline void setIsDamaged(bool a) { m_isDamaged = a; }
 
 	inline Inventory* getInventory() { return m_inventory; }
 

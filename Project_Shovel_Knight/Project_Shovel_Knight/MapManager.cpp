@@ -1181,6 +1181,13 @@ void MapManager::CollisionEnemy()
 			(*iter)->damage(1);
 			PLAYER->DownATKCollision((*iter)->getRect());
 		}
+
+		if (PLAYER->getInvincibleTime() == false) {
+			if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &(*iter)->getRect())) {
+				PLAYER->setIsDamaged(true);
+				PLAYER->setInvincibleTime(true);
+			}
+		}
 	}
 }
 

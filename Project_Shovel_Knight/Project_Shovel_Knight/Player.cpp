@@ -12,6 +12,7 @@ HRESULT Player::init()
 	m_AttackDownImg = IMAGEMANAGER->addImage("Player_AttackDown", "image/Player/Player_AttackDown.bmp", 24, 72, 1, 2, true, RGB(255, 0, 255));
 	m_JumpDown = IMAGEMANAGER->addImage("Player_JumpDown", "image/Player/Player_JumpDown.bmp", 33, 68, 1, 2, true, RGB(255, 0, 255));
 	m_LadderUpImg = IMAGEMANAGER->addImage("Player_ladder", "image/Player/Player_ladder.bmp", 100, 32, 4, 1, true, RGB(255, 0, 255));
+	m_DamagedImg = IMAGEMANAGER->addImage("Player_damaged", "image/Player/Player_damaged.bmp", 35, 78, 1, 2, true, RGB(255, 0, 255));
 
 	m_UI = IMAGEMANAGER->addImage("UI", "image/UI.bmp", 400, 18, true, RGB(255, 0, 255));
 
@@ -38,12 +39,14 @@ HRESULT Player::init()
 	m_AttackCount = 0;
 	m_invincibleCount = 100;
 	m_invincibleAlpha = 0;
+	m_DamagedTime = 0;
 
 	m_isRight = true;
 	m_isAttack = false;
 	m_isAirAttack = false;
 	m_isGround = false;
 	m_invincibleTime = false;
+	m_isDamaged = false;
 
 	m_State = P_IDLE;
 	
@@ -71,6 +74,21 @@ void Player::update()
 	if (m_isGround == false) {
 		gravity += 0.3f;
 		m_fY -= jumpSpeed - gravity;
+	}
+
+	if (m_isDamaged == true) {
+		m_State = P_DAMAGED;
+		m_DamagedTime++;
+		if (m_DamagedTime < 17) {
+			m_fX += cosf(10) * 4.0f;
+			m_fY -= sinf(40) * 4.0f;
+		}
+
+		else if (m_DamagedTime >= 18) {
+			m_State = P_IDLE;
+			m_DamagedTime = 0;
+			m_isDamaged = false;
+		}
 	}
 
 	if (m_invincibleTime == true) {
@@ -109,9 +127,9 @@ void Player::render(HDC hdc)
 	m_Equipment->render(m_UI->getMemDC());
 
 	char str[64];
-	wsprintf(str, "money : %d", m_invincibleCount);
+	wsprintf(str, "money : %d", m_DamagedTime);
 	//sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
-	TextOut(hdc, m_fX, m_fY, str, strlen(str));
+	TextOut(hdc, m_fX, m_fY - 20, str, strlen(str));
 }
 
 void Player::KeyProcess()
@@ -295,24 +313,60 @@ void Player::ShovelRender(HDC hdc)
 	}
 	
 	else if (m_isAttack) {
-		if (m_isRight) m_AttackImg->frameRender(hdc, m_fX, m_fY - 7, m_AtkFrameCount, m_CurrFrameY);
-		else if (!m_isRight) m_AttackImg->frameRender(hdc, m_fX - 19, m_fY - 7, m_AtkFrameCount, m_CurrFrameY);
+		if (m_invincibleTime == true) {
+			if (m_isRight) m_AttackImg->frameAlphaRender(hdc, m_fX, m_fY - 7, m_AtkFrameCount, m_CurrFrameY, m_invincibleAlpha);
+			else if (!m_isRight) m_AttackImg->frameAlphaRender(hdc, m_fX - 19, m_fY - 7, m_AtkFrameCount, m_CurrFrameY, m_invincibleAlpha);
+		}
+		else {
+			if (m_isRight) m_AttackImg->frameRender(hdc, m_fX, m_fY - 7, m_AtkFrameCount, m_CurrFrameY);
+			else if (!m_isRight) m_AttackImg->frameRender(hdc, m_fX - 19, m_fY - 7, m_AtkFrameCount, m_CurrFrameY);
+		}
+		
 	}
 
 	else if (m_State == P_JUMP) {
-		if (m_isRight) {
-			if (jumpSpeed - gravity >= 0)m_JumpImg->frameRender(hdc, m_fX - 3, m_fY - 8, 0, 0);
-			else if (jumpSpeed - gravity <= 0) m_JumpDown->frameRender(hdc, m_fX, m_fY - 8, 0, 0);
+		if (m_invincibleTime == true) {
+			if (m_isRight) {
+				if (jumpSpeed - gravity >= 0)m_JumpImg->frameAlphaRender(hdc, m_fX - 3, m_fY - 8, 0, 0, m_invincibleAlpha);
+				else if (jumpSpeed - gravity <= 0) m_JumpDown->frameAlphaRender(hdc, m_fX, m_fY - 8, 0, 0, m_invincibleAlpha);
+			}
+			else if (!m_isRight) {
+				if (jumpSpeed - gravity >= 0)m_JumpImg->frameAlphaRender(hdc, m_fX, m_fY - 8, 0, 1, m_invincibleAlpha);
+				else if (jumpSpeed - gravity <= 0) m_JumpDown->frameAlphaRender(hdc, m_fX - 3, m_fY - 8, 0, 1, m_invincibleAlpha);
+			}
 		}
-		else if (!m_isRight) {
-			if (jumpSpeed - gravity >= 0)m_JumpImg->frameRender(hdc, m_fX, m_fY - 8, 0, 1);
-			else if (jumpSpeed - gravity <= 0) m_JumpDown->frameRender(hdc, m_fX - 3, m_fY - 8, 0, 1);
+		else {
+			if (m_isRight) {
+				if (jumpSpeed - gravity >= 0)m_JumpImg->frameRender(hdc, m_fX - 3, m_fY - 8, 0, 0);
+				else if (jumpSpeed - gravity <= 0) m_JumpDown->frameRender(hdc, m_fX, m_fY - 8, 0, 0);
+			}
+			else if (!m_isRight) {
+				if (jumpSpeed - gravity >= 0)m_JumpImg->frameRender(hdc, m_fX, m_fY - 8, 0, 1);
+				else if (jumpSpeed - gravity <= 0) m_JumpDown->frameRender(hdc, m_fX - 3, m_fY - 8, 0, 1);
+			}
 		}
 	}
 
 	else if (m_State == P_DOWNATTACK) {
-		if (m_isRight) m_AttackDownImg->frameRender(hdc, m_fX + 2, m_fY - 8, 0, 0);
-		else if (!m_isRight) m_AttackDownImg->frameRender(hdc, m_fX + 2, m_fY - 8, 0, 1);
+		if (m_invincibleTime == true) {
+			if (m_isRight) m_AttackDownImg->frameAlphaRender(hdc, m_fX + 2, m_fY - 8, 0, 0, m_invincibleAlpha);
+			else if (!m_isRight) m_AttackDownImg->frameAlphaRender(hdc, m_fX + 2, m_fY - 8, 0, 1, m_invincibleAlpha);
+		}
+		else {
+			if (m_isRight) m_AttackDownImg->frameRender(hdc, m_fX + 2, m_fY - 8, 0, 0);
+			else if (!m_isRight) m_AttackDownImg->frameRender(hdc, m_fX + 2, m_fY - 8, 0, 1);
+		}
+	}
+
+	else if (m_State == P_DAMAGED) {
+		if (m_invincibleTime == true) {
+			if (m_isRight) m_DamagedImg->frameAlphaRender(hdc, m_fX - 3, m_fY - 14, 0, 0, m_invincibleAlpha);
+			else if (!m_isRight) m_DamagedImg->frameAlphaRender(hdc, m_fX - 3, m_fY - 14, 0, 1, m_invincibleAlpha);
+		}
+		else {
+			if (m_isRight) m_DamagedImg->frameRender(hdc, m_fX - 3, m_fY - 14, 0, 0);
+			else if (!m_isRight) m_DamagedImg->frameRender(hdc, m_fX - 3, m_fY - 14, 0, 1);
+		}
 	}
 
 	else if (m_State == P_LADDERUP) {
