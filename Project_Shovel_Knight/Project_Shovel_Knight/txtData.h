@@ -21,6 +21,9 @@ public:
 	std::vector<std::string> txtLoad(const char* loadFileName);
 	std::vector<std::string> charArraySeparation(char charArray[]);
 
+	std::vector<int> txtLoadInt(const char* loadFileName);
+	std::vector<int> IntArraySeparation(char charArray[]);
+
 	txtData();
 	~txtData();
 };

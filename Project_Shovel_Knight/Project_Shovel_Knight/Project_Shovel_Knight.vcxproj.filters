@@ -228,6 +228,12 @@
     <ClInclude Include="obejectBasicInfo.h">
       <Filter>메인게임\오브젝트</Filter>
     </ClInclude>
+    <ClInclude Include="dirtBlock.h">
+      <Filter>메인게임\오브젝트</Filter>
+    </ClInclude>
+    <ClInclude Include="dirtBlock_Small.h">
+      <Filter>메인게임\오브젝트</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -357,6 +363,12 @@
       <Filter>메인게임\오브젝트</Filter>
     </ClCompile>
     <ClCompile Include="obejectBasicInfo.cpp">
+      <Filter>메인게임\오브젝트</Filter>
+    </ClCompile>
+    <ClCompile Include="dirtBlock.cpp">
+      <Filter>메인게임\오브젝트</Filter>
+    </ClCompile>
+    <ClCompile Include="dirtBlock_Small.cpp">
       <Filter>메인게임\오브젝트</Filter>
     </ClCompile>
   </ItemGroup>

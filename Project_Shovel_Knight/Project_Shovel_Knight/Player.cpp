@@ -103,7 +103,7 @@ void Player::render(HDC hdc)
 	char str[64];
 	//wsprintf(str, "money : %d", m_AppearTime);
 	sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
-	TextOut(hdc, m_fX, m_fY - 20, str, strlen(str));
+	TextOut(hdc, m_fX - 50, m_fY - 20, str, strlen(str));
 }
 
 void Player::KeyProcess()
@@ -488,6 +488,42 @@ void Player::DownATKCollision(RECT x)
 		}
 	
 	}
+}
+
+void Player::OBJCollision(RECT x)
+{
+	RECT rc;
+	if (IntersectRect(&rc, &m_rc, &x)) {
+
+		if (m_rc.right < x.left + 4) {
+			m_fX -= 2.0f;
+			m_State = P_IDLE;
+		}
+
+		else if (m_rc.left > x.right - 4) {
+			m_fX += 2.0f;
+			m_State = P_IDLE;
+		}
+
+		else if (m_rc.bottom > x.bottom) {
+			gravity = 0;
+			jumpSpeed = 0;
+			m_isGround = false;
+			m_fY += 2.0f;
+		}
+		else /*if (m_rc.bottom > x.top)*/ {
+			/*if (!SOUNDMANAGER->isPlaySound("플레이어착지") && m_State == P_JUMP) {
+				SOUNDMANAGER->play("플레이어착지", 1.0f);
+			}*/
+			m_State = P_IDLE;
+			m_fY = x.top - 24;
+			gravity = 0;
+			jumpSpeed = 0;
+			m_isGround = true;
+		}
+	}
+
+	else m_isGround = false;
 }
 
 Player::Player() : Money(10000)

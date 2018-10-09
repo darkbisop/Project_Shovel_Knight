@@ -19,12 +19,12 @@ HRESULT MapManager::init(void)
 	m_pMapImage->init();
 
 	m_pEnemyMgr = new enemyManager;
-	m_pEnemyMgr->init();
 	m_pEnemyMgr->setBug();
 
 	m_pObjectMgr = new objectManager;
 	m_pObjectMgr->init();
 	m_pObjectMgr->setPileOfRocks();
+	m_pObjectMgr->setDirtblock();
 
 	EFFECTMANAGER->addEffect("enemy_effect", "image/effect/enemy_effect.bmp", 120, 16, 24, 16, 10, 10);
 
@@ -87,9 +87,9 @@ void MapManager::render(HDC hdc)
 	EFFECTMANAGER->render(_empty->getMemDC());
 	PLAYER->render(_empty->getMemDC());
 
-	for (vIterRC = vRect.begin(); vIterRC != vRect.end(); vIterRC++) {
+	/*for (vIterRC = vRect.begin(); vIterRC != vRect.end(); vIterRC++) {
 		Rectangle(_empty->getMemDC(), vIterRC->_rc.left, vIterRC->_rc.top, vIterRC->_rc.right, vIterRC->_rc.bottom);
-	}
+	}*/
 
 	_empty->render(hdc, 0, 0, m_Camera.x, m_Camera.y, WINSIZEX, WINSIZEY);
 
@@ -549,6 +549,8 @@ void MapManager::MovingMap()
 				CurrMapNum = 1;
 				MovingCamera[0] = false;
 				MapOn[0] = false;
+				m_pEnemyMgr->setBug();
+				m_pObjectMgr->setDirtblock();
 			}
 		}
 	}
@@ -596,6 +598,7 @@ void MapManager::MovingMap()
 				CurrMapNum = 1;
 				MovingCamera[1] = false;
 				MapOn[2] = false;
+				m_pEnemyMgr->setBug();
 			}
 		}
 	}
@@ -1171,17 +1174,24 @@ void MapManager::CollisionEnemy()
 	vector<bug*> vBug = m_pEnemyMgr->getVecBug();
 	vector<bug*>::iterator iter;
 
-	for (iter = vBug.begin(); iter != vBug.end(); iter++) {
+	for (iter = vBug.begin(); iter != vBug.end();) {
 		RECT rc;
 		if (IntersectRect(&rc, &PLAYER->getAttacRect(), &(*iter)->getRect())) {
 			(*iter)->damage(1);
+			iter = vBug.erase(iter);
 		}
 
 		else if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iter)->getRect())) {
 			(*iter)->damage(1);
 			PLAYER->DownATKCollision((*iter)->getRect());
+			iter = vBug.erase(iter);
 		}
 
+		else iter++;
+	}
+
+	for (iter = vBug.begin(); iter != vBug.end(); iter++) {
+		RECT rc;
 		if (PLAYER->getInvincibleTime() == false) {
 			if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &(*iter)->getRect())) {
 				PLAYER->setIsDamaged(true);
@@ -1196,11 +1206,38 @@ void MapManager::CollisionObject()
 	vector<PileOfRocks*> vPOR = m_pObjectMgr->getVecPOR();
 	vector<PileOfRocks*>::iterator iter;
 
-	for (iter = vPOR.begin(); iter != vPOR.end(); iter++) {
+	for (iter = vPOR.begin(); iter != vPOR.end();) {
 		RECT rc;
 		if (IntersectRect(&rc, &PLAYER->getAttacRect(), &(*iter)->getRect())) {
 			(*iter)->DigOut();
+			iter = vPOR.erase(iter);
 		}
+		else iter++;
+	}
+
+	vector<dirtBlock*> vdirt = m_pObjectMgr->getVecDIRT();
+	vector<dirtBlock*>::iterator iterDIrt;
+
+	for (iterDIrt = vdirt.begin(); iterDIrt != vdirt.end();) {
+		RECT rc;
+		if (IntersectRect(&rc, &PLAYER->getAttacRect(), &(*iterDIrt)->getRect())) {
+			(*iterDIrt)->DigOut();
+			(*iterDIrt)->setCrash(true);
+			iterDIrt = vdirt.erase(iterDIrt);
+		}
+
+		else if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterDIrt)->getRect())) {
+			PLAYER->DownATKCollision((*iterDIrt)->getRect());
+			(*iterDIrt)->DigOut();
+			(*iterDIrt)->setCrash(true);
+			iterDIrt = vdirt.erase(iterDIrt);
+		}
+
+		else iterDIrt++;
+	}
+
+	for (iterDIrt = vdirt.begin(); iterDIrt != vdirt.end(); iterDIrt++) {
+		PLAYER->OBJCollision((*iterDIrt)->getRect());
 	}
 }
 

@@ -60,6 +60,7 @@ public:
 	inline int getY() { return m_fY; }
 	inline RECT getRect() { return m_rc; }
 	inline void setAlive(bool a) { m_isAlive = a; }
+	inline bool getAlive(){ return m_isAlive; }
 
 
 	bug();

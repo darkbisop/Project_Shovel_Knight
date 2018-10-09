@@ -152,6 +152,8 @@
     <ClInclude Include="bug.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="commonMacroFunction.h" />
+    <ClInclude Include="dirtBlock.h" />
+    <ClInclude Include="dirtBlock_Small.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
     <ClInclude Include="enemy.h" />
@@ -201,6 +203,8 @@
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="bug.cpp" />
     <ClCompile Include="button.cpp" />
+    <ClCompile Include="dirtBlock.cpp" />
+    <ClCompile Include="dirtBlock_Small.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
     <ClCompile Include="enemy.cpp" />

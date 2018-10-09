@@ -70,6 +70,7 @@ public:
 	void RectColliosion(RECT x);
 	void LadderColliosion(RECT x);
 	void DownATKCollision(RECT x);
+	void OBJCollision(RECT x);
 
 	inline RECT getPlayerRect() { return m_rc; }
 	inline RECT getAttacRect() { return m_AttackRc; }

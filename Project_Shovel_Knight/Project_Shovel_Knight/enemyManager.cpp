@@ -37,25 +37,29 @@ void enemyManager::render(HDC hdc)
 
 void enemyManager::setBug()
 {
-	bug* pBug;
-	pBug = new bug;
-	pBug->init(550, 808);
-	m_VecBug.push_back(pBug);
+	if (MAPMANAGER->getMapNum() == 0) {
+		bug* pBug;
+		pBug = new bug;
+		pBug->init(550, 808);
+		m_VecBug.push_back(pBug);
 
-	bug* pBug2;
-	pBug2 = new bug;
-	pBug2->init(920, 808);
-	m_VecBug.push_back(pBug2);
+		bug* pBug2;
+		pBug2 = new bug;
+		pBug2->init(920, 808);
+		m_VecBug.push_back(pBug2);
 
-	bug* pBug3;
-	pBug3 = new bug;
-	pBug3->init(1140, 808);
-	m_VecBug.push_back(pBug3);
+		bug* pBug3;
+		pBug3 = new bug;
+		pBug3->init(1140, 808);
+		m_VecBug.push_back(pBug3);
+	}
 
-	bug* pBug4;
-	pBug4 = new bug;
-	pBug4->init(1850, 808);
-	m_VecBug.push_back(pBug4);
+	if (MAPMANAGER->getMapNum() == 1) {
+		bug* pBug4;
+		pBug4 = new bug;
+		pBug4->init(1850, 808);
+		m_VecBug.push_back(pBug4);
+	}
 }
 
 void enemyManager::setTarget(spaceShip * pTarget)

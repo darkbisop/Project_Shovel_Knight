@@ -40,7 +40,6 @@ void PlayScene::render(HDC hdc)
 	//m_pEnemyMgr->render(_empty->getMemDC());
 }
 
-
 void PlayScene::DrawMap()
 {
 	/*m_SkyBg->render(_empty->getMemDC(), (int)MAPMANAGER->getCamera().x, (int)MAPMANAGER->getCamera().y);

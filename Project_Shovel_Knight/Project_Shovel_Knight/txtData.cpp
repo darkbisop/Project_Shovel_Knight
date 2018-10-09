@@ -104,6 +104,47 @@ vector<string> txtData::charArraySeparation(char charArray[])
 	return vecStr;
 }
 
+vector<int> txtData::txtLoadInt(const char * loadFileName)
+{
+	char str[128];
+	DWORD read;
+
+	HANDLE hFile;
+	hFile = CreateFile(loadFileName,
+		GENERIC_READ,
+		0,
+		NULL,
+		OPEN_EXISTING,
+		FILE_ATTRIBUTE_NORMAL,
+		NULL);
+
+	ReadFile(hFile, str, 128, &read, NULL);
+
+	CloseHandle(hFile);
+
+	return IntArraySeparation(str);
+}
+
+vector<int> txtData::IntArraySeparation(char charArray[])
+{
+	vector<int> vecInt;
+	const char* separator = ",";
+	char* token;
+	char* temp;
+
+	int TempInt;
+
+	token = strtok_s(charArray, separator, &temp);
+	TempInt = atoi(token);
+	vecInt.push_back(TempInt);
+
+	while ((token = strtok_s(NULL, separator, &temp)) != NULL) {
+		TempInt = atoi(token);
+		vecInt.push_back(TempInt);
+	}
+	return vecInt;
+}
+
 txtData::txtData()
 {
 }
