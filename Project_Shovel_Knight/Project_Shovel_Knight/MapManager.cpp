@@ -12,7 +12,7 @@ HRESULT MapManager::init(void)
 	Back_3_Ground = IMAGEMANAGER->addImage("Back_3_Ground", "image/BackGround/Back_3_Ground.bmp", 1000, 108, true, RGB(255, 0, 255));
 	Back_2_Ground = IMAGEMANAGER->addImage("Back_2_Ground", "image/BackGround/Back_2_Ground.bmp", 1000, 176, true, RGB(255, 0, 255));
 	Back_Ground = IMAGEMANAGER->addImage("Back_Ground", "image/BackGround/Back_Ground.bmp", 2500, 199, true, RGB(255, 0, 255));
-
+	m_pImg = IMAGEMANAGER->addImage("bubble", "image/Enemy/bubble_dragon/bubble_move.bmp", 108, 27, 4, 1, true, RGB(255, 0, 255));
 	m_SkyBg = IMAGEMANAGER->addImage("SkyBG", "image/BackGround/Sky.bmp", 399, 208, true, RGB(255, 0, 255));
 
 	m_pMapImage = new MapImage;
@@ -20,6 +20,7 @@ HRESULT MapManager::init(void)
 
 	m_pEnemyMgr = new enemyManager;
 	m_pEnemyMgr->setBug();
+	m_pEnemyMgr->setBubleDragon();
 
 	m_pObjectMgr = new objectManager;
 	m_pObjectMgr->init();
@@ -61,9 +62,10 @@ void MapManager::update(void)
 	m_pEnemyMgr->update();
 	m_pObjectMgr->update();
 	EFFECTMANAGER->update();
+	CollisionObject();
 	CollisionMap();
 	CollisionEnemy();
-	CollisionObject();
+	CollisionBoss();
 	PLAYER->update();
 }
 
@@ -87,9 +89,9 @@ void MapManager::render(HDC hdc)
 	EFFECTMANAGER->render(_empty->getMemDC());
 	PLAYER->render(_empty->getMemDC());
 
-	/*for (vIterRC = vRect.begin(); vIterRC != vRect.end(); vIterRC++) {
-		Rectangle(_empty->getMemDC(), vIterRC->_rc.left, vIterRC->_rc.top, vIterRC->_rc.right, vIterRC->_rc.bottom);
-	}*/
+	//for (vIterRC = vRect.begin(); vIterRC != vRect.end(); vIterRC++) {
+	//	Rectangle(_empty->getMemDC(), vIterRC->_rc.left, vIterRC->_rc.top, vIterRC->_rc.right, vIterRC->_rc.bottom);
+	//}
 
 	_empty->render(hdc, 0, 0, m_Camera.x, m_Camera.y, WINSIZEX, WINSIZEY);
 
@@ -547,10 +549,12 @@ void MapManager::MovingMap()
 			if (m_Camera.x >= 1600) {
 				m_Camera.x = 1600;
 				CurrMapNum = 1;
+				PLAYER->SetCurr(1);
 				MovingCamera[0] = false;
 				MapOn[0] = false;
 				m_pEnemyMgr->setBug();
 				m_pObjectMgr->setDirtblock();
+				PushRect();
 			}
 		}
 	}
@@ -566,6 +570,7 @@ void MapManager::MovingMap()
 				CurrMapNum = 0;
 				MovingCamera[0] = false;
 				MapOn[1] = false;
+				PushRect();
 			}
 		}
 	}
@@ -580,9 +585,11 @@ void MapManager::MovingMap()
 			}
 			if (m_Camera.x >= 2000) {
 				m_Camera.x = 2000;
+				//PLAYER->SetCurr(2);
 				CurrMapNum = 2;
 				MovingCamera[1] = false;
 				MapOn[1] = false;
+				PushRect();
 			}
 		}
 	}
@@ -599,6 +606,8 @@ void MapManager::MovingMap()
 				MovingCamera[1] = false;
 				MapOn[2] = false;
 				m_pEnemyMgr->setBug();
+				m_pObjectMgr->setDirtblock();
+				PushRect();
 			}
 		}
 	}
@@ -613,8 +622,11 @@ void MapManager::MovingMap()
 			}
 			if (m_Camera.y <= 426) {
 				m_Camera.y = 424;
+				PLAYER->SetCurr(3);
 				CurrMapNum = 3;
 				MovingCamera[2] = false;
+				m_pEnemyMgr->setBug();
+				PushRect();
 			}
 		}
 	}
@@ -644,8 +656,13 @@ void MapManager::MovingMap()
 				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 2400) {
+				m_Camera.x = 2400;
 				CurrMapNum = 4;
+				PLAYER->SetCurr(4);
 				MovingCamera[3] = false;
+				MapOn[3] = false;
+				m_pObjectMgr->setDirtblock();
+				PushRect();
 			}
 		}
 	}
@@ -676,7 +693,10 @@ void MapManager::MovingMap()
 			if (m_Camera.x >= 2800) {
 				m_Camera.x = 2800;
 				CurrMapNum = 5;
+				PLAYER->SetCurr(5);
 				MovingCamera[4] = false;
+				m_pEnemyMgr->setBubleDragon();
+				PushRect();
 			}
 		}
 	}
@@ -710,6 +730,7 @@ void MapManager::MovingMap()
 				CurrMapNum = 6;
 				MovingCamera[5] = false;
 				MapOn[5] = false;
+				PushRect();
 			}
 		}
 	}
@@ -1070,81 +1091,91 @@ void MapManager::PushRect()
 
 
 	// 1번맵
-	_RectInfo._rc = RectMake(1729, 759, 35, 80);
-	vRect.push_back(_RectInfo);
+	if (CurrMapNum == 1) {
+		_RectInfo._rc = RectMake(1729, 759, 35, 80);
+		vRect.push_back(_RectInfo);
 
-	_RectInfo._rc = RectMake(1760, 727, 31, 80);
-	vRect.push_back(_RectInfo);
+		_RectInfo._rc = RectMake(1760, 727, 31, 80);
+		vRect.push_back(_RectInfo);
 
-	_RectInfo._rc = RectMake(1791, 823, 163, 30);
-	vRect.push_back(_RectInfo);
+		_RectInfo._rc = RectMake(1791, 823, 163, 30);
+		vRect.push_back(_RectInfo);
 
-	_RectInfo._rc = RectMake(1823, 674, 30, 100);
-	vRect.push_back(_RectInfo);
+		_RectInfo._rc = RectMake(1823, 674, 30, 100);
+		vRect.push_back(_RectInfo);
 
-	_RectInfo._rc = RectMake(1951, 791, 177, 52);
-	vRect.push_back(_RectInfo);
-
+		_RectInfo._rc = RectMake(1951, 791, 177, 52);
+		vRect.push_back(_RectInfo);
+	}
 
 	// 2번맵
-	_RectInfo._rc = RectMake(2126, 822, 100, 52);
-	vRect.push_back(_RectInfo);
-	_RectInfo._rc = RectMake(2225, 742, 80, 122);
-	vRect.push_back(_RectInfo);
-	// 비눗방울 대신 밟을 임시 렉트, 지울거임
-	_RectInfo._rc = RectMake(2126, 780, 50, 52);
-	vRect.push_back(_RectInfo);
-	_RectInfo._rc = RectMake(2306, 615, 20, 132);
-	vRect.push_back(_RectInfo);
-	// 사다리
-	_RectLadder._rc = RectMake(2294, 614, 6, 132);
-	vLadderRect.push_back(_RectLadder);
+	if (CurrMapNum == 2) {
+		_RectInfo._rc = RectMake(2126, 822, 100, 52);
+		vRect.push_back(_RectInfo);
+		_RectInfo._rc = RectMake(2225, 742, 80, 122);
+		vRect.push_back(_RectInfo);
+		// 비눗방울 대신 밟을 임시 렉트, 지울거임
+		_RectInfo._rc = RectMake(2126, 780, 50, 52);
+		vRect.push_back(_RectInfo);
+		_RectInfo._rc = RectMake(2306, 615, 20, 132);
+		vRect.push_back(_RectInfo);
+		// 사다리
+		_RectLadder._rc = RectMake(2294, 614, 6, 132);
+		vLadderRect.push_back(_RectLadder);
+	}
 
 
 	// 3번맵
-	_RectInfo._rc = RectMake(2019, 615, 270, 40);
-	vRect.push_back(_RectInfo);
+	if (CurrMapNum == 3) {
+		_RectInfo._rc = RectMake(2019, 615, 270, 40);
+		vRect.push_back(_RectInfo);
 
-	_RectLadder._rc = RectMake(2037, 465, 6, 132);
-	vLadderRect.push_back(_RectLadder);
+		_RectLadder._rc = RectMake(2037, 465, 6, 132);
+		vLadderRect.push_back(_RectLadder);
 
-	_RectInfo._rc = RectMake(2050, 518, 29, 20);
-	vRect.push_back(_RectInfo);
+		_RectInfo._rc = RectMake(2050, 518, 29, 20);
+		vRect.push_back(_RectInfo);
 
-	// 임시렉트. 이녀석은 좌우로 움직여야 하는 녀석
-	_RectInfo._rc = RectMake(2170, 518, 45, 20);
-	vRect.push_back(_RectInfo);
+		// 임시렉트. 이녀석은 좌우로 움직여야 하는 녀석
+		_RectInfo._rc = RectMake(2170, 518, 45, 20);
+		vRect.push_back(_RectInfo);
 
-	_RectInfo._rc = RectMake(2305, 518, 143, 60);
-	vRect.push_back(_RectInfo);
-
+		_RectInfo._rc = RectMake(2305, 518, 143, 60);
+		vRect.push_back(_RectInfo);
+	}
 
 
 	// 4번맵 
-	_RectInfo._rc = RectMake(2447, 615, 80, 40);
-	vRect.push_back(_RectInfo);
+	if (CurrMapNum == 4) {
+		_RectInfo._rc = RectMake(2447, 615, 80, 40);
+		vRect.push_back(_RectInfo);
 
-	_RectInfo._rc = RectMake(2547, 615, 100, 40);
-	vRect.push_back(_RectInfo);
+		_RectInfo._rc = RectMake(2547, 615, 100, 40);
+		vRect.push_back(_RectInfo);
 
-	_RectInfo._rc = RectMake(2688, 615, 430, 40);
-	vRect.push_back(_RectInfo);
-
-	_RectLadder._rc = RectMake(3140, 615, 6, 27);
-	vLadderRect.push_back(_RectLadder);
+		_RectInfo._rc = RectMake(2688, 615, 430, 40);
+		vRect.push_back(_RectInfo);
+	}
 
 
 	// 5번맵
-	_RectInfo._rc = RectMake(2868,790, 300, 15);
-	vRect.push_back(_RectInfo);
+	if (CurrMapNum == 5) {
+		_RectLadder._rc = RectMake(3140, 615, 6, 60);
+		vLadderRect.push_back(_RectLadder);
+	}
 
-	_RectInfo._rc = RectMake(2830, 839, 45, 15);
-	vRect.push_back(_RectInfo);
-
-	_RectLadder._rc = RectMake(2884, 839, 6, 40);
-	vLadderRect.push_back(_RectLadder);
 
 	// 6번맵
+	if (CurrMapNum == 6) {
+		_RectInfo._rc = RectMake(2868, 790, 300, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(2830, 839, 45, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectLadder._rc = RectMake(2884, 839, 6, 40);
+		vLadderRect.push_back(_RectLadder);
+	}
 }
 
 void MapManager::EraseRect(int i)
@@ -1158,9 +1189,9 @@ void MapManager::CollisionMap()
 	{
 		PLAYER->RectColliosion(MAPMANAGER->getMapVectorRc(i));
 
-		/*if (MAPMANAGER->getMapNum() == 1 && MAPMANAGER->getMapVectorRcSize() > 5) {
+		if (PLAYER->getCurr() > CurrMapNum) {
 			MAPMANAGER->EraseRect(i);
-		}*/
+		}
 	}
 
 	for (int i = 0; i < vLadderRect.size(); i++)
@@ -1201,6 +1232,42 @@ void MapManager::CollisionEnemy()
 	}
 }
 
+void MapManager::CollisionBoss()
+{
+	vector<bubble_Dragon*> vBBD = m_pEnemyMgr->getVecBBD();
+	vector<bubble_Dragon*>::iterator iterBBD;
+
+	for (iterBBD = vBBD.begin(); iterBBD != vBBD.end();) {
+		RECT rc;
+		if ((*iterBBD)->getLife() > 0) {
+			if (IntersectRect(&rc, &PLAYER->getAttacRect(), &(*iterBBD)->getHead())) {
+				(*iterBBD)->damage(1);
+			}
+
+			else if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterBBD)->getHead())) {
+				(*iterBBD)->damage(1);
+				PLAYER->DownATKCollision((*iterBBD)->getHead());
+			}
+
+			if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterBBD)->getBody())) {
+				PLAYER->DownATKtoOBJCollision((*iterBBD)->getBody());
+			}
+		}
+
+		if ((*iterBBD)->getLife() == 0) {
+			iterBBD = vBBD.erase(iterBBD);
+		}
+		else iterBBD++;
+	}
+
+	for (iterBBD = vBBD.begin(); iterBBD != vBBD.end(); iterBBD++) {
+		RECT rc;
+		if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterBBD)->getBody())) {
+			PLAYER->DownATKtoOBJCollision((*iterBBD)->getBody());
+		} 
+	}
+}
+
 void MapManager::CollisionObject()
 {
 	vector<PileOfRocks*> vPOR = m_pObjectMgr->getVecPOR();
@@ -1227,7 +1294,7 @@ void MapManager::CollisionObject()
 		}
 
 		else if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterDIrt)->getRect())) {
-			PLAYER->DownATKCollision((*iterDIrt)->getRect());
+			PLAYER->DownATKtoOBJCollision((*iterDIrt)->getRect());
 			(*iterDIrt)->DigOut();
 			(*iterDIrt)->setCrash(true);
 			iterDIrt = vdirt.erase(iterDIrt);
@@ -1239,6 +1306,30 @@ void MapManager::CollisionObject()
 	for (iterDIrt = vdirt.begin(); iterDIrt != vdirt.end(); iterDIrt++) {
 		PLAYER->OBJCollision((*iterDIrt)->getRect());
 	}
+
+
+	/*vector<bubble*> vbuble = m_pObjectMgr->getVecBubble();
+	vector<bubble*>::iterator iterBuble;
+
+	for (iterBuble = vbuble.begin(); iterBuble != vbuble.end();) {
+		RECT rc;
+		if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterBuble)->getRECT())) {
+			PLAYER->DownATKCollision((*iterBuble)->getRECT());
+			iterBuble = vbuble.erase(iterBuble);
+		}
+
+		else iterBuble++;
+	}
+
+	for (iterBuble = vbuble.begin(); iterBuble != vbuble.end();) {
+		RECT rc;
+		if (PLAYER->getInvincibleTime() == false) {
+			if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &(*iterBuble)->getRECT())) {
+				PLAYER->setIsDamaged(true);
+				PLAYER->setInvincibleTime(true);
+			}
+		}
+	}*/
 }
 
 MapManager::MapManager() :m_Camera({ 0 , 0 }),  _empty(new image)

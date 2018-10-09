@@ -2,6 +2,7 @@
 #include <vector>
 #include "enemy.h"
 #include "bug.h"
+#include "bubble_Dragon.h"
 
 class enemyManager
 {
@@ -13,6 +14,9 @@ private:
 	vector<bug*> m_VecBug;
 	vector<bug*>::iterator m_IterBug;
 
+	vector<bubble_Dragon*> m_VecBBD;
+	vector<bubble_Dragon*>::iterator m_IterBBD;
+
 public:
 	HRESULT init();
 	void release();
@@ -20,14 +24,16 @@ public:
 	void render(HDC hdc);
 
 	void setBug();
-	void setTarget(spaceShip* pTarget);
+	void setBubleDragon();
 
-	
-	inline std::vector<enemy*> getVecEnemy() { return m_vecEnemy; }
-	inline std::vector<enemy*>::iterator getIterEnemy() { return m_iter; }
+	inline vector<enemy*> getVecEnemy() { return m_vecEnemy; }
+	inline vector<enemy*>::iterator getIterEnemy() { return m_iter; }
 
-	inline std::vector<bug*> getVecBug() { return m_VecBug; }
-	inline std::vector<bug*>::iterator getIterBug() { return m_IterBug; }
+	inline vector<bug*> getVecBug() { return m_VecBug; }
+	inline vector<bug*>::iterator getIterBug() { return m_IterBug; }
+
+	inline vector<bubble_Dragon*> getVecBBD() { return m_VecBBD; }
+	inline vector<bubble_Dragon*>::iterator getIterBBD() { return m_IterBBD; }
 
 	enemyManager();
 	~enemyManager();

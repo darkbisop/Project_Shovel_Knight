@@ -52,6 +52,7 @@ private:
 	bool	m_isAppear;
 	
 	int		Money;
+	int		CurrMap;
 	int		m_DamagedTime;
 	int		m_AppearTime;
 	int		m_invincibleCount;
@@ -70,6 +71,7 @@ public:
 	void RectColliosion(RECT x);
 	void LadderColliosion(RECT x);
 	void DownATKCollision(RECT x);
+	void DownATKtoOBJCollision(RECT x);
 	void OBJCollision(RECT x);
 
 	inline RECT getPlayerRect() { return m_rc; }
@@ -92,6 +94,9 @@ public:
 
 	inline bool getIsDamaged() { return m_isDamaged; }
 	inline void setIsDamaged(bool a) { m_isDamaged = a; }
+
+	inline void SetCurr(int a) { CurrMap = a; }
+	inline int getCurr() {return CurrMap; }
 
 	inline Inventory* getInventory() { return m_inventory; }
 

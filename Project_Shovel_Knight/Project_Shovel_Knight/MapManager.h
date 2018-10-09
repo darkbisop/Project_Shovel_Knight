@@ -41,6 +41,7 @@ private:
 	image*	Back_3_Ground;
 	image*	Back_2_Ground;
 	image*	Back_Ground;
+	image*  m_pImg;
 	
 	RECT	CheckChangeMapRect[24];
 	RECT	m_Floor;
@@ -69,6 +70,7 @@ public:
 
 	void CollisionMap();
 	void CollisionEnemy();
+	void CollisionBoss();
 	void CollisionObject();
 
 	RECT getMapVectorRc(int i) { return vRect.at(i)._rc; }

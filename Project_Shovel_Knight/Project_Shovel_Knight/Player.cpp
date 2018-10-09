@@ -36,6 +36,7 @@ HRESULT Player::init()
 	jumpSpeed = 0;
 	gravity = 0;
 	Money = 10000;
+	CurrMap = 0;
 	
 	m_FrameCount = 0;
 	m_CurrFrameX = 0;
@@ -90,7 +91,7 @@ void Player::update()
 
 void Player::render(HDC hdc)
 {
-	Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
+	//Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
 	//Rectangle(hdc, m_AttackRc.left, m_AttackRc.top, m_AttackRc.right, m_AttackRc.bottom);
 	//Rectangle(hdc, m_AttackDownRc.left, m_AttackDownRc.top, m_AttackDownRc.right, m_AttackDownRc.bottom);
 
@@ -324,34 +325,34 @@ void Player::ShovelRender(HDC hdc)
 {
 	if (m_State == P_IDLE) {
 		if (m_invincibleTime == true) {
-			if (m_isRight) m_IdleImg->frameAlphaRender(hdc, m_fX, m_fY - 7, 0, 0, m_invincibleAlpha);
-			else if (!m_isRight) m_IdleImg->frameAlphaRender(hdc, m_fX - 2, m_fY - 7, 0, 1, m_invincibleAlpha);
+			if (m_isRight) m_IdleImg->frameAlphaRender(hdc, m_fX, m_fY - 8, 0, 0, m_invincibleAlpha);
+			else if (!m_isRight) m_IdleImg->frameAlphaRender(hdc, m_fX - 2, m_fY - 8, 0, 1, m_invincibleAlpha);
 		}
 		else {
-			if (m_isRight) m_IdleImg->frameRender(hdc, m_fX, m_fY - 7, 0, 0);
-			else if (!m_isRight) m_IdleImg->frameRender(hdc, m_fX - 2, m_fY - 7, 0, 1);
+			if (m_isRight) m_IdleImg->frameRender(hdc, m_fX, m_fY - 8, 0, 0);
+			else if (!m_isRight) m_IdleImg->frameRender(hdc, m_fX - 2, m_fY - 8, 0, 1);
 		}
 	}
 	
 	else if (m_State == P_MOVE) {
 		if (m_invincibleTime == true) {
-			if (m_isRight) m_MoveImg->frameAlphaRender(hdc, m_fX, m_fY - 10, m_CurrFrameX, 0, m_invincibleAlpha);
-			else if (!m_isRight) m_MoveImg->frameAlphaRender(hdc, m_fX - 8, m_fY - 10, m_CurrFrameX, 1, m_invincibleAlpha);
+			if (m_isRight) m_MoveImg->frameAlphaRender(hdc, m_fX, m_fY - 11, m_CurrFrameX, 0, m_invincibleAlpha);
+			else if (!m_isRight) m_MoveImg->frameAlphaRender(hdc, m_fX - 8, m_fY - 11, m_CurrFrameX, 1, m_invincibleAlpha);
 		}
 		else {
-			if (m_isRight) m_MoveImg->frameRender(hdc, m_fX, m_fY - 10, m_CurrFrameX, 0);
-			else if (!m_isRight) m_MoveImg->frameRender(hdc, m_fX - 8, m_fY - 10, m_CurrFrameX, 1);
+			if (m_isRight) m_MoveImg->frameRender(hdc, m_fX, m_fY - 11, m_CurrFrameX, 0);
+			else if (!m_isRight) m_MoveImg->frameRender(hdc, m_fX - 8, m_fY - 11, m_CurrFrameX, 1);
 		}
 	}
 	
 	else if (m_isAttack) {
 		if (m_invincibleTime == true) {
-			if (m_isRight) m_AttackImg->frameAlphaRender(hdc, m_fX, m_fY - 7, m_AtkFrameCount, m_CurrFrameY, m_invincibleAlpha);
-			else if (!m_isRight) m_AttackImg->frameAlphaRender(hdc, m_fX - 19, m_fY - 7, m_AtkFrameCount, m_CurrFrameY, m_invincibleAlpha);
+			if (m_isRight) m_AttackImg->frameAlphaRender(hdc, m_fX, m_fY - 9, m_AtkFrameCount, m_CurrFrameY, m_invincibleAlpha);
+			else if (!m_isRight) m_AttackImg->frameAlphaRender(hdc, m_fX - 19, m_fY - 9, m_AtkFrameCount, m_CurrFrameY, m_invincibleAlpha);
 		}
 		else {
-			if (m_isRight) m_AttackImg->frameRender(hdc, m_fX, m_fY - 7, m_AtkFrameCount, m_CurrFrameY);
-			else if (!m_isRight) m_AttackImg->frameRender(hdc, m_fX - 19, m_fY - 7, m_AtkFrameCount, m_CurrFrameY);
+			if (m_isRight) m_AttackImg->frameRender(hdc, m_fX, m_fY - 9, m_AtkFrameCount, m_CurrFrameY);
+			else if (!m_isRight) m_AttackImg->frameRender(hdc, m_fX - 19, m_fY - 9, m_AtkFrameCount, m_CurrFrameY);
 		}
 		
 	}
@@ -410,7 +411,7 @@ void Player::ShovelRender(HDC hdc)
 	}
 
 	else if (m_State == P_APPEAR) {
-		m_AppearImg->frameRender(hdc, m_fX - 22, m_fY - 23, m_CurrFrameX, 0);
+		m_AppearImg->frameRender(hdc, m_fX - 22, m_fY - 24, m_CurrFrameX, 0);
 	}
 }
 
@@ -458,6 +459,7 @@ void Player::LadderColliosion(RECT x)
 			gravity = 0;
 			jumpSpeed = 0;
 			m_isGround = true;
+			m_fY += 0;
 			
 			if (KEYMANAGER->isStayKeyDown(VK_UP)) {
 				m_State = P_LADDERUP;
@@ -486,7 +488,21 @@ void Player::DownATKCollision(RECT x)
 				m_isGround = false;
 			}
 		}
-	
+	}
+}
+
+void Player::DownATKtoOBJCollision(RECT x)
+{
+	RECT rc;
+	if (IntersectRect(&rc, &m_AttackDownRc, &x)) {
+		if (m_AttackDownRc.bottom > x.top - 20) {
+			gravity = 0;
+			jumpSpeed -= 0.1f;
+			if (jumpSpeed > 0.1f) {
+				m_isGround = false;
+				gravity += 1.6f;
+			}
+		}
 	}
 }
 

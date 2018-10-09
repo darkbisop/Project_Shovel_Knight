@@ -10,7 +10,7 @@ HRESULT bug::init(float x, float y)
 		48, 34, 2, 2, true, RGB(255, 0, 255));
 	m_nLife = 1;
 	m_nPower = 1;
-	m_fRange = 100.0f;
+	m_fRange = 90.0f;
 	m_fX = x;
 	m_fY = y;
 	m_destX = m_fX;
@@ -18,7 +18,7 @@ HRESULT bug::init(float x, float y)
 	m_fRightAngle = 0.0f;// *PI / 180;
 	m_fLeftAngle = 180.0f * PI / 180;
 	m_rc = RectMakeCenter(m_fX, m_fY, m_pImg_Move->getFrameWidth(), m_pImg_Move->getFrameHeight());
-	m_fSpeed = 0.7f;
+	m_fSpeed = 0.5f;
 	m_isAlive = true;
 	m_isRight = false;
 	m_isDying = false;
@@ -65,7 +65,7 @@ void bug::render(HDC hdc)
 	{
 		//Rectangle(hdc, m_tempRc.left, m_tempRc.top, m_tempRc.right, m_tempRc.bottom);
 		//Rectangle(hdc, m_rcRange.left, m_rcRange.top, m_rcRange.right, m_rcRange.bottom);
-		Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
+		//Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
 		if (!m_isDying)
 		{
 			m_pImg_Move->frameRender(hdc, m_fX, m_fY, m_nCurrFrameX, m_nCurrFrameY);

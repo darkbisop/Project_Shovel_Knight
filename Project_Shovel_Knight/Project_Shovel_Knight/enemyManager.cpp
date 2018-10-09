@@ -10,26 +10,33 @@ HRESULT enemyManager::init()
 
 void enemyManager::release()
 {
-	for (m_IterBug = m_VecBug.begin(); m_IterBug != m_VecBug.end(); m_IterBug++)
-	{
+	for (m_IterBug = m_VecBug.begin(); m_IterBug != m_VecBug.end(); m_IterBug++) {
 		delete (*m_IterBug);
 	}
+	for (m_IterBBD = m_VecBBD.begin(); m_IterBBD != m_VecBBD.end(); m_IterBBD++) {
+		delete (*m_IterBBD);
+	}
 	m_VecBug.clear();
+	m_VecBBD.clear();
 }
 
 void enemyManager::update()
 {
-	for (m_IterBug = m_VecBug.begin(); m_IterBug != m_VecBug.end(); m_IterBug++)
-	{
+	for (m_IterBug = m_VecBug.begin(); m_IterBug != m_VecBug.end(); m_IterBug++) {
 		(*m_IterBug)->update();
+	}
+	for (m_IterBBD = m_VecBBD.begin(); m_IterBBD != m_VecBBD.end(); m_IterBBD++) {
+		(*m_IterBBD)->update();
 	}
 }
 
 void enemyManager::render(HDC hdc)
 {
-	for (m_IterBug = m_VecBug.begin(); m_IterBug != m_VecBug.end(); m_IterBug++)
-	{
+	for (m_IterBug = m_VecBug.begin(); m_IterBug != m_VecBug.end(); m_IterBug++){
 		(*m_IterBug)->render(hdc);
+	}
+	for (m_IterBBD = m_VecBBD.begin(); m_IterBBD != m_VecBBD.end(); m_IterBBD++) {
+		(*m_IterBBD)->render(hdc);
 	}
 }
 
@@ -60,13 +67,22 @@ void enemyManager::setBug()
 		pBug4->init(1850, 808);
 		m_VecBug.push_back(pBug4);
 	}
+
+	if (MAPMANAGER->getMapOn(3)) {
+		bug* pBug;
+		pBug = new bug;
+		pBug->init(2347, 504);
+		m_VecBug.push_back(pBug);
+	}
 }
 
-void enemyManager::setTarget(spaceShip * pTarget)
+void enemyManager::setBubleDragon()
 {
-	for (m_iter = m_vecEnemy.begin(); m_iter != m_vecEnemy.end(); m_iter++)
-	{
-		(*m_iter)->setTarget(pTarget);
+	if (MAPMANAGER->getMapOn(5)) {
+		bubble_Dragon* pBBD;
+		pBBD = new bubble_Dragon;
+		pBBD->init(2970, 528);
+		m_VecBBD.push_back(pBBD);
 	}
 }
 

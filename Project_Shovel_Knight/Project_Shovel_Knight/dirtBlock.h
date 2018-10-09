@@ -43,7 +43,6 @@ public:
 
 	void animation();
 	void DigOut();
-	void COllision();
 
 	inline bool getCrash() { return m_crash; }
 	inline void setCrash(bool a) { m_crash = a; }

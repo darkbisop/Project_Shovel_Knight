@@ -82,6 +82,9 @@
     <Filter Include="메인게임\플레이어">
       <UniqueIdentifier>{6eccb3ed-bc73-442e-861a-ce87476297c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="메인게임\에너미\보스">
+      <UniqueIdentifier>{1b1e5641-9de0-4890-8e57-f0ecbfc8cd0e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -234,6 +237,12 @@
     <ClInclude Include="dirtBlock_Small.h">
       <Filter>메인게임\오브젝트</Filter>
     </ClInclude>
+    <ClInclude Include="bubble.h">
+      <Filter>메인게임\에너미\보스</Filter>
+    </ClInclude>
+    <ClInclude Include="bubble_Dragon.h">
+      <Filter>메인게임\에너미\보스</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -370,6 +379,12 @@
     </ClCompile>
     <ClCompile Include="dirtBlock_Small.cpp">
       <Filter>메인게임\오브젝트</Filter>
+    </ClCompile>
+    <ClCompile Include="bubble.cpp">
+      <Filter>메인게임\에너미\보스</Filter>
+    </ClCompile>
+    <ClCompile Include="bubble_Dragon.cpp">
+      <Filter>메인게임\에너미\보스</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
