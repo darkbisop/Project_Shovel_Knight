@@ -20,7 +20,7 @@ HRESULT MapManager::init(void)
 
 	m_pEnemyMgr = new enemyManager;
 	m_pEnemyMgr->setBug();
-	m_pEnemyMgr->setBubleDragon();
+	//m_pEnemyMgr->setBubleDragon();
 
 	m_pObjectMgr = new objectManager;
 	m_pObjectMgr->init();
@@ -89,9 +89,9 @@ void MapManager::render(HDC hdc)
 	EFFECTMANAGER->render(_empty->getMemDC());
 	PLAYER->render(_empty->getMemDC());
 
-	//for (vIterRC = vRect.begin(); vIterRC != vRect.end(); vIterRC++) {
-	//	Rectangle(_empty->getMemDC(), vIterRC->_rc.left, vIterRC->_rc.top, vIterRC->_rc.right, vIterRC->_rc.bottom);
-	//}
+	for (vIterRC = vRect.begin(); vIterRC != vRect.end(); vIterRC++) {
+		Rectangle(_empty->getMemDC(), vIterRC->_rc.left, vIterRC->_rc.top, vIterRC->_rc.right, vIterRC->_rc.bottom);
+	}
 
 	_empty->render(hdc, 0, 0, m_Camera.x, m_Camera.y, WINSIZEX, WINSIZEY);
 
@@ -142,7 +142,7 @@ void MapManager::CurrMap()
 	}
 
 	// 10¹ø¸ÊÀÏ¶§
-	if (CurrMapNum == 12 && MovingCamera[9] == false && MovingCamera[12] == false) {
+	if (CurrMapNum == 10 && MovingCamera[9] == false && MovingCamera[10] == false) {
 
 		m_Camera = { (int)PLAYER->getPlayerX() - 180, (int)PLAYER->getPlayerY() };
 
@@ -313,17 +313,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 		}
 	}
 
-	//// ##### 5 <-- 6  #####
-	if (CurrMapNum == 6) {
-		RECT rc;
-		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[5])) {
-			//MovingCamera[6] = true;
-			MovingCamera[5] = true;
-			MapOn[5] = true;
-		}
-	}
-
-
+	
 	// ##### 6 --> 7  #####
 	if (CurrMapNum == 6) {
 		RECT rc;
@@ -331,16 +321,6 @@ void MapManager::CollisionCheck_ChangeMapRect()
 			//MovingCamera[7] = true;
 			MovingCamera[6] = true;
 			MapOn[7] = true;
-		}
-	}
-
-	//// ##### 6 <-- 7  #####
-	if (CurrMapNum == 7) {
-		RECT rc;
-		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[6])) {
-			//MovingCamera[7] = true;
-			MovingCamera[6] = true;
-			MapOn[6] = true;
 		}
 	}
 
@@ -662,6 +642,7 @@ void MapManager::MovingMap()
 				MovingCamera[3] = false;
 				MapOn[3] = false;
 				m_pObjectMgr->setDirtblock();
+				m_pObjectMgr->setSmallBlock();
 				PushRect();
 			}
 		}
@@ -730,23 +711,9 @@ void MapManager::MovingMap()
 				CurrMapNum = 6;
 				MovingCamera[5] = false;
 				MapOn[5] = false;
+				PLAYER->SetCurr(6);
+				m_pObjectMgr->setSmallBlock();
 				PushRect();
-			}
-		}
-	}
-
-	// ##### 5 <-- 6  #####
-	if (MovingCamera[5] == true && CurrMapNum == 6) {
-		if (m_Camera.y > 426) {
-			m_Camera.y -= 5;
-			if (580 < PLAYER->getPlayerY()) {
-				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 0.9f);
-			}
-			if (m_Camera.y <= 426) {
-				m_Camera.y = 426;
-				CurrMapNum = 5;
-				MovingCamera[5] = false;
-				MapOn[6] = false;
 			}
 		}
 	}
@@ -763,6 +730,9 @@ void MapManager::MovingMap()
 				CurrMapNum = 7;
 				MovingCamera[6] = false;
 				MapOn[6] = false;
+				PLAYER->SetCurr(7);
+				m_pObjectMgr->setDirtblock();
+				PushRect();
 			}
 		}
 	}
@@ -779,6 +749,8 @@ void MapManager::MovingMap()
 				CurrMapNum = 8;
 				MovingCamera[7] = false;
 				MapOn[7] = false;
+				//m_pObjectMgr->setDirtblock();
+				PushRect();
 			}
 		}
 	}
@@ -796,6 +768,8 @@ void MapManager::MovingMap()
 				CurrMapNum = 9;
 				MovingCamera[8] = false;
 				MapOn[8] = false;
+				PLAYER->SetCurr(9);
+				PushRect();
 			}
 		}
 	}
@@ -812,6 +786,8 @@ void MapManager::MovingMap()
 				CurrMapNum = 8;
 				MovingCamera[8] = false;
 				MapOn[9] = false;
+				PLAYER->SetCurr(8);
+				PushRect();
 			}
 		}
 	}
@@ -826,9 +802,12 @@ void MapManager::MovingMap()
 			}
 			if (m_Camera.x >= 3200) {
 				m_Camera.x = 3200;
-				CurrMapNum = 12;
+				CurrMapNum = 10;
 				MovingCamera[9] = false;
 				MapOn[8] = false;
+				PLAYER->SetCurr(10);
+				m_pObjectMgr->setDirtblock();
+				PushRect();
 			}
 		}
 	}
@@ -1176,6 +1155,84 @@ void MapManager::PushRect()
 		_RectLadder._rc = RectMake(2884, 839, 6, 40);
 		vLadderRect.push_back(_RectLadder);
 	}
+
+
+	// 7¹ø¸Ê
+	if (CurrMapNum == 7) {
+		_RectInfo._rc = RectMake(2814, 1046, 300, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectLadder._rc = RectMake(3093, 981, 6, 60);
+		vLadderRect.push_back(_RectLadder);
+
+		_RectInfo._rc = RectMake(2958, 982, 130, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectLadder._rc = RectMake(2965, 917, 6, 60);
+		vLadderRect.push_back(_RectLadder);
+
+		_RectInfo._rc = RectMake(2975, 918, 130, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(3105, 918, 30, 130);
+		vRect.push_back(_RectInfo);
+
+		// ÃµÀå
+		/*_RectInfo._rc = RectMake(2975, 856, 200, 15);
+		vRect.push_back(_RectInfo);*/
+	}
+
+
+	// 7¹ø¸Ê
+	if (CurrMapNum == 7) {
+		_RectInfo._rc = RectMake(3089, 1110, 80, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(2673, 1239, 320, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(3049, 1239, 100, 15);
+		vRect.push_back(_RectInfo);
+	}
+
+
+	// 8¹ø¸Ê
+	if (CurrMapNum == 8) {
+		_RectInfo._rc = RectMake(3089, 1110, 80, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(2673, 1239, 320, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(3049, 1239, 100, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(3157, 1207, 120, 15);
+		vRect.push_back(_RectInfo);
+	}
+
+
+	// 9¹ø¸Ê
+	if (CurrMapNum == 9) {
+		_RectInfo._rc = RectMake(2673, 1239, 320, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(2523, 1239, 100, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(2403, 1239, 100, 15);
+		vRect.push_back(_RectInfo);
+	}
+
+	// 10¹ø¸Ê
+	if (CurrMapNum == 10) {
+		_RectInfo._rc = RectMake(3280, 1175, 30, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(3320, 1143, 40, 15);
+		vRect.push_back(_RectInfo);
+	}
+
 }
 
 void MapManager::EraseRect(int i)
@@ -1305,6 +1362,33 @@ void MapManager::CollisionObject()
 
 	for (iterDIrt = vdirt.begin(); iterDIrt != vdirt.end(); iterDIrt++) {
 		PLAYER->OBJCollision((*iterDIrt)->getRect());
+	}
+
+
+
+	vector<dirtBlock_Small*> vSmall = m_pObjectMgr->getVecSmall();
+	vector<dirtBlock_Small*>::iterator iterSmall;
+
+	for (iterSmall = vSmall.begin(); iterSmall != vSmall.end();) {
+		RECT rc;
+		if (IntersectRect(&rc, &PLAYER->getAttacRect(), &(*iterSmall)->getRect())) {
+			(*iterSmall)->DigOut();
+			(*iterSmall)->setCrash(true);
+			iterSmall = vSmall.erase(iterSmall);
+		}
+
+		else if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterSmall)->getRect())) {
+			PLAYER->DownATKtoOBJCollision((*iterSmall)->getRect());
+			(*iterSmall)->DigOut();
+			(*iterSmall)->setCrash(true);
+			iterSmall = vSmall.erase(iterSmall);
+		}
+
+		else iterSmall++;
+	}
+
+	for (iterSmall = vSmall.begin(); iterSmall != vSmall.end(); iterSmall++) {
+		PLAYER->OBJCollision((*iterSmall)->getRect());
 	}
 
 

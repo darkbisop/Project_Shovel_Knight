@@ -27,7 +27,7 @@ HRESULT bubble_Dragon::init(float x, float y)
 	m_fX = x;
 	m_fY = y;
 	m_fSpeed = 0.5f;
-	m_nLife = 7;
+	m_nLife = 1;
 	m_isAlive = true;
 	m_isDying = false;
 	m_rc_Head = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2 + 15 - 50, m_fY + m_pImg_Idle->getFrameHeight() / 2 + 27, m_pImg_Idle->getFrameWidth() / 2 - 50, m_pImg_Idle->getFrameHeight() / 2 - 22);
