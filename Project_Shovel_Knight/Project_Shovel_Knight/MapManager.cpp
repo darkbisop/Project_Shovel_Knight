@@ -5,7 +5,6 @@
 #include "effectManager.h"
 #include "objectManager.h"
 
-// dddd
 HRESULT MapManager::init(void)
 {
 	_empty = IMAGEMANAGER->addImage("MainCamera", "image/Empty.bmp", 7200, 1400, true, RGB(255, 0, 255));
@@ -95,6 +94,8 @@ void MapManager::render(HDC hdc)
 	}
 
 	_empty->render(hdc, 0, 0, m_Camera.x, m_Camera.y, WINSIZEX, WINSIZEY);
+
+	TIMEMANAGER->render(hdc);
 
 	//char str[64];
 	//wsprintf(str, "x : %d, y : %d", m_Camera.x, m_Camera.y);
@@ -1324,6 +1325,35 @@ void MapManager::CollisionBoss()
 			PLAYER->DownATKtoOBJCollision((*iterBBD)->getBody());
 		} 
 	}
+
+
+
+	for (iterBBD = vBBD.begin(); iterBBD != vBBD.end(); iterBBD++) {
+
+		vector<bubble*> vbuble = (*iterBBD)->getOBJMgr()->getVecBubble();
+		vector<bubble*>::iterator iterBuble;
+
+		for (iterBuble = vbuble.begin(); iterBuble != vbuble.end();) {
+			RECT rc;
+			if ((*iterBuble)->getIsFire() == true && IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterBuble)->getRECT())) {
+				PLAYER->DownATKCollision((*iterBuble)->getRECT());
+				((*iterBuble)->setIsFire(false));
+				iterBuble = vbuble.erase(iterBuble);
+			}
+
+			else iterBuble++;
+		}
+
+	/*	for (iterBuble = vbuble.begin(); iterBuble != vbuble.end();) {
+			RECT rc;
+			if (PLAYER->getInvincibleTime() == false) {
+				if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &(*iterBuble)->getRECT())) {
+					PLAYER->setIsDamaged(true);
+					PLAYER->setInvincibleTime(true);
+				}
+			}
+		}*/
+	}
 }
 
 void MapManager::CollisionObject()
@@ -1391,30 +1421,6 @@ void MapManager::CollisionObject()
 	for (iterSmall = vSmall.begin(); iterSmall != vSmall.end(); iterSmall++) {
 		PLAYER->OBJCollision((*iterSmall)->getRect());
 	}
-
-
-	/*vector<bubble*> vbuble = m_pObjectMgr->getVecBubble();
-	vector<bubble*>::iterator iterBuble;
-
-	for (iterBuble = vbuble.begin(); iterBuble != vbuble.end();) {
-		RECT rc;
-		if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterBuble)->getRECT())) {
-			PLAYER->DownATKCollision((*iterBuble)->getRECT());
-			iterBuble = vbuble.erase(iterBuble);
-		}
-
-		else iterBuble++;
-	}
-
-	for (iterBuble = vbuble.begin(); iterBuble != vbuble.end();) {
-		RECT rc;
-		if (PLAYER->getInvincibleTime() == false) {
-			if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &(*iterBuble)->getRECT())) {
-				PLAYER->setIsDamaged(true);
-				PLAYER->setInvincibleTime(true);
-			}
-		}
-	}*/
 }
 
 MapManager::MapManager() :m_Camera({ 0 , 0 }),  _empty(new image)

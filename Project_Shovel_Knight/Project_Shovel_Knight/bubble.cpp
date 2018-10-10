@@ -100,10 +100,10 @@ void bubble::move()
 			m_fY -= sinf(90 * PI / 180) * 0.3f;
 			m_rc = RectMakeCenter(m_fX + m_pImg->getFrameWidth() / 2, m_fY + m_pImg->getFrameHeight() / 2, 20, 20);
 		}
-		if (m_fX < 10 || m_fY < 10)
+		/*if (m_fX < 10 || m_fY < 10)
 		{
 			m_isFire = false;
-		}
+		}*/
 	}
 }
 

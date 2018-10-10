@@ -36,8 +36,8 @@ public:
 	inline float getY() { return m_fY; }
 	inline void setY(float x) { m_fY = x; }
 
-	inline bool getIsAlive() { return m_isAlive; }
-	inline void setIsAlive(bool a) { m_isAlive = a; }
+	inline bool getIsFire() { return m_isFire; }
+	inline void setIsFire(bool a) { m_isFire = a; }
 
 	bubble();
 	~bubble();

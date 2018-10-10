@@ -72,6 +72,7 @@ public:
 	inline RECT getBody() { return m_rc_Body; }
 
 	inline int getLife() { return m_nLife; }
+	inline objectManager* getOBJMgr() { return m_pBubbleMgr; }
 
 	bubble_Dragon();
 	~bubble_Dragon();
