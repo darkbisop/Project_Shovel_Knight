@@ -5,6 +5,7 @@
 #include "effectManager.h"
 #include "objectManager.h"
 
+// dddd
 HRESULT MapManager::init(void)
 {
 	_empty = IMAGEMANAGER->addImage("MainCamera", "image/Empty.bmp", 7200, 1400, true, RGB(255, 0, 255));
