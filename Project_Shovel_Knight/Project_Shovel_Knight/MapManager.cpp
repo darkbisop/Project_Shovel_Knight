@@ -98,7 +98,7 @@ void MapManager::render(HDC hdc)
 	//TIMEMANAGER->render(hdc);
 
 	char str[64];
-	wsprintf(str, "x : %d, y : %d", CurrMapNum, MovingCamera[12]);
+	wsprintf(str, "x : %d, y : %d", CurrMapNum, PLAYER->getCurr());
 	//sprintf_s(str, "x : %f, y : %f", PLAYER->getPlayerX(), PLAYER->getPlayerY());
 	TextOut(hdc, 100, 30, str, strlen(str));
 }
@@ -552,7 +552,7 @@ void MapManager::MovingMap()
 				CurrMapNum = 0;
 				MovingCamera[0] = false;
 				MapOn[1] = false;
-				PushRect();
+				//PushRect();
 			}
 		}
 	}
@@ -1090,6 +1090,9 @@ void MapManager::PushRect()
 
 	// 1¹ø¸Ê
 	if (CurrMapNum == 1) {
+	
+		vRect.erase(vRect.begin(), vRect.begin() + 10);
+
 		_RectInfo._rc = RectMake(1729, 759, 35, 80);
 		vRect.push_back(_RectInfo);
 
@@ -1310,10 +1313,10 @@ void MapManager::PushRect()
 		_RectInfo._rc = RectMake(4133, 743, 220, 15);
 		vRect.push_back(_RectInfo);
 
-		_RectLadder._rc = RectMake(4107, 620, 6, 70);
+		_RectLadder._rc = RectMake(4101, 614, 6, 80);
 		vLadderRect.push_back(_RectLadder);
 
-		_RectLadder._rc = RectMake(4280, 620, 6, 50);
+		_RectLadder._rc = RectMake(4277, 626, 6, 50);
 		vLadderRect.push_back(_RectLadder);
 	}
 }
@@ -1325,17 +1328,11 @@ void MapManager::EraseRect(int i)
 
 void MapManager::CollisionMap()
 {
-	for (int i = 0; i < vRect.size(); i++)
-	{
+	for (int i = 0; i < vRect.size(); i++) {
 		PLAYER->RectColliosion(MAPMANAGER->getMapVectorRc(i));
-
-		if (PLAYER->getCurr() > CurrMapNum) {
-			MAPMANAGER->EraseRect(i);
-		}
 	}
 
-	for (int i = 0; i < vLadderRect.size(); i++)
-	{
+	for (int i = 0; i < vLadderRect.size(); i++) {
 		PLAYER->LadderColliosion(MAPMANAGER->getLadderVECRc(i));
 	}
 }
