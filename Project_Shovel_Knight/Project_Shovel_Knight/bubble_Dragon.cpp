@@ -14,15 +14,15 @@ bubble_Dragon::~bubble_Dragon()
 
 HRESULT bubble_Dragon::init(float x, float y)
 {
-	m_pImg_Idle = IMAGEMANAGER->addImage("bubble_Idle", "image/enemy/bubble_dragon/bubble_dragon_idle.bmp",
+	m_pImg_Idle = IMAGEMANAGER->addImage("bubble_Idle", "image/Enemy/bubble_dragon/bubble_dragon_idle.bmp",
 		2172, 88, 12, 1, true, RGB(255, 0, 255));
-	m_pImg_Move = IMAGEMANAGER->addImage("bubble_Move", "image/enemy/bubble_dragon/bubble_dragon_move.bmp",
+	m_pImg_Move = IMAGEMANAGER->addImage("bubble_Move", "image/Enemy/bubble_dragon/bubble_dragon_move.bmp",
 		1068, 89, 6, 1, true, RGB(255, 0, 255));
-	m_pImg_Atk = IMAGEMANAGER->addImage("bubble_Atk", "image/enemy/bubble_dragon/bubble_dragon_Atk.bmp",
+	m_pImg_Atk = IMAGEMANAGER->addImage("bubble_Atk", "image/Enemy/bubble_dragon/bubble_dragon_Atk.bmp",
 		1480, 83, 10, 1, true, RGB(255, 0, 255));
-	m_pImg_Hit = IMAGEMANAGER->addImage("bubble_Hit", "image/enemy/bubble_dragon/bubble_dragon_damage.bmp",
+	m_pImg_Hit = IMAGEMANAGER->addImage("bubble_Hit", "image/Enemy/bubble_dragon/bubble_dragon_damage.bmp",
 		1068, 89, 6, 1, true, RGB(255, 0, 255));
-	m_pImg_Die = IMAGEMANAGER->addImage("bubble_Die", "image/enemy/bubble_dragon/bubble_dragon_Die1.bmp",
+	m_pImg_Die = IMAGEMANAGER->addImage("bubble_Die", "image/Enemy/bubble_dragon/bubble_dragon_Die1.bmp",
 		1480, 83, 10, 1, true, RGB(255, 0, 255));
 	m_fX = x;
 	m_fY = y;
@@ -34,7 +34,7 @@ HRESULT bubble_Dragon::init(float x, float y)
 	m_rc_Body = RectMakeCenter(m_fX + 125, m_fY + m_pImg_Idle->getFrameHeight() / 2 + 7, m_pImg_Idle->getFrameWidth() - 70, m_pImg_Idle->getFrameHeight() - 5);
 	bubbleDG_state = BUBBLEDG_IDLE;
 	m_pBubbleMgr = new objectManager;
-	m_pBubbleMgr->init("image / enemy / bubble_dragon / bubble_move.bmp", 100.0f, 3);
+	m_pBubbleMgr->init("image/Enemy/bubble_dragon/bubble_move.bmp", 100.0f, 3);
 
 	m_nFireCount = 0;
 

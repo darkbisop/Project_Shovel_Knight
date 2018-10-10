@@ -85,15 +85,15 @@ void Player::update()
 
 	m_rc = RectMake(m_fX + 5, m_fY, 20, 25);
 
-	if (m_State == P_DOWNATTACK) m_AttackDownRc = RectMake(m_fX + 7, m_fY + 20, 10, 10);
+	if (m_State == P_DOWNATTACK) m_AttackDownRc = RectMake(m_fX + 7, m_fY + 20, 16, 10);
 	else  m_AttackDownRc = RectMake(-1000, -1000, -1, -1);
 }
 
 void Player::render(HDC hdc)
 {
 	//Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
-	//Rectangle(hdc, m_AttackRc.left, m_AttackRc.top, m_AttackRc.right, m_AttackRc.bottom);
-	//Rectangle(hdc, m_AttackDownRc.left, m_AttackDownRc.top, m_AttackDownRc.right, m_AttackDownRc.bottom);
+	Rectangle(hdc, m_AttackRc.left, m_AttackRc.top, m_AttackRc.right, m_AttackRc.bottom);
+	Rectangle(hdc, m_AttackDownRc.left, m_AttackDownRc.top, m_AttackDownRc.right, m_AttackDownRc.bottom);
 
 	ShovelRender(hdc);
 
@@ -101,10 +101,10 @@ void Player::render(HDC hdc)
 	m_inventory->render(hdc);
 	m_Equipment->render(m_UI->getMemDC());
 
-	char str[64];
-	//wsprintf(str, "money : %d", m_AppearTime);
-	sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
-	TextOut(hdc, m_fX - 50, m_fY - 20, str, strlen(str));
+	//char str[64];
+	////wsprintf(str, "money : %d", m_AppearTime);
+	//sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
+	//TextOut(hdc, m_fX - 50, m_fY - 20, str, strlen(str));
 }
 
 void Player::KeyProcess()
@@ -219,7 +219,7 @@ void Player::Animation()
 			m_FrameCount++;
 
 			if (m_AttackCount > 10) {
-				m_AttackRc = RectMake(m_fX + 35, m_fY + 10 , 10, 10);
+				m_AttackRc = RectMake(m_fX + 35, m_fY - 5, 25, 25);
 			}
 			if (m_AttackCount > 11) {
 				m_AttackRc = RectMake(-1000, -1000, -1, -1);
@@ -243,7 +243,7 @@ void Player::Animation()
 			m_AttackCount++;
 
 			if (m_AttackCount > 10) {
-				m_AttackRc = RectMake(m_fX - 10, m_fY + 10, 10, 10);
+				m_AttackRc = RectMake(m_fX - 10, m_fY - 5, 25, 25);
 			}
 			if (m_AttackCount > 11) {
 				m_AttackRc = RectMake(-1000, -1000, -1, -1);

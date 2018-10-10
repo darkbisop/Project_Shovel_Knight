@@ -17,7 +17,7 @@ HRESULT bubble::init()
 	m_nFrameCount = 0;
 	m_nBubbleCount = 0;
 	ZeroMemory(&m_rc, sizeof(m_rc));
-	m_pImg = IMAGEMANAGER->addImage("bubble", "image/enemy/bubble_dragon/bubble_move.bmp",
+	m_pImg = IMAGEMANAGER->addImage("bubble", "image/Enemy/bubble_dragon/bubble_move.bmp",
 		108, 27, 4, 1, true, RGB(255, 0, 255));
 	//m_rc = RectMakeCenter(m_fX, m_fY, m_pImg->getFrameWidth(), m_pImg->getFrameHeight());
 
@@ -39,7 +39,7 @@ HRESULT bubble::init(const char * szImageName, float speed, float x, float y, fl
 	m_nFrameCount = 0;
 	m_nBubbleCount = 0;
 	ZeroMemory(&m_rc, sizeof(m_rc));
-	m_pImg = IMAGEMANAGER->addImage("bubble", "image/enemy/bubble_dragon/bubble_move.bmp",
+	m_pImg = IMAGEMANAGER->addImage("bubble", "image/Enemy/bubble_dragon/bubble_move.bmp",
 		108, 27, 4, 1, true, RGB(255, 0, 255));
 	//m_rc = RectMakeCenter(m_fX, m_fY, m_pImg->getFrameWidth(), m_pImg->getFrameHeight());
 	return S_OK;

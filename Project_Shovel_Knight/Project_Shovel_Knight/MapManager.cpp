@@ -95,12 +95,12 @@ void MapManager::render(HDC hdc)
 
 	_empty->render(hdc, 0, 0, m_Camera.x, m_Camera.y, WINSIZEX, WINSIZEY);
 
-	TIMEMANAGER->render(hdc);
+	//TIMEMANAGER->render(hdc);
 
-	//char str[64];
-	//wsprintf(str, "x : %d, y : %d", m_Camera.x, m_Camera.y);
-	////sprintf_s(str, "x : %f, y : %f", PLAYER->getPlayerX(), PLAYER->getPlayerY());
-	//TextOut(hdc, 100, 30, str, strlen(str));
+	char str[64];
+	wsprintf(str, "x : %d, y : %d", CurrMapNum, MovingCamera[12]);
+	//sprintf_s(str, "x : %f, y : %f", PLAYER->getPlayerX(), PLAYER->getPlayerY());
+	TextOut(hdc, 100, 30, str, strlen(str));
 }
 
 void MapManager::CheckMapRect()
@@ -144,7 +144,7 @@ void MapManager::CurrMap()
 	}
 
 	// 10¹ø¸ÊÀÏ¶§
-	if (CurrMapNum == 10 && MovingCamera[9] == false && MovingCamera[10] == false) {
+	if (CurrMapNum == 12 && MovingCamera[11] == false && MovingCamera[12] == false) {
 
 		m_Camera = { (int)PLAYER->getPlayerX() - 180, (int)PLAYER->getPlayerY() };
 
@@ -804,11 +804,12 @@ void MapManager::MovingMap()
 			}
 			if (m_Camera.x >= 3200) {
 				m_Camera.x = 3200;
-				CurrMapNum = 10;
+				CurrMapNum = 12;
 				MovingCamera[9] = false;
 				MapOn[8] = false;
-				PLAYER->SetCurr(10);
+				PLAYER->SetCurr(12);
 				m_pObjectMgr->setDirtblock();
+				m_pObjectMgr->setSmallBlock();
 				PushRect();
 			}
 		}
@@ -828,6 +829,10 @@ void MapManager::MovingMap()
 				CurrMapNum = 13;
 				MovingCamera[12] = false;
 				MapOn[10] = false;
+				PLAYER->SetCurr(13);
+				//m_pObjectMgr->setDirtblock();
+				//m_pObjectMgr->setSmallBlock();
+				PushRect();
 			}
 		}
 	}
@@ -1227,12 +1232,24 @@ void MapManager::PushRect()
 	}
 
 	// 10¹ø¸Ê
-	if (CurrMapNum == 10) {
+	if (CurrMapNum == 12) {
 		_RectInfo._rc = RectMake(3280, 1175, 30, 15);
 		vRect.push_back(_RectInfo);
 
 		_RectInfo._rc = RectMake(3320, 1143, 40, 15);
 		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(3350, 1239, 800, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(4225, 1239, 65, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(4290, 1207, 85, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectLadder._rc = RectMake(4357, 1030, 6, 130);
+		vLadderRect.push_back(_RectLadder);
 	}
 
 }
@@ -1274,6 +1291,10 @@ void MapManager::CollisionEnemy()
 		else if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iter)->getRect())) {
 			(*iter)->damage(1);
 			PLAYER->DownATKCollision((*iter)->getRect());
+			iter = vBug.erase(iter);
+		}
+
+		else if (PLAYER->getCurr() > CurrMapNum) {
 			iter = vBug.erase(iter);
 		}
 
@@ -1367,6 +1388,11 @@ void MapManager::CollisionObject()
 			(*iter)->DigOut();
 			iter = vPOR.erase(iter);
 		}
+
+		else if (PLAYER->getCurr() > CurrMapNum) {
+			iter = vPOR.erase(iter);
+		}
+
 		else iter++;
 	}
 
@@ -1385,6 +1411,10 @@ void MapManager::CollisionObject()
 			PLAYER->DownATKtoOBJCollision((*iterDIrt)->getRect());
 			(*iterDIrt)->DigOut();
 			(*iterDIrt)->setCrash(true);
+			iterDIrt = vdirt.erase(iterDIrt);
+		}
+
+		else if (PLAYER->getCurr() > CurrMapNum) {
 			iterDIrt = vdirt.erase(iterDIrt);
 		}
 
@@ -1412,6 +1442,10 @@ void MapManager::CollisionObject()
 			PLAYER->DownATKtoOBJCollision((*iterSmall)->getRect());
 			(*iterSmall)->DigOut();
 			(*iterSmall)->setCrash(true);
+			iterSmall = vSmall.erase(iterSmall);
+		}
+
+		else if (PLAYER->getCurr() > CurrMapNum) {
 			iterSmall = vSmall.erase(iterSmall);
 		}
 

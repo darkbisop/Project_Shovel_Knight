@@ -157,6 +157,35 @@ void objectManager::setDirtblock()
 			pdirt->init(3360 + i * 32, 1143 );
 			v_dirtBlock.push_back(pdirt);
 		}
+
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				dirtBlock* pdirt;
+				pdirt = new dirtBlock;
+				pdirt->init(3456 + j * 32, 1175 + i * 32);
+				v_dirtBlock.push_back(pdirt);
+			}
+		}
+
+		dirtBlock* pdirt;
+		pdirt = new dirtBlock;
+		pdirt->init(3628, 1206);
+		v_dirtBlock.push_back(pdirt);
+
+		dirtBlock* pdirt2;
+		pdirt2 = new dirtBlock;
+		pdirt2->init(3660, 1174);
+		v_dirtBlock.push_back(pdirt2);
+
+		dirtBlock* pdirt3;
+		pdirt3 = new dirtBlock;
+		pdirt3->init(3724, 1206);
+		v_dirtBlock.push_back(pdirt3);
+
+		dirtBlock* pdirt4;
+		pdirt4 = new dirtBlock;
+		pdirt4->init(3788, 1206);
+		v_dirtBlock.push_back(pdirt4);
 	}
 }
 
@@ -183,6 +212,85 @@ void objectManager::setSmallBlock()
 				dirtBlock_Small* pSmall;
 				pSmall = new dirtBlock_Small;
 				pSmall->init(2832 + j * 16, 791 + i * 16);
+				v_SmallBlock.push_back(pSmall);
+			}
+		}
+	}
+
+	// 10번맵 오브젝트
+	if (MAPMANAGER->getMapOn(10)) {
+		for (int i = 0; i < 2; i++) {
+			dirtBlock_Small* pSmall;
+			pSmall = new dirtBlock_Small;
+			pSmall->init(3596 + i * 16, 1222);
+			v_SmallBlock.push_back(pSmall);
+		}
+
+		dirtBlock_Small* pSmall;
+		pSmall = new dirtBlock_Small;
+		pSmall->init(3612 , 1206);
+		v_SmallBlock.push_back(pSmall);
+
+		for (int i = 0; i < 2; i++) {
+			dirtBlock_Small* pSmall;
+			pSmall = new dirtBlock_Small;
+			pSmall->init(3628 + i * 16, 1190);
+			v_SmallBlock.push_back(pSmall);
+		}
+
+		dirtBlock_Small* pSmall2;
+		pSmall2 = new dirtBlock_Small;
+		pSmall2->init(3644, 1174);
+		v_SmallBlock.push_back(pSmall2);
+
+		for (int i = 0; i < 2; i++) {
+			dirtBlock_Small* pSmall;
+			pSmall = new dirtBlock_Small;
+			pSmall->init(3660 + i * 16, 1158);
+			v_SmallBlock.push_back(pSmall);
+		}
+
+		dirtBlock_Small* pSmall3;
+		pSmall3 = new dirtBlock_Small;
+		pSmall3->init(3676 , 1142);
+		v_SmallBlock.push_back(pSmall3);
+
+
+		for (int i = 0; i < 2; i++) {
+			dirtBlock_Small* pSmall;
+			pSmall = new dirtBlock_Small;
+			pSmall->init(3708 , 1206 + i * 16);
+			v_SmallBlock.push_back(pSmall);
+		}
+
+		for (int i = 0; i < 2; i++) {
+			dirtBlock_Small* pSmall;
+			pSmall = new dirtBlock_Small;
+			pSmall->init(3756, 1206 + i * 16);
+			v_SmallBlock.push_back(pSmall);
+		}
+
+		for (int i = 0; i < 2; i++) {
+			dirtBlock_Small* pSmall;
+			pSmall = new dirtBlock_Small;
+			pSmall->init(3772, 1206 + i * 16);
+			v_SmallBlock.push_back(pSmall);
+		}
+
+		for (int i = 0; i < 2; i++) {
+			dirtBlock_Small* pSmall;
+			pSmall = new dirtBlock_Small;
+			pSmall->init(3820, 1206 + i * 16);
+			v_SmallBlock.push_back(pSmall);
+		}
+
+
+
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 8; j++) {
+				dirtBlock_Small* pSmall;
+				pSmall = new dirtBlock_Small;
+				pSmall->init(3692 + j * 16, 1142 + i * 16);
 				v_SmallBlock.push_back(pSmall);
 			}
 		}

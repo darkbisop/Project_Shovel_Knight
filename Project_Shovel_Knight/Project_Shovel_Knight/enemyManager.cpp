@@ -41,7 +41,6 @@ void enemyManager::render(HDC hdc)
 }
 
 
-
 void enemyManager::setBug()
 {
 	if (MAPMANAGER->getMapNum() == 0) {
