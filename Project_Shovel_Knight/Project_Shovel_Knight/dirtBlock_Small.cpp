@@ -65,7 +65,7 @@ void dirtBlock_Small::update()
 void dirtBlock_Small::render(HDC hdc)
 {
 	if (_isAlive) {
-		Rectangle(hdc, _rc.left, _rc.top, _rc.right, _rc.bottom);
+		//Rectangle(hdc, _rc.left, _rc.top, _rc.right, _rc.bottom);
 		m_Img->render(hdc, _rc.left, _rc.top);
 
 	}

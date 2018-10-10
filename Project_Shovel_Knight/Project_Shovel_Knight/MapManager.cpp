@@ -850,6 +850,10 @@ void MapManager::MovingMap()
 				CurrMapNum = 14;
 				MovingCamera[13] = false;
 				MapOn[13] = false;
+				PLAYER->SetCurr(14);
+				//m_pObjectMgr->setDirtblock();
+				//m_pObjectMgr->setSmallBlock();
+				PushRect();
 			}
 		}
 	}
@@ -866,6 +870,10 @@ void MapManager::MovingMap()
 				CurrMapNum = 13;
 				MovingCamera[13] = false;
 				MapOn[14] = false;
+				PLAYER->SetCurr(13);
+				//m_pObjectMgr->setDirtblock();
+				//m_pObjectMgr->setSmallBlock();
+				PushRect();
 			}
 		}
 	}
@@ -883,6 +891,10 @@ void MapManager::MovingMap()
 				CurrMapNum = 15;
 				MovingCamera[14] = false;
 				MapOn[13] = false;
+				PLAYER->SetCurr(15);
+				//m_pObjectMgr->setDirtblock();
+				//m_pObjectMgr->setSmallBlock();
+				PushRect();
 			}
 		}
 	}
@@ -1166,22 +1178,22 @@ void MapManager::PushRect()
 
 	// 7¹ø¸Ê
 	if (CurrMapNum == 7) {
-		_RectInfo._rc = RectMake(2814, 1046, 300, 15);
+		_RectInfo._rc = RectMake(2814, 1047, 300, 15);
 		vRect.push_back(_RectInfo);
 
 		_RectLadder._rc = RectMake(3093, 981, 6, 60);
 		vLadderRect.push_back(_RectLadder);
 
-		_RectInfo._rc = RectMake(2958, 982, 130, 15);
+		_RectInfo._rc = RectMake(2958, 983, 130, 15);
 		vRect.push_back(_RectInfo);
 
 		_RectLadder._rc = RectMake(2965, 917, 6, 60);
 		vLadderRect.push_back(_RectLadder);
 
-		_RectInfo._rc = RectMake(2975, 918, 130, 15);
+		_RectInfo._rc = RectMake(2975, 919, 130, 15);
 		vRect.push_back(_RectInfo);
 
-		_RectInfo._rc = RectMake(3105, 918, 30, 130);
+		_RectInfo._rc = RectMake(3105, 919, 30, 130);
 		vRect.push_back(_RectInfo);
 
 		// ÃµÀå
@@ -1248,10 +1260,62 @@ void MapManager::PushRect()
 		_RectInfo._rc = RectMake(4290, 1207, 85, 15);
 		vRect.push_back(_RectInfo);
 
-		_RectLadder._rc = RectMake(4357, 1030, 6, 130);
+		_RectLadder._rc = RectMake(4357, 1045, 6, 115);
 		vLadderRect.push_back(_RectLadder);
 	}
 
+
+	// 13¹ø ¸Ê
+	if (CurrMapNum == 13) {
+		_RectInfo._rc = RectMake(4000, 1046, 350, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(4080, 976, 80, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(4230, 966, 50, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(4335, 966, 100, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectLadder._rc = RectMake(4004, 805, 6, 130);
+		vLadderRect.push_back(_RectLadder);
+	}
+
+
+	// 14¹ø ¸Ê
+	if (CurrMapNum == 14) {
+		_RectInfo._rc = RectMake(4420, 998, 60, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(4520, 998, 60, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(4609, 998, 110, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(4749, 998, 110, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(4879, 998, 90, 15);
+		vRect.push_back(_RectInfo);
+	}
+
+	// 15¹ø ¸Ê
+	if (CurrMapNum == 15) {
+		_RectInfo._rc = RectMake(4023, 807, 290, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(4133, 743, 220, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectLadder._rc = RectMake(4107, 620, 6, 70);
+		vLadderRect.push_back(_RectLadder);
+
+		_RectLadder._rc = RectMake(4280, 620, 6, 50);
+		vLadderRect.push_back(_RectLadder);
+	}
 }
 
 void MapManager::EraseRect(int i)

@@ -66,7 +66,7 @@ void dirtBlock::update()
 void dirtBlock::render(HDC hdc)
 {
 	if (_isAlive) {
-		Rectangle(hdc, _rc.left, _rc.top, _rc.right, _rc.bottom);
+		//Rectangle(hdc, _rc.left, _rc.top, _rc.right, _rc.bottom);
 		m_Img->render(hdc, _rc.left, _rc.top);
 		
 	}
@@ -75,7 +75,7 @@ void dirtBlock::render(HDC hdc)
 
 	for (v_Iter = v_VecJewel.begin(); v_Iter != v_VecJewel.end(); v_Iter++) {
 		if (v_Iter->isAlive) {
-			Rectangle(hdc, v_Iter->rc.left, v_Iter->rc.top, v_Iter->rc.right, v_Iter->rc.bottom);
+			//Rectangle(hdc, v_Iter->rc.left, v_Iter->rc.top, v_Iter->rc.right, v_Iter->rc.bottom);
 			m_Gems->render(hdc, v_Iter->x - 6, v_Iter->y - 1);
 		}
 	}
