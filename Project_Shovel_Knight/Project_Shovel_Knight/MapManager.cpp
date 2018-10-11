@@ -1326,7 +1326,7 @@ void MapManager::PushRect()
 	}
 
 
-	// 14번 맵
+	// 14번 맵 여기서부터 해야함
 	if (CurrMapNum == 14) {
 		_RectInfo._rc = RectMake(4420, 998, 60, 15);
 		vRect.push_back(_RectInfo);
