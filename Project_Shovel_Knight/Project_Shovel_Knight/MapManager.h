@@ -44,7 +44,6 @@ private:
 	image*  m_pImg;
 	
 	RECT	CheckChangeMapRect[24];
-	RECT	m_Floor;
 
 	int		CurrMapNum;
 	
@@ -66,7 +65,6 @@ public:
 	void CollisionCheck_ChangeMapRect();
 	void MovingMap();
 	void PushRect();
-	void EraseRect(int i);
 
 	void CollisionMap();
 	void CollisionEnemy();

@@ -1,15 +1,11 @@
 #pragma once
 #include <vector>
-#include "enemy.h"
 #include "bug.h"
 #include "bubble_Dragon.h"
 
 class enemyManager
 {
 private:
-	
-	std::vector<enemy*>	m_vecEnemy;
-	std::vector<enemy*>::iterator	m_iter;
 
 	vector<bug*> m_VecBug;
 	vector<bug*>::iterator m_IterBug;
@@ -25,9 +21,6 @@ public:
 
 	void setBug();
 	void setBubleDragon();
-
-	inline vector<enemy*> getVecEnemy() { return m_vecEnemy; }
-	inline vector<enemy*>::iterator getIterEnemy() { return m_iter; }
 
 	inline vector<bug*> getVecBug() { return m_VecBug; }
 	inline vector<bug*>::iterator getIterBug() { return m_IterBug; }

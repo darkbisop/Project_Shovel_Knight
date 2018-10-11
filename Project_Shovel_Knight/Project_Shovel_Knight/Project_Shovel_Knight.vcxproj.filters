@@ -111,9 +111,6 @@
     <ClInclude Include="Player.h">
       <Filter>메인게임\플레이어</Filter>
     </ClInclude>
-    <ClInclude Include="enemy.h">
-      <Filter>메인게임\에너미</Filter>
-    </ClInclude>
     <ClInclude Include="enemyManager.h">
       <Filter>메인게임\에너미</Filter>
     </ClInclude>
@@ -256,9 +253,6 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>메인게임\플레이어</Filter>
-    </ClCompile>
-    <ClCompile Include="enemy.cpp">
-      <Filter>메인게임\에너미</Filter>
     </ClCompile>
     <ClCompile Include="enemyManager.cpp">
       <Filter>메인게임\에너미</Filter>

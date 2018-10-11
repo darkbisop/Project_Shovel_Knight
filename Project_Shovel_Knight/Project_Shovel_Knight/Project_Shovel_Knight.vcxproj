@@ -158,7 +158,6 @@
     <ClInclude Include="dirtBlock_Small.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
-    <ClInclude Include="enemy.h" />
     <ClInclude Include="enemyManager.h" />
     <ClInclude Include="Equipment.h" />
     <ClInclude Include="Flame_Wand.h" />
@@ -211,7 +210,6 @@
     <ClCompile Include="dirtBlock_Small.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
-    <ClCompile Include="enemy.cpp" />
     <ClCompile Include="enemyManager.cpp" />
     <ClCompile Include="Equipment.cpp" />
     <ClCompile Include="Flame_Wand.cpp" />
