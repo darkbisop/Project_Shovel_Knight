@@ -36,7 +36,7 @@ void PlayScene::render(HDC hdc)
 {
 	MAPMANAGER->render(hdc);
 	//DrawMap();
-	MAPMANAGER->CurrMap();
+	//MAPMANAGER->CurrMap();
 	//m_pEnemyMgr->render(_empty->getMemDC());
 }
 

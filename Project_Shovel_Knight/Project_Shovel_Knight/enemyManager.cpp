@@ -83,6 +83,13 @@ void enemyManager::setBubleDragon()
 		pBBD->init(2970, 528);
 		m_VecBBD.push_back(pBBD);
 	}
+
+	if (MAPMANAGER->getMapOn(18)) {
+		bubble_Dragon* pBBD;
+		pBBD = new bubble_Dragon;
+		pBBD->init(5374, 546);
+		m_VecBBD.push_back(pBBD);
+	}
 }
 
 enemyManager::enemyManager()

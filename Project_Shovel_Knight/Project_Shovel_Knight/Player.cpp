@@ -36,8 +36,7 @@ HRESULT Player::init()
 	jumpSpeed = 0;
 	gravity = 0;
 	Money = 10000;
-	CurrMap = 0;
-	
+
 	m_FrameCount = 0;
 	m_CurrFrameX = 0;
 	m_CurrFrameY = 0;
