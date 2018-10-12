@@ -5,7 +5,7 @@
 
 enum State
 {
-	P_APPEAR, P_IDLE, P_MOVE, P_ATTACK, P_DOWNATTACK, P_MAGIC, P_JUMP, P_LADDERUP, P_LADDERSTOP, P_DAMAGED
+	P_APPEAR, P_IDLE, P_MOVE, P_ATTACK, P_DOWNATTACK, P_MAGIC, P_JUMP, P_LADDERUP, P_LADDERSTOP, P_DAMAGED,
 };
 
 class Player : public singletonBase<Player>
@@ -50,6 +50,7 @@ private:
 	bool	m_invincibleTime;
 	bool	m_isDamaged;
 	bool	m_isAppear;
+	bool	m_isFalling;
 	
 	int		Money;
 	int		m_DamagedTime;

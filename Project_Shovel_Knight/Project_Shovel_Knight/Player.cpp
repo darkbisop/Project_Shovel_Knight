@@ -53,6 +53,7 @@ HRESULT Player::init()
 	m_invincibleTime = false;
 	m_isDamaged = false;
 	m_isAppear = false;
+	m_isFalling = false;
 
 	m_State = P_IDLE;
 	
@@ -78,6 +79,7 @@ void Player::update()
 	Animation();
 
 	if (m_isGround == false) {
+	
 		gravity += 0.3f;
 		m_fY -= jumpSpeed - gravity;
 	}
@@ -100,10 +102,10 @@ void Player::render(HDC hdc)
 	m_inventory->render(hdc);
 	m_Equipment->render(m_UI->getMemDC());
 
-	//char str[64];
-	////wsprintf(str, "money : %d", m_AppearTime);
-	//sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
-	//TextOut(hdc, m_fX - 50, m_fY - 20, str, strlen(str));
+	char str[64];
+	//wsprintf(str, "money : %d", m_isFalling);
+	sprintf_s(str, "x : %f", jumpSpeed);
+	TextOut(hdc, m_fX - 50, m_fY - 20, str, strlen(str));
 }
 
 void Player::KeyProcess()
@@ -144,7 +146,7 @@ void Player::KeyProcess()
 		}
 	}
 
-	if (jumpSpeed > 1.0f && KEYMANAGER->isStayKeyDown(VK_DOWN)) {
+	if (jumpSpeed > 1.0f && KEYMANAGER->isStayKeyDown(VK_DOWN) || gravity > 0.1f && KEYMANAGER->isStayKeyDown(VK_DOWN)) {
 		m_State = P_DOWNATTACK;
 		m_AttackDownRc = RectMake(m_fX + 7, m_fY + 20, 10, 10);
 	}
@@ -439,6 +441,7 @@ void Player::RectColliosion(RECT x)
 			/*if (!SOUNDMANAGER->isPlaySound("플레이어착지") && m_State == P_JUMP) {
 				SOUNDMANAGER->play("플레이어착지", 1.0f);
 			}*/
+			m_isFalling = false;
 			m_State = P_IDLE;
 			m_fY = x.top - 24;
 			gravity = 0;
@@ -483,7 +486,7 @@ void Player::DownATKCollision(RECT x)
 		if (m_AttackDownRc.bottom > x.top - 20) {
 			gravity = 0;
 			jumpSpeed += 0.1f;
-			if (jumpSpeed > 0.1f) {
+			if (jumpSpeed > 0) {
 				m_isGround = false;
 			}
 		}
@@ -496,13 +499,35 @@ void Player::DownATKtoOBJCollision(RECT x)
 	if (IntersectRect(&rc, &m_AttackDownRc, &x)) {
 		if (m_AttackDownRc.bottom > x.top - 20) {
 			gravity = 0;
-			jumpSpeed -= 0.1f;
-			if (jumpSpeed > 0.1f) {
-				m_isGround = false;
-				gravity += 1.6f;
+			jumpSpeed = 0;
+
+			if (jumpSpeed <= 0.0f) {
+				jumpSpeed += 5.1f;
 			}
+			else {
+				if (jumpSpeed > 0.1f) {
+					m_isGround = false;
+					gravity += 3.0f;
+				}
+			}
+
+			
 		}
 	}
+	
+	
+	/*if (m_isFalling && m_State == P_JUMP) {
+		if (IntersectRect(&rc, &m_AttackDownRc, &x)) {
+			if (m_AttackDownRc.bottom > x.top - 20) {
+				gravity = 0;
+				jumpSpeed -= 0.1f;
+				if (jumpSpeed > 0.1f) {
+					m_isGround = false;
+					gravity += 1.6f;
+				}
+			}
+		}
+	}*/
 }
 
 void Player::OBJCollision(RECT x)
@@ -538,7 +563,10 @@ void Player::OBJCollision(RECT x)
 		}
 	}
 
-	else m_isGround = false;
+	else {
+		m_isGround = false;
+		m_isFalling = true;
+	}
 }
 
 Player::Player() : Money(10000)

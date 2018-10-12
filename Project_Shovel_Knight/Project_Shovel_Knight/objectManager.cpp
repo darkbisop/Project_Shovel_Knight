@@ -295,6 +295,19 @@ void objectManager::setSmallBlock()
 			}
 		}
 	}
+
+
+	// 20번맵 오브젝트
+	if (MAPMANAGER->getMapOn(20)) {
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 6; j++) {
+				dirtBlock_Small* pSmall;
+				pSmall = new dirtBlock_Small;
+				pSmall->init(5824 + j * 16, 295 + i * 16);
+				v_SmallBlock.push_back(pSmall);
+			}
+		}
+	}
 }
 
 void objectManager::fire(float x, float y, float angle, float speed)
