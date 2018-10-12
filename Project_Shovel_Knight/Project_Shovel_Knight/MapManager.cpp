@@ -1512,7 +1512,7 @@ void MapManager::PushRect()
 		vRect.erase(vRect.begin(), vRect.begin() + 4);
 		//vLadderRect.erase(vLadderRect.begin(), vLadderRect.begin() + 12);
 
-		_RectInfo._rc = RectMake(6400, 199, 405, 15);
+		_RectInfo._rc = RectMake(6400, 199, 505, 15);
 		vRect.push_back(_RectInfo);
 	}
 }
