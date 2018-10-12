@@ -110,7 +110,10 @@ void objectManager::setDirtblock()
 	}
 
 	// 1번맵 오브젝트
-	if (MAPMANAGER->getMapNum() == 1) {
+	if (MAPMANAGER->getMapOn(1)) {
+
+		//v_dirtBlock.erase(v_dirtBlock.begin(), v_dirtBlock.begin() + 5);
+
 		dirtBlock* pdirt;
 		pdirt = new dirtBlock;
 		pdirt->init(1697, 758);
@@ -126,6 +129,9 @@ void objectManager::setDirtblock()
 
 	// 4번맵 오브젝트
 	if (MAPMANAGER->getMapOn(4)) {
+
+		//v_dirtBlock.erase(v_dirtBlock.begin(), v_dirtBlock.begin() + 3);
+
 		dirtBlock* pdirt;
 		pdirt = new dirtBlock;
 		pdirt->init(2448, 582);

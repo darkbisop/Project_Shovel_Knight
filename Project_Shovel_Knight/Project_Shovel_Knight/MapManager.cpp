@@ -80,29 +80,34 @@ void MapManager::render(HDC hdc)
 	}
 
 	CurrMap();
-	for (vIterLDRRC = vLadderRect.begin(); vIterLDRRC != vLadderRect.end(); vIterLDRRC++) {
+	/*for (vIterLDRRC = vLadderRect.begin(); vIterLDRRC != vLadderRect.end(); vIterLDRRC++) {
 		Rectangle(_empty->getMemDC(), vIterLDRRC->_rc.left, vIterLDRRC->_rc.top, vIterLDRRC->_rc.right, vIterLDRRC->_rc.bottom);
-	}
+	}*/
 	
 	m_pObjectMgr->render(_empty->getMemDC());
 	m_pEnemyMgr->render(_empty->getMemDC());
 	EFFECTMANAGER->render(_empty->getMemDC());
 	PLAYER->render(_empty->getMemDC());
 
-	for (vIterRC = vRect.begin(); vIterRC != vRect.end(); vIterRC++) {
+	/*for (vIterRC = vRect.begin(); vIterRC != vRect.end(); vIterRC++) {
 		Rectangle(_empty->getMemDC(), vIterRC->_rc.left, vIterRC->_rc.top, vIterRC->_rc.right, vIterRC->_rc.bottom);
-	}
+	}*/
 
 	_empty->render(hdc, 0, 0, m_Camera.x, m_Camera.y, WINSIZEX, WINSIZEY);
 
 	//TIMEMANAGER->render(hdc);
+	vector<dirtBlock*> vdirt = m_pObjectMgr->getVecDIRT();
+	vector<dirtBlock*>::iterator iterDIrt;
 
-	char str[64];
-	for (int i = 0; i < MAPMANAGER->vRect.size(); i++) {
-		wsprintf(str, "x : %d", vRect.size());
+	for (iterDIrt = vdirt.begin(); iterDIrt != vdirt.end(); iterDIrt++) {
+		char str[64];
+
+		wsprintf(str, "x : %d", vdirt.size());
 		//sprintf_s(str, "x : %f", vRect.size());
 		TextOut(hdc, 100, 30, str, strlen(str));
 	}
+
+	
 }
 
 void MapManager::CheckMapRect()
@@ -1024,6 +1029,7 @@ void MapManager::MovingMap()
 				CurrMapNum = 22;
 				MovingCamera[21] = false;
 				MapOn[21] = false;
+				PushRect();
 			}
 		}
 	}
@@ -1040,6 +1046,7 @@ void MapManager::MovingMap()
 				CurrMapNum = 23;
 				MovingCamera[22] = false;
 				MapOn[22] = false;
+				PushRect();
 			}
 		}
 	}
@@ -1128,7 +1135,7 @@ void MapManager::PushRect()
 		_RectInfo._rc = RectMake(2306, 615, 20, 132);
 		vRect.push_back(_RectInfo);
 		// »ç´Ù¸®
-		_RectLadder._rc = RectMake(2294, 614, 6, 132);
+		_RectLadder._rc = RectMake(2294, 613, 6, 132);
 		vLadderRect.push_back(_RectLadder);
 	}
 
@@ -1468,6 +1475,45 @@ void MapManager::PushRect()
 		_RectInfo._rc = RectMake(5750, 118, 50, 50);
 		vRect.push_back(_RectInfo);
 
+		_RectInfo._rc = RectMake(5815, 150, 50, 50);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(5875, 182, 50, 50);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(5940, 200, 220, 15);
+		vRect.push_back(_RectInfo);
+
+	}
+
+
+	// 22¹ø ¸Ê
+	if (CurrMapNum == 22) {
+
+		vRect.erase(vRect.begin(), vRect.begin() + 4);
+		//vLadderRect.erase(vLadderRect.begin(), vLadderRect.begin() + 12);
+
+		_RectInfo._rc = RectMake(5940, 200, 220, 15);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(6165, 135, 80, 50);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(6253, 167, 40, 50);
+		vRect.push_back(_RectInfo);
+
+		_RectInfo._rc = RectMake(6253, 199, 600, 15);
+		vRect.push_back(_RectInfo);
+	}
+
+	// 23¹ø ¸Ê
+	if (CurrMapNum == 23) {
+
+		vRect.erase(vRect.begin(), vRect.begin() + 4);
+		//vLadderRect.erase(vLadderRect.begin(), vLadderRect.begin() + 12);
+
+		_RectInfo._rc = RectMake(6400, 199, 405, 15);
+		vRect.push_back(_RectInfo);
 	}
 }
 
