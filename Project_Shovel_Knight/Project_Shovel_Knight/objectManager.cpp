@@ -36,10 +36,20 @@ void objectManager::release()
 		delete (*m_iter);
 	}
 
+	for (m_IterMoving = v_MovingFloor.begin(); m_IterMoving != v_MovingFloor.end(); m_IterMoving++) {
+		delete (*m_IterMoving);
+	}
+
+	for (m_IterBuble = v_BubleBuble.begin(); m_IterBuble != v_BubleBuble.end(); m_IterBuble++) {
+		delete (*m_IterBuble);
+	}
+
 	v_PileOfRocks.clear();
 	v_dirtBlock.clear();
 	v_SmallBlock.clear();
 	m_vecBubble.clear();
+	v_MovingFloor.clear();
+	v_BubleBuble.clear();
 }
 
 void objectManager::update()
@@ -56,6 +66,12 @@ void objectManager::update()
 	for (m_iter = m_vecBubble.begin(); m_iter != m_vecBubble.end(); m_iter++) {
 		(*m_iter)->update();
 	}
+	for (m_IterMoving = v_MovingFloor.begin(); m_IterMoving != v_MovingFloor.end(); m_IterMoving++) {
+		(*m_IterMoving)->update();
+	}
+	for (m_IterBuble = v_BubleBuble.begin(); m_IterBuble != v_BubleBuble.end(); m_IterBuble++) {
+		(*m_IterBuble)->update();
+	}
 }
 
 void objectManager::render(HDC hdc)
@@ -71,6 +87,12 @@ void objectManager::render(HDC hdc)
 	}
 	for (m_iter = m_vecBubble.begin(); m_iter != m_vecBubble.end(); m_iter++) {
 		(*m_iter)->render(hdc);
+	}
+	for (m_IterMoving = v_MovingFloor.begin(); m_IterMoving != v_MovingFloor.end(); m_IterMoving++) {
+		(*m_IterMoving)->render(hdc);
+	}
+	for (m_IterBuble = v_BubleBuble.begin(); m_IterBuble != v_BubleBuble.end(); m_IterBuble++) {
+		(*m_IterBuble)->render(hdc);
 	}
 }
 
@@ -130,8 +152,6 @@ void objectManager::setDirtblock()
 	// 4번맵 오브젝트
 	if (MAPMANAGER->getMapOn(4)) {
 
-		//v_dirtBlock.erase(v_dirtBlock.begin(), v_dirtBlock.begin() + 3);
-
 		dirtBlock* pdirt;
 		pdirt = new dirtBlock;
 		pdirt->init(2448, 582);
@@ -142,7 +162,6 @@ void objectManager::setDirtblock()
 		pdirt2->init(2750, 582);
 		v_dirtBlock.push_back(pdirt2);
 	}
-
 
 	// 7번맵 오브젝트
 	if (MAPMANAGER->getMapOn(7)) {
@@ -313,6 +332,52 @@ void objectManager::setSmallBlock()
 				v_SmallBlock.push_back(pSmall);
 			}
 		}
+	}
+}
+
+void objectManager::setMovingFloor()
+{
+	if (MAPMANAGER->getMapOn(3)) {
+		movingFloor* pMoving;
+		pMoving = new movingFloor;
+		pMoving->init(2190, 526, 160, 1, true, false, true, false, 1.5f);
+		v_MovingFloor.push_back(pMoving);
+	}
+
+	if (MAPMANAGER->getMapOn(4)) {
+		movingFloor* pMoving;
+		pMoving = new movingFloor;
+		pMoving->init(2608, 622, 160, 1, true, false, true, false, 1.5f);
+		v_MovingFloor.push_back(pMoving);
+	}
+
+	if (MAPMANAGER->getMapOn(13)) {
+		movingFloor* pMoving;
+		pMoving = new movingFloor;
+		pMoving->init(4073, 986, 1, 80, false, true, false, true, 1.0f);
+		v_MovingFloor.push_back(pMoving);
+
+		movingFloor* pMoving2;
+		pMoving2 = new movingFloor;
+		pMoving2->init(4220, 974, 160, 1, true, false, true, false, 1.5f);
+		v_MovingFloor.push_back(pMoving2);
+	}
+
+	if (MAPMANAGER->getMapOn(17)) {
+		movingFloor* pMoving;
+		pMoving = new movingFloor;
+		pMoving->init(5016, 570, 1, 140, false, true, false, true, 1.0f);
+		v_MovingFloor.push_back(pMoving);
+	}
+}
+
+void objectManager::setBubleBuble()
+{
+	if (MAPMANAGER->getMapOn(2)) {
+		BubleBuble* pbuble;
+		pbuble = new BubleBuble;
+		pbuble->init(2176, 800, 100, true);
+		v_BubleBuble.push_back(pbuble);
 	}
 }
 

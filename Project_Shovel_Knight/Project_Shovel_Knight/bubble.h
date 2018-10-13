@@ -20,8 +20,7 @@ protected:
 
 public:
 	virtual HRESULT init();
-	virtual HRESULT init(const char* szImageName, float speed,
-		float x, float y, float angle, float range);
+	virtual HRESULT init(const char* szImageName, float speed, float x, float y, float angle, float range);
 	virtual void release();
 	virtual void update();
 	virtual void render(HDC hdc);

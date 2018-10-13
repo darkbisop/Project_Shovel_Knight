@@ -556,7 +556,7 @@ void Player::OBJCollision(RECT x)
 				SOUNDMANAGER->play("플레이어착지", 1.0f);
 			}*/
 			m_State = P_IDLE;
-			m_fY = x.top - 24;
+			m_fY = x.top - 23;
 			gravity = 0;
 			jumpSpeed = 0;
 			m_isGround = true;

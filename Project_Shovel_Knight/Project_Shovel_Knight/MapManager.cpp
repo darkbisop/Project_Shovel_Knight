@@ -67,6 +67,29 @@ void MapManager::update(void)
 	CollisionEnemy();
 	CollisionBoss();
 	PLAYER->update();
+
+	if (KEYMANAGER->isOnceKeyDown('S')) {
+		sprintf_s(m_szText, "%f", PLAYER->getPlayerX());
+		sprintf_s(m_szText2, "%f", PLAYER->getPlayerY());
+		sprintf_s(m_szText3, "%d", m_Camera.x);
+		sprintf_s(m_szText4, "%d", m_Camera.y);
+		
+		vec.push_back(m_szText);
+		vec.push_back(m_szText2);
+		vec.push_back(m_szText3);
+		vec.push_back(m_szText4);
+		TXTDATA->txtSave("test.txt", vec);
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('L')) {
+		MapOn[3] = true;
+		CurrMapNum = 3;
+		PLAYER->SetPlayerX(atof(m_szText));
+		PLAYER->SetPlayerY(atof(m_szText2));
+		MAPMANAGER->setCameraX(atoi(m_szText3));
+		MAPMANAGER->setCameraY(atoi(m_szText4));
+		m_vecLoad = TXTDATA->txtLoad("test.txt");
+	}
 }
 
 void MapManager::render(HDC hdc)
@@ -89,9 +112,9 @@ void MapManager::render(HDC hdc)
 	EFFECTMANAGER->render(_empty->getMemDC());
 	PLAYER->render(_empty->getMemDC());
 
-	/*for (vIterRC = vRect.begin(); vIterRC != vRect.end(); vIterRC++) {
+	for (vIterRC = vRect.begin(); vIterRC != vRect.end(); vIterRC++) {
 		Rectangle(_empty->getMemDC(), vIterRC->_rc.left, vIterRC->_rc.top, vIterRC->_rc.right, vIterRC->_rc.bottom);
-	}*/
+	}
 
 	_empty->render(hdc, 0, 0, m_Camera.x, m_Camera.y, WINSIZEX, WINSIZEY);
 
@@ -577,6 +600,7 @@ void MapManager::MovingMap()
 				CurrMapNum = 2;
 				MovingCamera[1] = false;
 				MapOn[1] = false;
+				m_pObjectMgr->setBubleBuble();
 				PushRect();
 			}
 		}
@@ -613,27 +637,11 @@ void MapManager::MovingMap()
 				CurrMapNum = 3;
 				MovingCamera[2] = false;
 				m_pEnemyMgr->setBug();
+				m_pObjectMgr->setMovingFloor();
 				PushRect();
 			}
 		}
 	}
-
-	// ##### 2 <-- 3  #####
-	if (MovingCamera[2] == true && CurrMapNum == 3) {
-		if (m_Camera.y < 634) {
-			m_Camera.y += 5;
-			if (620 > PLAYER->getPlayerY()) {
-				PLAYER->SetPlayerY(PLAYER->getPlayerY() + 0.9f);
-			}
-			if (m_Camera.y >= 634) {
-				m_Camera.y = 634;
-				CurrMapNum = 2;
-				MovingCamera[2] = false;
-				MapOn[3] = false;
-			}
-		}
-	}
-
 
 	// ##### 3 --> 4  #####
 	if (MovingCamera[3] == true && CurrMapNum == 3) {
@@ -649,6 +657,7 @@ void MapManager::MovingMap()
 				MapOn[3] = false;
 				m_pObjectMgr->setDirtblock();
 				m_pObjectMgr->setSmallBlock();
+				m_pObjectMgr->setMovingFloor();
 				PushRect();
 			}
 		}
@@ -665,6 +674,7 @@ void MapManager::MovingMap()
 				MapOn[4] = false;
 				CurrMapNum = 3;
 				MovingCamera[3] = false;
+				PushRect();
 			}
 		}
 	}
@@ -827,8 +837,7 @@ void MapManager::MovingMap()
 				CurrMapNum = 13;
 				MovingCamera[12] = false;
 				MapOn[10] = false;
-				//m_pObjectMgr->setDirtblock();
-				//m_pObjectMgr->setSmallBlock();
+				m_pObjectMgr->setMovingFloor();
 				PushRect();
 			}
 		}
@@ -847,7 +856,7 @@ void MapManager::MovingMap()
 				CurrMapNum = 14;
 				MovingCamera[13] = false;
 				MapOn[13] = false;
-				//m_pObjectMgr->setDirtblock();
+				
 				//m_pObjectMgr->setSmallBlock();
 				PushRect();
 			}
@@ -939,6 +948,7 @@ void MapManager::MovingMap()
 				CurrMapNum = 17;
 				MovingCamera[16] = false;
 				MapOn[16] = false;
+				m_pObjectMgr->setMovingFloor();
 				PushRect();
 			}
 		}
@@ -1128,9 +1138,9 @@ void MapManager::PushRect()
 		_RectInfo._rc = RectMake(2225, 742, 80, 122);
 		vRect.push_back(_RectInfo);
 
-		// 비눗방울 대신 밟을 임시 렉트, 지울거임
-		_RectInfo._rc = RectMake(2126, 780, 50, 52);
-		vRect.push_back(_RectInfo);
+		//// 비눗방울 대신 밟을 임시 렉트, 지울거임
+		//_RectInfo._rc = RectMake(2126, 780, 50, 52);
+		//vRect.push_back(_RectInfo);
 
 		_RectInfo._rc = RectMake(2306, 615, 20, 132);
 		vRect.push_back(_RectInfo);
@@ -1144,7 +1154,7 @@ void MapManager::PushRect()
 	if (CurrMapNum == 3) {
 	
 		// 1+2번맵 삭제
-		vRect.erase(vRect.begin(), vRect.begin() + 11);
+		vRect.erase(vRect.begin(), vRect.begin() + 10);
 
 		_RectInfo._rc = RectMake(2019, 615, 270, 40);
 		vRect.push_back(_RectInfo);
@@ -1155,10 +1165,6 @@ void MapManager::PushRect()
 		_RectInfo._rc = RectMake(2050, 518, 29, 20);
 		vRect.push_back(_RectInfo);
 
-		// 임시렉트. 이녀석은 좌우로 움직여야 하는 녀석. 여기까지 삭제
-		_RectInfo._rc = RectMake(2170, 518, 45, 20);
-		vRect.push_back(_RectInfo);
-
 		_RectInfo._rc = RectMake(2305, 519, 143, 60);
 		vRect.push_back(_RectInfo);
 	}
@@ -1167,15 +1173,10 @@ void MapManager::PushRect()
 	// 4번맵 
 	if (CurrMapNum == 4) {
 
-		vRect.erase(vRect.begin(), vRect.begin() + 4);
-
 		_RectInfo._rc = RectMake(2305, 518, 143, 60);
 		vRect.push_back(_RectInfo);
 
 		_RectInfo._rc = RectMake(2447, 615, 80, 40);
-		vRect.push_back(_RectInfo);
-
-		_RectInfo._rc = RectMake(2547, 615, 100, 40);
 		vRect.push_back(_RectInfo);
 
 		_RectInfo._rc = RectMake(2688, 615, 430, 40);
@@ -1186,7 +1187,7 @@ void MapManager::PushRect()
 	// 5번맵
 	if (CurrMapNum == 5) {
 
-		vRect.erase(vRect.begin(), vRect.begin() + 4);
+		vRect.erase(vRect.begin(), vRect.begin() + 6);
 
 		_RectInfo._rc = RectMake(2688, 615, 430, 40);
 		vRect.push_back(_RectInfo);
@@ -1227,10 +1228,10 @@ void MapManager::PushRect()
 		_RectLadder._rc = RectMake(2965, 917, 6, 60);
 		vLadderRect.push_back(_RectLadder);
 
-		_RectInfo._rc = RectMake(2975, 919, 130, 15);
+		_RectInfo._rc = RectMake(2975, 919, 160, 15);
 		vRect.push_back(_RectInfo);
 
-		_RectInfo._rc = RectMake(3105, 919, 30, 130);
+		_RectInfo._rc = RectMake(3105, 949, 30, 100);
 		vRect.push_back(_RectInfo);
 
 		// 천장
@@ -1314,11 +1315,11 @@ void MapManager::PushRect()
 		_RectInfo._rc = RectMake(4000, 1046, 350, 15);
 		vRect.push_back(_RectInfo);
 
-		_RectInfo._rc = RectMake(4080, 976, 80, 15);
+		/*_RectInfo._rc = RectMake(4080, 976, 80, 15);
 		vRect.push_back(_RectInfo);
 
 		_RectInfo._rc = RectMake(4230, 966, 50, 15);
-		vRect.push_back(_RectInfo);
+		vRect.push_back(_RectInfo);*/
 
 		_RectInfo._rc = RectMake(4335, 967, 100, 15);
 		vRect.push_back(_RectInfo);
@@ -1349,7 +1350,7 @@ void MapManager::PushRect()
 	// 15번 맵
 	if (CurrMapNum == 15) {
 
-		vRect.erase(vRect.begin(), vRect.begin() + 9);
+		vRect.erase(vRect.begin(), vRect.begin() + 7);
 
 		_RectInfo._rc = RectMake(4023, 807, 290, 15);
 		vRect.push_back(_RectInfo);
@@ -1402,8 +1403,8 @@ void MapManager::PushRect()
 		_RectInfo._rc = RectMake(4875, 600, 65, 15);
 		vRect.push_back(_RectInfo);
 
-		_RectInfo._rc = RectMake(4945, 570, 65, 15);
-		vRect.push_back(_RectInfo);
+		/*_RectInfo._rc = RectMake(4945, 570, 65, 15);
+		vRect.push_back(_RectInfo);*/
 
 		_RectInfo._rc = RectMake(5065, 519, 180, 15);
 		vRect.push_back(_RectInfo);
@@ -1412,7 +1413,7 @@ void MapManager::PushRect()
 	// 18번 맵
 	if (CurrMapNum == 18) {
 
-		vRect.erase(vRect.begin(), vRect.begin() + 7);
+		vRect.erase(vRect.begin(), vRect.begin() + 6);
 
 		_RectInfo._rc = RectMake(5065, 519, 180, 15);
 		vRect.push_back(_RectInfo);
@@ -1510,9 +1511,9 @@ void MapManager::PushRect()
 	if (CurrMapNum == 23) {
 
 		vRect.erase(vRect.begin(), vRect.begin() + 4);
-		//vLadderRect.erase(vLadderRect.begin(), vLadderRect.begin() + 12);
+		vLadderRect.erase(vLadderRect.begin(), vLadderRect.begin() + 12);
 
-		_RectInfo._rc = RectMake(6400, 199, 505, 15);
+		_RectInfo._rc = RectMake(6300, 199, 505, 15);
 		vRect.push_back(_RectInfo);
 	}
 }
@@ -1605,23 +1606,21 @@ void MapManager::CollisionBoss()
 		for (iterBuble = vbuble.begin(); iterBuble != vbuble.end();) {
 			RECT rc;
 			if ((*iterBuble)->getIsFire() == true && IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterBuble)->getRECT())) {
-				PLAYER->DownATKCollision((*iterBuble)->getRECT());
+				PLAYER->DownATKtoOBJCollision((*iterBuble)->getRECT());
 				((*iterBuble)->setIsFire(false));
 				iterBuble = vbuble.erase(iterBuble);
 			}
 
-			else iterBuble++;
-		}
-
-	/*	for (iterBuble = vbuble.begin(); iterBuble != vbuble.end();) {
-			RECT rc;
-			if (PLAYER->getInvincibleTime() == false) {
+			else if (PLAYER->getInvincibleTime() == false) {
 				if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &(*iterBuble)->getRECT())) {
 					PLAYER->setIsDamaged(true);
 					PLAYER->setInvincibleTime(true);
+					iterBuble = vbuble.erase(iterBuble);
 				}
 			}
-		}*/
+
+			else iterBuble++;
+		}
 	}
 }
 
@@ -1690,6 +1689,54 @@ void MapManager::CollisionObject()
 
 	for (iterSmall = vSmall.begin(); iterSmall != vSmall.end(); iterSmall++) {
 		PLAYER->OBJCollision((*iterSmall)->getRect());
+	}
+
+
+
+	vector<movingFloor*> vMoving = m_pObjectMgr->getVecMoving();
+	vector<movingFloor*>::iterator iterMoving;
+
+	for (iterMoving = vMoving.begin(); iterMoving != vMoving.end(); iterMoving++) {
+		RECT rc;
+
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &(*iterMoving)->getRect())) {
+			
+			if ((*iterMoving)->getIsRight() == true && (*iterMoving)->getMoveRight() == true && 
+				(*iterMoving)->getIsUp() == false && (*iterMoving)->getMoveUp() == false) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 1.5f);
+			}
+			else if ((*iterMoving)->getIsRight() == false && (*iterMoving)->getMoveRight() == true &&
+				(*iterMoving)->getIsUp() == false && (*iterMoving)->getMoveUp() == false) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() - 1.5f);
+			}
+
+			if ((*iterMoving)->getIsUp() == true && (*iterMoving)->getMoveUp() == true &&
+				(*iterMoving)->getIsRight() == false && (*iterMoving)->getMoveRight() == false) {
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 1.0f);
+			}
+			else if ((*iterMoving)->getIsUp() == false && (*iterMoving)->getMoveUp() == true &&
+				(*iterMoving)->getIsRight() == false && (*iterMoving)->getMoveRight() == false) {
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() + 6.0f);
+			}
+		}
+
+		PLAYER->OBJCollision((*iterMoving)->getRect());
+	}
+
+
+	vector<BubleBuble*> vBBB = m_pObjectMgr->getVecBB();
+	vector<BubleBuble*>::iterator iterBBB;
+
+	for (iterBBB = vBBB.begin(); iterBBB != vBBB.end();) {
+		RECT rc;
+
+		if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterBBB)->getRect())) {
+			PLAYER->DownATKtoOBJCollision((*iterBBB)->getRect());
+			(*iterBBB)->setIsAlive(false);
+			iterBBB = vBBB.erase(iterBBB);
+		}
+
+		else iterBBB++;
 	}
 }
 

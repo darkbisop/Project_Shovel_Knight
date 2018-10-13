@@ -3,6 +3,8 @@
 #include "dirtBlock.h"
 #include "dirtBlock_Small.h"
 #include "bubble.h"
+#include "movingFloor.h"
+#include "BubleBuble.h"
 
 class objectManager
 {
@@ -20,6 +22,12 @@ private:
 	vector<bubble*>		m_vecBubble;
 	vector<bubble*>::iterator	m_iter;
 
+	vector<movingFloor*> v_MovingFloor;
+	vector<movingFloor*>::iterator m_IterMoving;
+
+	vector<BubleBuble*> v_BubleBuble;
+	vector<BubleBuble*>::iterator m_IterBuble;
+
 	const char* m_szImageName;
 	float		m_fRange;
 	int			m_nMaxCount;
@@ -35,6 +43,8 @@ public:
 	void setPileOfRocks();
 	void setDirtblock();
 	void setSmallBlock();
+	void setMovingFloor();
+	void setBubleBuble();
 
 	inline vector<PileOfRocks*> getVecPOR() { return v_PileOfRocks; }
 	inline vector<PileOfRocks*>::iterator getIterPOR() { return m_IterPOR; }
@@ -47,6 +57,12 @@ public:
 
 	inline vector<bubble*> getVecBubble() { return m_vecBubble; }
 	inline vector<bubble*>::iterator getIterBuble() { return m_iter; }
+
+	inline vector<movingFloor*> getVecMoving() { return v_MovingFloor; }
+	inline vector<movingFloor*>::iterator getIterMoving() { return m_IterMoving; }
+
+	inline vector<BubleBuble*> getVecBB() { return v_BubleBuble; }
+	inline vector<BubleBuble*>::iterator getIterBB() { return m_IterBuble; }
 
 	void fire(float x, float y, float angle, float speed);
 	void deleteBubble();

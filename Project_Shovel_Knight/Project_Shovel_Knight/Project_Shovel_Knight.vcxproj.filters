@@ -85,6 +85,9 @@
     <Filter Include="메인게임\에너미\보스">
       <UniqueIdentifier>{1b1e5641-9de0-4890-8e57-f0ecbfc8cd0e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="메인게임\오브젝트\오브젝트들">
+      <UniqueIdentifier>{a8dfd55a-93ae-48ed-82ff-abd5e117a7e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -219,26 +222,32 @@
     <ClInclude Include="bug.h">
       <Filter>메인게임\에너미</Filter>
     </ClInclude>
-    <ClInclude Include="PileOfRocks.h">
-      <Filter>메인게임\오브젝트</Filter>
-    </ClInclude>
     <ClInclude Include="objectManager.h">
       <Filter>메인게임\오브젝트</Filter>
     </ClInclude>
     <ClInclude Include="obejectBasicInfo.h">
       <Filter>메인게임\오브젝트</Filter>
     </ClInclude>
+    <ClInclude Include="bubble_Dragon.h">
+      <Filter>메인게임\에너미\보스</Filter>
+    </ClInclude>
     <ClInclude Include="dirtBlock.h">
-      <Filter>메인게임\오브젝트</Filter>
+      <Filter>메인게임\오브젝트\오브젝트들</Filter>
     </ClInclude>
     <ClInclude Include="dirtBlock_Small.h">
-      <Filter>메인게임\오브젝트</Filter>
+      <Filter>메인게임\오브젝트\오브젝트들</Filter>
+    </ClInclude>
+    <ClInclude Include="movingFloor.h">
+      <Filter>메인게임\오브젝트\오브젝트들</Filter>
+    </ClInclude>
+    <ClInclude Include="PileOfRocks.h">
+      <Filter>메인게임\오브젝트\오브젝트들</Filter>
     </ClInclude>
     <ClInclude Include="bubble.h">
       <Filter>메인게임\에너미\보스</Filter>
     </ClInclude>
-    <ClInclude Include="bubble_Dragon.h">
-      <Filter>메인게임\에너미\보스</Filter>
+    <ClInclude Include="BubleBuble.h">
+      <Filter>메인게임\오브젝트\오브젝트들</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -359,26 +368,32 @@
     <ClCompile Include="bug.cpp">
       <Filter>메인게임\에너미</Filter>
     </ClCompile>
-    <ClCompile Include="PileOfRocks.cpp">
-      <Filter>메인게임\오브젝트</Filter>
-    </ClCompile>
     <ClCompile Include="objectManager.cpp">
       <Filter>메인게임\오브젝트</Filter>
     </ClCompile>
     <ClCompile Include="obejectBasicInfo.cpp">
       <Filter>메인게임\오브젝트</Filter>
     </ClCompile>
+    <ClCompile Include="bubble_Dragon.cpp">
+      <Filter>메인게임\에너미\보스</Filter>
+    </ClCompile>
     <ClCompile Include="dirtBlock.cpp">
-      <Filter>메인게임\오브젝트</Filter>
+      <Filter>메인게임\오브젝트\오브젝트들</Filter>
     </ClCompile>
     <ClCompile Include="dirtBlock_Small.cpp">
-      <Filter>메인게임\오브젝트</Filter>
+      <Filter>메인게임\오브젝트\오브젝트들</Filter>
+    </ClCompile>
+    <ClCompile Include="movingFloor.cpp">
+      <Filter>메인게임\오브젝트\오브젝트들</Filter>
+    </ClCompile>
+    <ClCompile Include="PileOfRocks.cpp">
+      <Filter>메인게임\오브젝트\오브젝트들</Filter>
     </ClCompile>
     <ClCompile Include="bubble.cpp">
       <Filter>메인게임\에너미\보스</Filter>
     </ClCompile>
-    <ClCompile Include="bubble_Dragon.cpp">
-      <Filter>메인게임\에너미\보스</Filter>
+    <ClCompile Include="BubleBuble.cpp">
+      <Filter>메인게임\오브젝트\오브젝트들</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

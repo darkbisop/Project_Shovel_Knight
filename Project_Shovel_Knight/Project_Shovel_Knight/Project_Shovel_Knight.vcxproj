@@ -151,6 +151,7 @@
     <ClInclude Include="animation.h" />
     <ClInclude Include="bubble.h" />
     <ClInclude Include="bubble_Dragon.h" />
+    <ClInclude Include="BubleBuble.h" />
     <ClInclude Include="bug.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="commonMacroFunction.h" />
@@ -171,6 +172,7 @@
     <ClInclude Include="MapImage.h" />
     <ClInclude Include="missile.h" />
     <ClInclude Include="missileManager.h" />
+    <ClInclude Include="movingFloor.h" />
     <ClInclude Include="obejectBasicInfo.h" />
     <ClInclude Include="objectManager.h" />
     <ClInclude Include="PileOfRocks.h" />
@@ -204,6 +206,7 @@
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="bubble.cpp" />
     <ClCompile Include="bubble_Dragon.cpp" />
+    <ClCompile Include="BubleBuble.cpp" />
     <ClCompile Include="bug.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="dirtBlock.cpp" />
@@ -223,6 +226,7 @@
     <ClCompile Include="MapImage.cpp" />
     <ClCompile Include="missile.cpp" />
     <ClCompile Include="missileManager.cpp" />
+    <ClCompile Include="movingFloor.cpp" />
     <ClCompile Include="obejectBasicInfo.cpp" />
     <ClCompile Include="objectManager.cpp" />
     <ClCompile Include="PileOfRocks.cpp" />

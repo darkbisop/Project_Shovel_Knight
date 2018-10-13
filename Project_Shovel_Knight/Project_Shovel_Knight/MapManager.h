@@ -50,6 +50,12 @@ private:
 	bool	MovingCamera[24];
 	bool	MapOn[24];
 
+	char m_szText[64];
+	char m_szText2[64];
+	char m_szText3[64];
+	char m_szText4[64];
+	vector<string> vec;
+	vector<std::string> m_vecLoad;
 public:
 
 	HRESULT init(void);
@@ -79,6 +85,9 @@ public:
 
 	inline bool getMapNum() { return CurrMapNum; }
 	inline bool getMapOn(int x) { return MapOn[x]; }
+
+	inline void setCameraX(int a) { m_Camera.x = a; }
+	inline void setCameraY(int a) { m_Camera.y = a; }
 
 	MapManager();
 	~MapManager();
