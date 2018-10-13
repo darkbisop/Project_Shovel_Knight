@@ -28,7 +28,7 @@ HRESULT mainGame::init()
 	m_PlayScene = new PlayScene;
 	SCENEMANAGER->addScene("PlayScene", m_PlayScene);
 
-	SCENEMANAGER->changeScene("ShopScene");
+	SCENEMANAGER->changeScene("PlayScene");
 
 	//m_ScreenAni->start();
 

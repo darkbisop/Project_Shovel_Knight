@@ -2,8 +2,7 @@
 #include "singletonBase.h"
 #include "enemyManager.h"
 #include "objectManager.h"
-
-class effectManager;
+#include "Shop.h"
 
 struct tagMapInfo
 {
@@ -29,10 +28,12 @@ private:
 	vector<MapLadder> vLadderRect;
 	vector<MapLadder>::iterator vIterLDRRC;
 
-	enemyManager * m_pEnemyMgr;
+	enemyManager *	m_pEnemyMgr;
 	effectManager*	m_pEffectMgr;
-	objectManager* m_pObjectMgr;
-	MapImage* m_pMapImage;
+	objectManager*	m_pObjectMgr;
+	MapImage*		m_pMapImage;
+	Shop*			m_Shop;
+
 	POINT	m_Camera;
 
 	image*	_empty;
@@ -42,18 +43,27 @@ private:
 	image*	Back_2_Ground;
 	image*	Back_Ground;
 	image*  m_pImg;
+	image*  m_shopBg;
+	image*	m_Screen;
+	image*	m_ScreenRvs;
 	
-	RECT	CheckChangeMapRect[24];
+	RECT	CheckChangeMapRect[25];
 
 	int		CurrMapNum;
+	int		m_FrameCount;
+	int		m_CurrFrameX;
+	int		m_ReverseFrameX;
 	
 	bool	MovingCamera[24];
 	bool	MapOn[24];
+	bool	ScreenSFXOn;
+	bool	ScreenSFXREV;
 
 	char m_szText[64];
 	char m_szText2[64];
 	char m_szText3[64];
 	char m_szText4[64];
+
 	vector<string> vec;
 	vector<std::string> m_vecLoad;
 public:
@@ -76,6 +86,7 @@ public:
 	void CollisionEnemy();
 	void CollisionBoss();
 	void CollisionObject();
+	void ScreenEffect();
 
 	RECT getMapVectorRc(int i) { return vRect.at(i)._rc; }
 	int getMapVectorRcSize() { return vRect.size(); }

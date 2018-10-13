@@ -4,6 +4,7 @@
 #include "enemyManager.h"
 #include "effectManager.h"
 #include "objectManager.h"
+#include "animation.h"
 
 HRESULT MapManager::init(void)
 {
@@ -14,6 +15,9 @@ HRESULT MapManager::init(void)
 	Back_Ground = IMAGEMANAGER->addImage("Back_Ground", "image/BackGround/Back_Ground.bmp", 2500, 199, true, RGB(255, 0, 255));
 	m_pImg = IMAGEMANAGER->addImage("bubble", "image/Enemy/bubble_dragon/bubble_move.bmp", 108, 27, 4, 1, true, RGB(255, 0, 255));
 	m_SkyBg = IMAGEMANAGER->addImage("SkyBG", "image/BackGround/Sky.bmp", 399, 208, true, RGB(255, 0, 255));
+	m_shopBg = IMAGEMANAGER->addImage("ShopBG", "image/BackGround/Shop.bmp", 400, 208, true, RGB(255, 0, 255));
+	m_Screen = IMAGEMANAGER->addImage("ScreenSFX", "image/effect/ScreenSFX.bmp", 3200, 238, 8, 1, true, RGB(255, 0, 255));
+	m_ScreenRvs = IMAGEMANAGER->addImage("ScreenSFXRR", "image/effect/ScreenSFX.bmp", 3200, 238, 8, 1, true, RGB(255, 0, 255));
 
 	m_pMapImage = new MapImage;
 	m_pMapImage->init();
@@ -27,12 +31,14 @@ HRESULT MapManager::init(void)
 	m_pObjectMgr->setPileOfRocks();
 	m_pObjectMgr->setDirtblock();
 
-	EFFECTMANAGER->addEffect("enemy_effect", "image/effect/enemy_effect.bmp", 120, 16, 24, 16, 10, 10);
-
 	PLAYER->init();
 
-	MapOn[0] = true;
-	
+	m_Shop = new Shop;
+	m_Shop->init();
+	m_Shop->setInventoryLink(PLAYER->getInventory());
+
+	EFFECTMANAGER->addEffect("enemy_effect", "image/effect/enemy_effect.bmp", 120, 16, 24, 16, 10, 10);
+
 	for (int i = 0; i < 24; i++) {
 		MovingCamera[i] = false;
 	}
@@ -41,7 +47,10 @@ HRESULT MapManager::init(void)
 		MapOn[i] = false;
 	}
 
-	CurrMapNum = 0;
+	CurrMapNum = 100;
+	MapOn[11] = true;
+	ScreenSFXOn = false;
+	m_ReverseFrameX = 8;
 
 	CheckMapRect();
 	PushRect();
@@ -53,12 +62,17 @@ void MapManager::release(void)
 {
 	SAFE_DELETE(m_pEnemyMgr);
 	SAFE_DELETE(m_pObjectMgr);
+
+	m_Shop->release();
+	SAFE_DELETE(m_Shop);
 }
 
 void MapManager::update(void)
 {
+	m_Shop->update();
 	CollisionCheck_ChangeMapRect();
 	MovingMap();
+	ScreenEffect();
 	m_pEnemyMgr->update();
 	m_pObjectMgr->update();
 	EFFECTMANAGER->update();
@@ -67,7 +81,7 @@ void MapManager::update(void)
 	CollisionEnemy();
 	CollisionBoss();
 	PLAYER->update();
-
+	
 	if (KEYMANAGER->isOnceKeyDown('S')) {
 		sprintf_s(m_szText, "%f", PLAYER->getPlayerX());
 		sprintf_s(m_szText2, "%f", PLAYER->getPlayerY());
@@ -94,6 +108,7 @@ void MapManager::update(void)
 
 void MapManager::render(HDC hdc)
 {
+
 	m_SkyBg->render(_empty->getMemDC(), (int)m_Camera.x , (int)m_Camera.y);
 	if (CurrMapNum == 0 || CurrMapNum == 1) {
 		BackGround_Castle->loopRender(_empty->getMemDC(), &RectMake(0, 634, 2500, 176), -(int)m_Camera.x * 0.8f, 0);
@@ -101,36 +116,38 @@ void MapManager::render(HDC hdc)
 		Back_2_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 648, 2500, 176), -(int)m_Camera.x * 0.5f, 0);
 		Back_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 666, 2500, 199), -(int)m_Camera.x * 0.3f, 0);
 	}
+	
+	if (MapOn[11] == true) m_shopBg->render(_empty->getMemDC(), 0, 12);
+
+	Rectangle(_empty->getMemDC(), CheckChangeMapRect[24].left, CheckChangeMapRect[24].top
+		, CheckChangeMapRect[24].right, CheckChangeMapRect[24].bottom);
 
 	CurrMap();
+
 	/*for (vIterLDRRC = vLadderRect.begin(); vIterLDRRC != vLadderRect.end(); vIterLDRRC++) {
 		Rectangle(_empty->getMemDC(), vIterLDRRC->_rc.left, vIterLDRRC->_rc.top, vIterLDRRC->_rc.right, vIterLDRRC->_rc.bottom);
 	}*/
-	
+
 	m_pObjectMgr->render(_empty->getMemDC());
 	m_pEnemyMgr->render(_empty->getMemDC());
 	EFFECTMANAGER->render(_empty->getMemDC());
 	PLAYER->render(_empty->getMemDC());
+	m_Shop->render(_empty->getMemDC());
+	if (ScreenSFXOn == true) m_Screen->frameRender(_empty->getMemDC(), m_Camera.x, m_Camera.y, m_CurrFrameX, 0);
+	if (ScreenSFXREV == true) m_Screen->frameRender(_empty->getMemDC(), m_Camera.x, m_Camera.y, m_CurrFrameX, 0);
 
-	for (vIterRC = vRect.begin(); vIterRC != vRect.end(); vIterRC++) {
+	/*for (vIterRC = vRect.begin(); vIterRC != vRect.end(); vIterRC++) {
 		Rectangle(_empty->getMemDC(), vIterRC->_rc.left, vIterRC->_rc.top, vIterRC->_rc.right, vIterRC->_rc.bottom);
-	}
+	}*/
 
 	_empty->render(hdc, 0, 0, m_Camera.x, m_Camera.y, WINSIZEX, WINSIZEY);
 
 	//TIMEMANAGER->render(hdc);
-	vector<dirtBlock*> vdirt = m_pObjectMgr->getVecDIRT();
-	vector<dirtBlock*>::iterator iterDIrt;
-
-	for (iterDIrt = vdirt.begin(); iterDIrt != vdirt.end(); iterDIrt++) {
-		char str[64];
-
-		wsprintf(str, "x : %d", vdirt.size());
-		//sprintf_s(str, "x : %f", vRect.size());
-		TextOut(hdc, 100, 30, str, strlen(str));
-	}
-
 	
+	char str[64];
+	//wsprintf(str, "x : %d, y : %d", m_Camera.x, m_Camera.y);
+	sprintf_s(str, "x : %f, y : %f", PLAYER->getPlayerX(), PLAYER->getPlayerY());
+	TextOut(hdc, 100, 30, str, strlen(str));
 }
 
 void MapManager::CheckMapRect()
@@ -157,6 +174,7 @@ void MapManager::CheckMapRect()
 	CheckChangeMapRect[21] = RectMake(5724, 230, 50, 3);
 	CheckChangeMapRect[22] = RectMake(6000, 160, 3, 50);
 	CheckChangeMapRect[23] = RectMake(6398, 160, 3, 50);
+	CheckChangeMapRect[24] = RectMake(394, 160, 3, 50);
 }
 
 void MapManager::CurrMap()
@@ -235,6 +253,13 @@ void MapManager::CurrMap()
 
 void MapManager::CollisionCheck_ChangeMapRect()
 {
+	if (CurrMapNum == 100) {
+		RECT rc;
+		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[24])) {
+			ScreenSFXOn = true;
+		}
+	}
+
 	// ##### 0 --> 1  #####
 	if (CurrMapNum == 0) {
 		RECT rc;
@@ -1064,6 +1089,10 @@ void MapManager::MovingMap()
 
 void MapManager::PushRect()
 {
+	if (CurrMapNum == 100) {
+		_RectInfo._rc = RectMake(0, 207, 450, 15);
+		vRect.push_back(_RectInfo);
+	}
 	// 0¹ø¸Ê
 	if (CurrMapNum == 0) {
 		_RectInfo._rc = RectMake(-30, 823, 1470, 50);
@@ -1737,6 +1766,43 @@ void MapManager::CollisionObject()
 		}
 
 		else iterBBB++;
+	}
+}
+
+void MapManager::ScreenEffect()
+{
+	if (ScreenSFXOn == true) {
+		m_FrameCount++;
+		if (m_FrameCount % 7 == 0) {
+			m_CurrFrameX++;
+			m_Screen->setFrameX(m_CurrFrameX);
+
+			if (m_CurrFrameX >= 8) {
+				m_CurrFrameX = 8;
+				MapOn[0] = true;
+				MapOn[11] == false;
+				ScreenSFXOn = false;
+				CurrMapNum = 0;
+				PLAYER->SetPlayerX(-35);
+				PLAYER->SetPlayerY(780);
+				PushRect();
+				ScreenSFXREV = true;
+			}
+		}
+	}
+
+	if (ScreenSFXREV && PLAYER->getPlayerY() >= 789) {
+		m_FrameCount++;
+		if (m_FrameCount % 7 == 0) {
+			m_CurrFrameX--;
+			m_Screen->setFrameX(m_CurrFrameX);
+
+			if (m_CurrFrameX <= 0) {
+				m_CurrFrameX = 0;
+				ScreenSFXREV = false;
+				PLAYER->setAppear(true);
+			}
+		}
 	}
 }
 

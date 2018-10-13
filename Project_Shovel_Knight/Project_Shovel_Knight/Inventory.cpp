@@ -118,6 +118,7 @@ void Inventory::buyItem(Item * item)
 {
 	for (int y = 0; y < INVENTORY_Y; y++) {
 		for (int x = 0; x < INVENTORY_X; x++) {
+
 			if (m_Inventory[y][x].m_pItem == NULL) {
 				m_Inventory[y][x].m_pItem = item;
 				PLAYER->setMoney(PLAYER->getMoney() - m_Inventory[y][x].m_pItem->getCost());

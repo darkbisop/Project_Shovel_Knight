@@ -30,8 +30,10 @@ HRESULT Player::init()
 	m_inventory->SetEquipmentLink(m_Equipment);
 	m_Equipment->setInventoryLink(m_inventory);
 
-	m_fX = -35;
-	m_fY = 790;
+	m_fX = 192;
+	m_fY = 183;
+	/*m_fX = -35;
+	m_fY = 790;*/
 	m_fSpeed = 2.0f;
 	jumpSpeed = 0;
 	gravity = 0;
@@ -514,20 +516,6 @@ void Player::DownATKtoOBJCollision(RECT x)
 			
 		}
 	}
-	
-	
-	/*if (m_isFalling && m_State == P_JUMP) {
-		if (IntersectRect(&rc, &m_AttackDownRc, &x)) {
-			if (m_AttackDownRc.bottom > x.top - 20) {
-				gravity = 0;
-				jumpSpeed -= 0.1f;
-				if (jumpSpeed > 0.1f) {
-					m_isGround = false;
-					gravity += 1.6f;
-				}
-			}
-		}
-	}*/
 }
 
 void Player::OBJCollision(RECT x)
