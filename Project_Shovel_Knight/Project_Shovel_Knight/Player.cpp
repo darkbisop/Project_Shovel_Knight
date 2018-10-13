@@ -141,7 +141,7 @@ void Player::KeyProcess()
 
 	if (KEYMANAGER->isOnceKeyDown('C') && gravity <= 0) {
 		SOUNDMANAGER->play("플레이어점프", 1.0f);
-		jumpSpeed += 7.0f;
+		jumpSpeed += 6.5f;
 		if (jumpSpeed > 0.1f) {
 			m_State = P_JUMP;
 			m_isGround = false;

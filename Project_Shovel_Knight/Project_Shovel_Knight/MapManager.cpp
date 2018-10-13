@@ -38,6 +38,7 @@ HRESULT MapManager::init(void)
 	m_Shop->setInventoryLink(PLAYER->getInventory());
 
 	EFFECTMANAGER->addEffect("enemy_effect", "image/effect/enemy_effect.bmp", 120, 16, 24, 16, 10, 10);
+	SOUNDMANAGER->addSound("마을", "Sound/Village.mp3", false, false);
 
 	for (int i = 0; i < 24; i++) {
 		MovingCamera[i] = false;
@@ -54,6 +55,7 @@ HRESULT MapManager::init(void)
 
 	CheckMapRect();
 	PushRect();
+	SOUNDMANAGER->play("마을", 0.9f);
 
 	return S_OK;
 }
@@ -1779,6 +1781,7 @@ void MapManager::ScreenEffect()
 
 			if (m_CurrFrameX >= 8) {
 				m_CurrFrameX = 8;
+				SOUNDMANAGER->stop("마을");
 				MapOn[0] = true;
 				MapOn[11] == false;
 				ScreenSFXOn = false;

@@ -15,7 +15,6 @@ HRESULT dirtBlock::init(float x, float y)
 	_isAlive = true;
 	m_crash = false;
 
-	_Count = 0;
 	RanD = 0;
 	RandGems = 0;
 	
@@ -102,12 +101,16 @@ void dirtBlock::animation()
 void dirtBlock::DigOut()
 {
 	if (_isAlive == true) {
-		m_Drop.x = m_fX + 17;
-		m_Drop.y = m_fY + 2;
-		m_Drop.gravity = 0;
-		m_Drop.angle = 90 * 3.14 / 180;
-		m_Drop.speed = 3.0f;
-		v_VecJewel.push_back(m_Drop);
+		RanD = RANDOM->getFromIntTo(1, 10);
+
+		if (RanD == 1) {
+			m_Drop.x = m_fX + 17;
+			m_Drop.y = m_fY + 2;
+			m_Drop.gravity = 0;
+			m_Drop.angle = 90 * 3.14 / 180;
+			m_Drop.speed = 3.0f;
+			v_VecJewel.push_back(m_Drop);
+		}
 	}
 }
 
