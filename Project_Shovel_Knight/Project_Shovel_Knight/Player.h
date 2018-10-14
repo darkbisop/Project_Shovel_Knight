@@ -5,7 +5,7 @@
 
 enum State
 {
-	P_APPEAR, P_IDLE, P_MOVE, P_ATTACK, P_DOWNATTACK, P_MAGIC, P_JUMP, P_LADDERUP, P_LADDERSTOP, P_DAMAGED,
+	P_APPEAR, P_IDLE, P_MOVE, P_ATTACK, P_DOWNATTACK, P_MAGIC, P_JUMP, P_LADDERUP, P_LADDERSTOP, P_DAMAGED, P_DEAD
 };
 
 class Player : public singletonBase<Player>
@@ -30,12 +30,19 @@ private:
 	image*	m_LadderUpImg;
 	image*	m_DamagedImg;
 	image*	m_AppearImg;
+	image*	m_DeathImg;
+
+	image*	m_Number_1;
+	image*	m_Number_2;
+	image*	m_Number_3;
+	image*	m_Number_4;
 
 	int		m_CurrFrameX;
 	int		m_CurrFrameY;
 	int		m_FrameCount;
 	int		m_AtkFrameCount;
 	int		m_AttackCount;
+	int		m_DEADCount;
 
 	float	m_fSpeed;
 	float	m_fX;
@@ -51,8 +58,13 @@ private:
 	bool	m_isDamaged;
 	bool	m_isAppear;
 	bool	m_isFalling;
+	bool	m_isDead;
+
+	bool	 temp;
+	bool	m_isCheck;
 	
 	int		Money;
+	int		Hp;
 	int		m_DamagedTime;
 	int		m_AppearTime;
 	int		m_invincibleCount;
@@ -70,6 +82,8 @@ public:
 	void ShovelRender(HDC hdc);
 	void RectColliosion(RECT x);
 	void LadderColliosion(RECT x);
+	void SpikeColliosion(RECT x);
+	void SaveColliosion(RECT x);
 	void DownATKCollision(RECT x);
 	void DownATKtoOBJCollision(RECT x);
 	void OBJCollision(RECT x);
@@ -86,6 +100,9 @@ public:
 
 	inline int getMoney() { return Money; }
 	inline void setMoney(int a) { Money = a; }
+
+	inline int getHP() { return Hp; }
+	inline void setHp(int a) { Hp = a; }
 
 	inline void setAppear(bool a) { m_isAppear = a; }
 

@@ -18,6 +18,7 @@ HRESULT MapManager::init(void)
 	m_shopBg = IMAGEMANAGER->addImage("ShopBG", "image/BackGround/Shop.bmp", 400, 208, true, RGB(255, 0, 255));
 	m_Screen = IMAGEMANAGER->addImage("ScreenSFX", "image/effect/ScreenSFX.bmp", 3200, 238, 8, 1, true, RGB(255, 0, 255));
 	m_ScreenRvs = IMAGEMANAGER->addImage("ScreenSFXRR", "image/effect/ScreenSFX.bmp", 3200, 238, 8, 1, true, RGB(255, 0, 255));
+	m_SaveCheckPoint = IMAGEMANAGER->addImage("Check", "image/Object/Check.bmp", 231, 48, 11, 1, true, RGB(255, 0, 255));
 
 	m_pMapImage = new MapImage;
 	m_pMapImage->init();
@@ -51,7 +52,10 @@ HRESULT MapManager::init(void)
 	CurrMapNum = 100;
 	MapOn[11] = true;
 	ScreenSFXOn = false;
+	ScreenSFXREV2 = false;
 	m_ReverseFrameX = 8;
+	m_CheckSaveFrame = 0;
+	m_screenFrame = 8;
 
 	CheckMapRect();
 	PushRect();
@@ -83,29 +87,6 @@ void MapManager::update(void)
 	CollisionEnemy();
 	CollisionBoss();
 	PLAYER->update();
-	
-	if (KEYMANAGER->isOnceKeyDown('S')) {
-		sprintf_s(m_szText, "%f", PLAYER->getPlayerX());
-		sprintf_s(m_szText2, "%f", PLAYER->getPlayerY());
-		sprintf_s(m_szText3, "%d", m_Camera.x);
-		sprintf_s(m_szText4, "%d", m_Camera.y);
-		
-		vec.push_back(m_szText);
-		vec.push_back(m_szText2);
-		vec.push_back(m_szText3);
-		vec.push_back(m_szText4);
-		TXTDATA->txtSave("test.txt", vec);
-	}
-
-	if (KEYMANAGER->isOnceKeyDown('L')) {
-		MapOn[3] = true;
-		CurrMapNum = 3;
-		PLAYER->SetPlayerX(atof(m_szText));
-		PLAYER->SetPlayerY(atof(m_szText2));
-		MAPMANAGER->setCameraX(atoi(m_szText3));
-		MAPMANAGER->setCameraY(atoi(m_szText4));
-		m_vecLoad = TXTDATA->txtLoad("test.txt");
-	}
 }
 
 void MapManager::render(HDC hdc)
@@ -137,6 +118,19 @@ void MapManager::render(HDC hdc)
 	m_Shop->render(_empty->getMemDC());
 	if (ScreenSFXOn == true) m_Screen->frameRender(_empty->getMemDC(), m_Camera.x, m_Camera.y, m_CurrFrameX, 0);
 	if (ScreenSFXREV == true) m_Screen->frameRender(_empty->getMemDC(), m_Camera.x, m_Camera.y, m_CurrFrameX, 0);
+	if (ScreenSFXREV2 == true) m_Screen->frameRender(_empty->getMemDC(), m_Camera.x, m_Camera.y, m_screenFrame, 0);
+	
+
+	for (vIterSaveRC = vSaveRect.begin(); vIterSaveRC != vSaveRect.end(); vIterSaveRC++) {
+		Rectangle(_empty->getMemDC(), vIterSaveRC->_rc.left, vIterSaveRC->_rc.top, vIterSaveRC->_rc.right, vIterSaveRC->_rc.bottom);
+		if (SaveCheck == true) m_SaveCheckPoint->frameRender(_empty->getMemDC(), vIterSaveRC->_rc.left - 7, vIterSaveRC->_rc.top - 1, m_CheckSaveFrame, 0);
+	}
+
+	for (vIterSpikeRC = vSpikeRect.begin(); vIterSpikeRC != vSpikeRect.end(); vIterSpikeRC++) {
+		Rectangle(_empty->getMemDC(), vIterSpikeRC->_rc.left, vIterSpikeRC->_rc.top, vIterSpikeRC->_rc.right, vIterSpikeRC->_rc.bottom);
+	}
+
+	
 
 	/*for (vIterRC = vRect.begin(); vIterRC != vRect.end(); vIterRC++) {
 		Rectangle(_empty->getMemDC(), vIterRC->_rc.left, vIterRC->_rc.top, vIterRC->_rc.right, vIterRC->_rc.bottom);
@@ -147,8 +141,8 @@ void MapManager::render(HDC hdc)
 	//TIMEMANAGER->render(hdc);
 	
 	char str[64];
-	//wsprintf(str, "x : %d, y : %d", m_Camera.x, m_Camera.y);
-	sprintf_s(str, "x : %f, y : %f", PLAYER->getPlayerX(), PLAYER->getPlayerY());
+	wsprintf(str, "x : %d, dd : %d", m_screenFrame, ScreenSFXREV2);
+	//sprintf_s(str, "x : %f, y : %f", PLAYER->getPlayerX(), PLAYER->getPlayerY());
 	TextOut(hdc, 100, 30, str, strlen(str));
 }
 
@@ -259,6 +253,25 @@ void MapManager::CollisionCheck_ChangeMapRect()
 		RECT rc;
 		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[24])) {
 			ScreenSFXOn = true;
+
+			if (ScreenSFXOn && m_CurrFrameX == 8) {
+				SOUNDMANAGER->stop("마을");
+				MapOn[0] = true;
+				MapOn[11] == false;
+				ScreenSFXOn = false;
+				CurrMapNum = 0;
+				PLAYER->SetPlayerX(-35);
+				PLAYER->SetPlayerY(780);
+				PushRect();
+				ScreenSFXREV = true;
+			}
+		}
+	}
+
+	if (CurrMapNum == 4 && PLAYER->getHP() <= 0) {
+		if (ScreenSFXOn && m_CurrFrameX == 8) {
+			ScreenSFXREV2 = true;
+			LoadPoint();
 		}
 	}
 
@@ -1185,10 +1198,13 @@ void MapManager::PushRect()
 	if (CurrMapNum == 3) {
 	
 		// 1+2번맵 삭제
-		vRect.erase(vRect.begin(), vRect.begin() + 10);
+		//vRect.erase(vRect.begin(), vRect.begin() + 10);
 
 		_RectInfo._rc = RectMake(2019, 615, 270, 40);
 		vRect.push_back(_RectInfo);
+
+		_RectSave._rc = RectMake(2164, 567, 1, 50);
+		vSaveRect.push_back(_RectSave);
 
 		_RectLadder._rc = RectMake(2037, 465, 6, 132);
 		vLadderRect.push_back(_RectLadder);
@@ -1207,8 +1223,11 @@ void MapManager::PushRect()
 		_RectInfo._rc = RectMake(2305, 518, 143, 60);
 		vRect.push_back(_RectInfo);
 
-		_RectInfo._rc = RectMake(2447, 615, 80, 40);
+		_RectInfo._rc = RectMake(2432, 615, 80, 40);
 		vRect.push_back(_RectInfo);
+
+		_RectSpike._rc = RectMake(2515, 630, 160, 40);
+		vSpikeRect.push_back(_RectSpike);
 
 		_RectInfo._rc = RectMake(2688, 615, 430, 40);
 		vRect.push_back(_RectInfo);
@@ -1552,11 +1571,21 @@ void MapManager::PushRect()
 void MapManager::CollisionMap()
 {
 	for (int i = 0; i < vRect.size(); i++) {
-		PLAYER->RectColliosion(MAPMANAGER->getMapVectorRc(i));
+		if (PLAYER->getHP() >= 0) {
+			PLAYER->RectColliosion(MAPMANAGER->getMapVectorRc(i));
+		}
 	}
 
 	for (int i = 0; i < vLadderRect.size(); i++) {
 		PLAYER->LadderColliosion(MAPMANAGER->getLadderVECRc(i));
+	}
+
+	for (int i = 0; i < vSpikeRect.size(); i++) {
+		PLAYER->SpikeColliosion(MAPMANAGER->getSpikeVECRc(i));
+	}
+
+	for (int i = 0; i < vSaveRect.size(); i++) {
+		PLAYER->SaveColliosion(MAPMANAGER->getSaveVECRc(i));
 	}
 }
 
@@ -1729,29 +1758,33 @@ void MapManager::CollisionObject()
 
 	for (iterMoving = vMoving.begin(); iterMoving != vMoving.end(); iterMoving++) {
 		RECT rc;
+		if (PLAYER->getHP() > 0) {
+			if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &(*iterMoving)->getRect())) {
 
-		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &(*iterMoving)->getRect())) {
-			
-			if ((*iterMoving)->getIsRight() == true && (*iterMoving)->getMoveRight() == true && 
-				(*iterMoving)->getIsUp() == false && (*iterMoving)->getMoveUp() == false) {
-				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 1.5f);
-			}
-			else if ((*iterMoving)->getIsRight() == false && (*iterMoving)->getMoveRight() == true &&
-				(*iterMoving)->getIsUp() == false && (*iterMoving)->getMoveUp() == false) {
-				PLAYER->SetPlayerX(PLAYER->getPlayerX() - 1.5f);
-			}
+				if ((*iterMoving)->getIsRight() == true && (*iterMoving)->getMoveRight() == true &&
+					(*iterMoving)->getIsUp() == false && (*iterMoving)->getMoveUp() == false) {
+					PLAYER->SetPlayerX(PLAYER->getPlayerX() + 1.5f);
+				}
+				else if ((*iterMoving)->getIsRight() == false && (*iterMoving)->getMoveRight() == true &&
+					(*iterMoving)->getIsUp() == false && (*iterMoving)->getMoveUp() == false) {
+					PLAYER->SetPlayerX(PLAYER->getPlayerX() - 1.5f);
+				}
 
-			if ((*iterMoving)->getIsUp() == true && (*iterMoving)->getMoveUp() == true &&
-				(*iterMoving)->getIsRight() == false && (*iterMoving)->getMoveRight() == false) {
-				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 1.0f);
-			}
-			else if ((*iterMoving)->getIsUp() == false && (*iterMoving)->getMoveUp() == true &&
-				(*iterMoving)->getIsRight() == false && (*iterMoving)->getMoveRight() == false) {
-				PLAYER->SetPlayerY(PLAYER->getPlayerY() + 6.0f);
+				if ((*iterMoving)->getIsUp() == true && (*iterMoving)->getMoveUp() == true &&
+					(*iterMoving)->getIsRight() == false && (*iterMoving)->getMoveRight() == false) {
+					PLAYER->SetPlayerY(PLAYER->getPlayerY() - 1.0f);
+				}
+				else if ((*iterMoving)->getIsUp() == false && (*iterMoving)->getMoveUp() == true &&
+					(*iterMoving)->getIsRight() == false && (*iterMoving)->getMoveRight() == false) {
+					PLAYER->SetPlayerY(PLAYER->getPlayerY() + 6.0f);
+				}
 			}
 		}
+		
 
-		PLAYER->OBJCollision((*iterMoving)->getRect());
+		if (PLAYER->getHP() > 0) {
+			PLAYER->OBJCollision((*iterMoving)->getRect());
+		}
 	}
 
 
@@ -1781,15 +1814,6 @@ void MapManager::ScreenEffect()
 
 			if (m_CurrFrameX >= 8) {
 				m_CurrFrameX = 8;
-				SOUNDMANAGER->stop("마을");
-				MapOn[0] = true;
-				MapOn[11] == false;
-				ScreenSFXOn = false;
-				CurrMapNum = 0;
-				PLAYER->SetPlayerX(-35);
-				PLAYER->SetPlayerY(780);
-				PushRect();
-				ScreenSFXREV = true;
 			}
 		}
 	}
@@ -1807,6 +1831,62 @@ void MapManager::ScreenEffect()
 			}
 		}
 	}
+
+	if (ScreenSFXREV2 && PLAYER->getHP() <= 0) {
+		ScreenSFXOn = false;
+		m_FrameCount++;
+
+		if (m_FrameCount % 7 == 0) {
+			m_screenFrame--;
+			m_Screen->setFrameX(m_screenFrame);
+
+			if (m_screenFrame <= 0) {
+				m_screenFrame = 0;
+				PLAYER->setHp(12);
+				ScreenSFXREV2 = false;
+			}
+		}
+	}
+
+	if (SaveCheck) {
+		m_FrameCount++;
+		if (m_FrameCount % 7 == 0) {
+			m_CheckSaveFrame++;
+			m_SaveCheckPoint->setFrameX(m_CheckSaveFrame);
+
+			if (m_CheckSaveFrame >= 11) {
+				m_CheckSaveFrame = 8;
+			}
+		}
+	}
+}
+
+void MapManager::SavePoint()
+{
+	sprintf_s(m_szText, "%f", PLAYER->getPlayerX());
+	sprintf_s(m_szText2, "%f", PLAYER->getPlayerY());
+	sprintf_s(m_szText3, "%d", m_Camera.x);
+	sprintf_s(m_szText4, "%d", m_Camera.y);
+	sprintf_s(m_szText5, "%d", PLAYER->getHP());
+
+	vec.push_back(m_szText);
+	vec.push_back(m_szText2);
+	vec.push_back(m_szText3);
+	vec.push_back(m_szText4);
+	vec.push_back(m_szText5);
+	TXTDATA->txtSave("test.txt", vec);
+}
+
+void MapManager::LoadPoint()
+{
+	MapOn[3] = true;
+	CurrMapNum = 3;
+	PLAYER->SetPlayerX(atof(m_szText));
+	PLAYER->SetPlayerY(atof(m_szText2));
+	MAPMANAGER->setCameraX(atoi(m_szText3));
+	MAPMANAGER->setCameraY(atoi(m_szText4));
+	PLAYER->setHp(atoi(m_szText5));
+	m_vecLoad = TXTDATA->txtLoad("test.txt");
 }
 
 MapManager::MapManager() :m_Camera({ 0 , 0 }),  _empty(new image)

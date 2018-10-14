@@ -80,10 +80,10 @@ void Shop::render(HDC hdc)
 		}
 	}
 
-	char str[64];
-	wsprintf(str, "money : %d", PLAYER->getMoney());
-	//sprintf_s(str, "x : %f", m_fX, m_fY);
-	TextOut(hdc, 100, 170, str, strlen(str));
+	//char str[64];
+	//wsprintf(str, "money : %d", PLAYER->getMoney());
+	////sprintf_s(str, "x : %f", m_fX, m_fY);
+	//TextOut(hdc, 100, 170, str, strlen(str));
 }
 
 Shop::Shop()

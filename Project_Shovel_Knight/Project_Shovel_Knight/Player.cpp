@@ -13,6 +13,12 @@ HRESULT Player::init()
 	m_LadderUpImg = IMAGEMANAGER->addImage("Player_ladder", "image/Player/Player_ladder.bmp", 100, 32, 4, 1, true, RGB(255, 0, 255));
 	m_DamagedImg = IMAGEMANAGER->addImage("Player_damaged", "image/Player/Player_damaged.bmp", 35, 78, 1, 2, true, RGB(255, 0, 255));
 	m_AppearImg = IMAGEMANAGER->addImage("Player_appear", "image/Player/Player_appear.bmp", 540, 51, 9, 1, true, RGB(255, 0, 255));
+	m_DeathImg = IMAGEMANAGER->addImage("PlayerDeath", "image/Player/PlayerDeath.bmp", 333, 34, 9, 1, true, RGB(255, 0, 255));
+
+	m_Number_1 = IMAGEMANAGER->addImage("Number", "image/Number.bmp", 70, 7, 10, 1, true, RGB(255, 0, 255));
+	m_Number_2 = IMAGEMANAGER->addImage("Number", "image/Number.bmp", 70, 7, 10, 1, true, RGB(255, 0, 255));
+	m_Number_3 = IMAGEMANAGER->addImage("Number", "image/Number.bmp", 70, 7, 10, 1, true, RGB(255, 0, 255));
+	m_Number_4 = IMAGEMANAGER->addImage("Number", "image/Number.bmp", 70, 7, 10, 1, true, RGB(255, 0, 255));
 
 	m_UI = IMAGEMANAGER->addImage("UI", "image/UI.bmp", 400, 18, true, RGB(255, 0, 255));
 
@@ -34,10 +40,11 @@ HRESULT Player::init()
 	m_fY = 183;
 	/*m_fX = -35;
 	m_fY = 790;*/
+	Hp = 12;
 	m_fSpeed = 2.0f;
 	jumpSpeed = 0;
 	gravity = 0;
-	Money = 10000;
+	Money = 9000;
 
 	m_FrameCount = 0;
 	m_CurrFrameX = 0;
@@ -48,6 +55,7 @@ HRESULT Player::init()
 	m_invincibleAlpha = 0;
 	m_DamagedTime = 0;
 	m_AppearTime = 0;
+	m_DEADCount = 0;
 
 	m_isRight = true;
 	m_isAttack = false;
@@ -56,6 +64,10 @@ HRESULT Player::init()
 	m_isDamaged = false;
 	m_isAppear = false;
 	m_isFalling = false;
+	m_isDead = false;
+	m_isCheck = false;
+
+	temp = false;
 
 	m_State = P_IDLE;
 	
@@ -80,10 +92,12 @@ void Player::update()
 	KeyProcess();
 	Animation();
 
-	if (m_isGround == false) {
-	
-		gravity += 0.3f;
-		m_fY -= jumpSpeed - gravity;
+	if (temp == false) {
+		if (m_isGround == false) {
+
+			gravity += 0.3f;
+			m_fY -= jumpSpeed - gravity;
+		}
 	}
 
 	m_rc = RectMake(m_fX + 5, m_fY, 20, 25);
@@ -104,10 +118,17 @@ void Player::render(HDC hdc)
 	m_inventory->render(hdc);
 	m_Equipment->render(m_UI->getMemDC());
 
+	m_Number_1->frameRender(hdc, MAPMANAGER->getCamera().x + 15, MAPMANAGER->getCamera().y + 9, Money / 1000, 0);
+	m_Number_2->frameRender(hdc, MAPMANAGER->getCamera().x + 23, MAPMANAGER->getCamera().y + 9, Money % 1000 % 1000 / 100, 0);
+	m_Number_3->frameRender(hdc, MAPMANAGER->getCamera().x + 31, MAPMANAGER->getCamera().y + 9, Money % 1000 % 100 / 10, 0);
+	m_Number_4->frameRender(hdc, MAPMANAGER->getCamera().x + 39, MAPMANAGER->getCamera().y + 9, 0, 0);
+
+	//SetTextColor(hdc, RGB(255, 255, 255));
+	//SetBkColor(hdc, RGB(255, 0, 255));
 	char str[64];
-	//wsprintf(str, "money : %d", m_isFalling);
-	sprintf_s(str, "x : %f", jumpSpeed);
-	TextOut(hdc, m_fX - 50, m_fY - 20, str, strlen(str));
+	wsprintf(str, "%d", Hp);
+	//sprintf_s(str, "x : %f", jumpSpeed);
+	TextOut(hdc, m_fX, m_fY, str, strlen(str));
 }
 
 void Player::KeyProcess()
@@ -165,6 +186,19 @@ void Player::KeyProcess()
 	}
 	else if (KEYMANAGER->isOnceKeyUp(VK_LEFT) && m_isRight == false) {
 		m_State = P_IDLE;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('1')) {
+		m_State = P_DEAD;
+		m_isDead = true;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('2')) {
+		temp = true;
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('3')) {
+		temp = false;
 	}
 }
 
@@ -286,6 +320,24 @@ void Player::Animation()
 
 			if (m_CurrFrameX >= 8) {
 				m_CurrFrameX = 8;
+			}
+		}
+	}
+
+	else if (m_isDead) {
+		m_State = P_DEAD;
+		if (m_isRight == true) {
+			m_FrameCount++;
+			if (m_FrameCount % 17 == 0) {
+				m_DEADCount++;
+				m_DeathImg->setFrameX(m_DEADCount);
+
+				if (m_DEADCount >= 8) {
+					m_DEADCount = 8;
+					MAPMANAGER->setSceenSFX(true);
+					m_isDead = false;
+					//Hp = 12;
+				}
 			}
 		}
 	}
@@ -416,6 +468,10 @@ void Player::ShovelRender(HDC hdc)
 	else if (m_State == P_APPEAR) {
 		m_AppearImg->frameRender(hdc, m_fX - 22, m_fY - 24, m_CurrFrameX, 0);
 	}
+
+	else if (m_State == P_DEAD) {
+		if (m_isRight) m_DeathImg->frameRender(hdc, m_fX - 5, m_fY - 7, m_DEADCount, 0);
+	}
 }
 
 void Player::RectColliosion(RECT x)
@@ -477,6 +533,33 @@ void Player::LadderColliosion(RECT x)
 				m_fY += 1.0f;
 			} 
 			else m_State = P_LADDERSTOP;
+		}
+	}
+}
+
+void Player::SpikeColliosion(RECT x)
+{
+	RECT rc;
+	if (IntersectRect(&rc, &m_rc, &x)) {
+		m_isFalling = false;
+		m_fY = x.top - 24;
+		gravity = 0;
+		jumpSpeed = 0;
+		m_isGround = true;
+		Hp = 0;
+		m_isDead = true;
+		m_State = P_DEAD;
+	}
+}
+
+void Player::SaveColliosion(RECT x)
+{
+	if (m_isCheck == false) {
+		RECT rc;
+		if (IntersectRect(&rc, &m_rc, &x)) {
+			MAPMANAGER->setCheckOn(true);
+			MAPMANAGER->SavePoint();
+			m_isCheck = true;
 		}
 	}
 }
