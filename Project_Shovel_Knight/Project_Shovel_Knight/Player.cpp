@@ -67,7 +67,8 @@ HRESULT Player::init()
 	m_isDead = false;
 	m_isCheck = false;
 
-	temp = false;
+	m_isMovingMap = false;
+	m_isAfterLoad = false;
 
 	m_State = P_IDLE;
 	
@@ -92,7 +93,7 @@ void Player::update()
 	KeyProcess();
 	Animation();
 
-	if (temp == false) {
+	if (m_isMovingMap == false) {
 		if (m_isGround == false) {
 
 			gravity += 0.3f;
@@ -125,39 +126,43 @@ void Player::render(HDC hdc)
 
 	//SetTextColor(hdc, RGB(255, 255, 255));
 	//SetBkColor(hdc, RGB(255, 0, 255));
-	char str[64];
-	wsprintf(str, "%d", Hp);
-	//sprintf_s(str, "x : %f", jumpSpeed);
-	TextOut(hdc, m_fX, m_fY, str, strlen(str));
+	//char str[64];
+	////wsprintf(str, "%d", m_State);
+	//sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
+	//TextOut(hdc, m_fX - 100, m_fY, str, strlen(str));
 }
 
 void Player::KeyProcess()
 {
+	
 	if (m_State != P_LADDERUP) {
-		if (KEYMANAGER->isStayKeyDown(VK_RIGHT)) {
-			if (m_State != P_JUMP && m_State != P_MOVE && m_State != P_DOWNATTACK) {
-				m_State = P_ATTACK;
-			}
-			if (m_State != P_JUMP && m_State != P_DOWNATTACK) {
-				m_State = P_MOVE;
+		if (m_isMovingMap == false) {
+			if (KEYMANAGER->isStayKeyDown(VK_RIGHT)) {
+				if (m_State != P_JUMP && m_State != P_MOVE && m_State != P_DOWNATTACK) {
+					m_State = P_ATTACK;
+				}
+				if (m_State != P_JUMP && m_State != P_DOWNATTACK) {
+					m_State = P_MOVE;
+				}
+
+				m_fX += m_fSpeed;
+				m_isRight = true;
 			}
 
-			m_fX += m_fSpeed;
-			m_isRight = true;
+			else if (KEYMANAGER->isStayKeyDown(VK_LEFT)) {
+				if (m_State != P_JUMP && m_State != P_MOVE && m_State != P_DOWNATTACK) {
+					m_State = P_ATTACK;
+				}
+
+				if (m_State != P_JUMP && m_State != P_DOWNATTACK) {
+					m_State = P_MOVE;
+				}
+
+				m_fX -= m_fSpeed;
+				m_isRight = false;
+			}
 		}
 
-		else if (KEYMANAGER->isStayKeyDown(VK_LEFT)) {
-			if (m_State != P_JUMP && m_State != P_MOVE && m_State != P_DOWNATTACK) {
-				m_State = P_ATTACK;
-			}
-
-			if (m_State != P_JUMP && m_State != P_DOWNATTACK) {
-				m_State = P_MOVE;
-			}
-
-			m_fX -= m_fSpeed;
-			m_isRight = false;
-		}
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('C') && gravity <= 0) {
@@ -181,24 +186,20 @@ void Player::KeyProcess()
 	}
 	
 
-	if (KEYMANAGER->isOnceKeyUp(VK_RIGHT) && m_isRight == true) {
-		m_State = P_IDLE;
+	if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && m_isRight == true && m_isMovingMap) {
+		m_State = P_MOVE;
 	}
-	else if (KEYMANAGER->isOnceKeyUp(VK_LEFT) && m_isRight == false) {
-		m_State = P_IDLE;
+	if (KEYMANAGER->isStayKeyDown(VK_LEFT) && m_isRight == false && m_isMovingMap) {
+		m_State = P_MOVE;
 	}
-
-	if (KEYMANAGER->isOnceKeyDown('1')) {
-		m_State = P_DEAD;
-		m_isDead = true;
+	if (KEYMANAGER->isStayKeyDown(VK_UP) && m_isMovingMap && m_State == P_LADDERUP) {
+		m_State = P_LADDERUP;
 	}
-
-	if (KEYMANAGER->isOnceKeyDown('2')) {
-		temp = true;
+	if (KEYMANAGER->isStayKeyDown(VK_DOWN) && m_isMovingMap && m_State == P_LADDERUP) {
+		m_State = P_LADDERUP;
 	}
-
-	if (KEYMANAGER->isOnceKeyDown('3')) {
-		temp = false;
+	if (KEYMANAGER->isStayKeyDown(VK_DOWN) && m_isMovingMap && m_State == P_DOWNATTACK) {
+		m_State = P_DOWNATTACK;
 	}
 }
 
@@ -514,13 +515,13 @@ void Player::RectColliosion(RECT x)
 void Player::LadderColliosion(RECT x)
 {
 	RECT rc;
-	if (m_State != P_JUMP) {
+	if (m_isMovingMap == false) {
 		if (IntersectRect(&rc, &m_rc, &x)) {
 			gravity = 0;
 			jumpSpeed = 0;
 			m_isGround = true;
 			m_fY += 0;
-			
+
 			if (KEYMANAGER->isStayKeyDown(VK_UP)) {
 				m_State = P_LADDERUP;
 				m_fX = x.left - 12;
@@ -531,10 +532,12 @@ void Player::LadderColliosion(RECT x)
 				m_State = P_LADDERUP;
 				m_fX = x.left - 12;
 				m_fY += 1.0f;
-			} 
+			}
+
 			else m_State = P_LADDERSTOP;
 		}
 	}
+	
 }
 
 void Player::SpikeColliosion(RECT x)

@@ -60,8 +60,9 @@ private:
 	bool	m_isFalling;
 	bool	m_isDead;
 
-	bool	 temp;
+	bool	m_isMovingMap;
 	bool	m_isCheck;
+	bool	m_isAfterLoad;
 	
 	int		Money;
 	int		Hp;
@@ -92,6 +93,9 @@ public:
 	inline RECT getAttacRect() { return m_AttackRc; }
 	inline RECT getAttacDWRect() { return m_AttackDownRc; }
 
+	inline State getState() { return m_State; }
+	inline void setState(State a) { m_State = a; }
+
 	inline float getPlayerX() { return m_fX; }
 	inline float getPlayerY() { return m_fY; }
 
@@ -100,6 +104,12 @@ public:
 
 	inline int getMoney() { return Money; }
 	inline void setMoney(int a) { Money = a; }
+
+	inline bool getIsAfterLoad() { return m_isAfterLoad; }
+	inline void setIsAfterLoad(bool a) { m_isAfterLoad = a; }
+
+	inline bool getIsMovingMap() { return m_isMovingMap; }
+	inline void setIsMovingMap(bool a) { m_isMovingMap = a; }
 
 	inline int getHP() { return Hp; }
 	inline void setHp(int a) { Hp = a; }

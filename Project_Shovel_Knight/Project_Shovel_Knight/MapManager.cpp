@@ -68,6 +68,7 @@ void MapManager::release(void)
 {
 	SAFE_DELETE(m_pEnemyMgr);
 	SAFE_DELETE(m_pObjectMgr);
+	SAFE_DELETE(m_pMapImage)
 
 	m_Shop->release();
 	SAFE_DELETE(m_Shop);
@@ -83,9 +84,10 @@ void MapManager::update(void)
 	m_pObjectMgr->update();
 	EFFECTMANAGER->update();
 	CollisionObject();
-	CollisionMap();
+
 	CollisionEnemy();
 	CollisionBoss();
+	CollisionMap();
 	PLAYER->update();
 }
 
@@ -102,14 +104,13 @@ void MapManager::render(HDC hdc)
 	
 	if (MapOn[11] == true) m_shopBg->render(_empty->getMemDC(), 0, 12);
 
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[24].left, CheckChangeMapRect[24].top
-		, CheckChangeMapRect[24].right, CheckChangeMapRect[24].bottom);
+	Rectangle(_empty->getMemDC(), CheckChangeMapRect[15].left, CheckChangeMapRect[15].top, CheckChangeMapRect[15].right, CheckChangeMapRect[15].bottom);
 
 	CurrMap();
 
-	/*for (vIterLDRRC = vLadderRect.begin(); vIterLDRRC != vLadderRect.end(); vIterLDRRC++) {
+	for (vIterLDRRC = vLadderRect.begin(); vIterLDRRC != vLadderRect.end(); vIterLDRRC++) {
 		Rectangle(_empty->getMemDC(), vIterLDRRC->_rc.left, vIterLDRRC->_rc.top, vIterLDRRC->_rc.right, vIterLDRRC->_rc.bottom);
-	}*/
+	}
 
 	m_pObjectMgr->render(_empty->getMemDC());
 	m_pEnemyMgr->render(_empty->getMemDC());
@@ -122,15 +123,13 @@ void MapManager::render(HDC hdc)
 	
 
 	for (vIterSaveRC = vSaveRect.begin(); vIterSaveRC != vSaveRect.end(); vIterSaveRC++) {
-		Rectangle(_empty->getMemDC(), vIterSaveRC->_rc.left, vIterSaveRC->_rc.top, vIterSaveRC->_rc.right, vIterSaveRC->_rc.bottom);
+		//Rectangle(_empty->getMemDC(), vIterSaveRC->_rc.left, vIterSaveRC->_rc.top, vIterSaveRC->_rc.right, vIterSaveRC->_rc.bottom);
 		if (SaveCheck == true) m_SaveCheckPoint->frameRender(_empty->getMemDC(), vIterSaveRC->_rc.left - 7, vIterSaveRC->_rc.top - 1, m_CheckSaveFrame, 0);
 	}
 
-	for (vIterSpikeRC = vSpikeRect.begin(); vIterSpikeRC != vSpikeRect.end(); vIterSpikeRC++) {
-		Rectangle(_empty->getMemDC(), vIterSpikeRC->_rc.left, vIterSpikeRC->_rc.top, vIterSpikeRC->_rc.right, vIterSpikeRC->_rc.bottom);
-	}
-
-	
+	//for (vIterSpikeRC = vSpikeRect.begin(); vIterSpikeRC != vSpikeRect.end(); vIterSpikeRC++) {
+	//	Rectangle(_empty->getMemDC(), vIterSpikeRC->_rc.left, vIterSpikeRC->_rc.top, vIterSpikeRC->_rc.right, vIterSpikeRC->_rc.bottom);
+	//}
 
 	/*for (vIterRC = vRect.begin(); vIterRC != vRect.end(); vIterRC++) {
 		Rectangle(_empty->getMemDC(), vIterRC->_rc.left, vIterRC->_rc.top, vIterRC->_rc.right, vIterRC->_rc.bottom);
@@ -138,12 +137,14 @@ void MapManager::render(HDC hdc)
 
 	_empty->render(hdc, 0, 0, m_Camera.x, m_Camera.y, WINSIZEX, WINSIZEY);
 
-	//TIMEMANAGER->render(hdc);
+	TIMEMANAGER->render(hdc);
 	
-	char str[64];
-	wsprintf(str, "x : %d, dd : %d", m_screenFrame, ScreenSFXREV2);
-	//sprintf_s(str, "x : %f, y : %f", PLAYER->getPlayerX(), PLAYER->getPlayerY());
-	TextOut(hdc, 100, 30, str, strlen(str));
+	//char str[64];
+	//for (int i = 0; i < vRect.size(); i++) {
+	//	wsprintf(str, "x : %d", vRect.size());
+	//	//sprintf_s(str, "x : %f, y : %f", PLAYER->getPlayerX(), PLAYER->getPlayerY());
+	//	TextOut(hdc, PLAYER->getPlayerX(), PLAYER->getPlayerY() - 100, str, strlen(str));
+	//}
 }
 
 void MapManager::CheckMapRect()
@@ -595,10 +596,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[0] == true && CurrMapNum == 0) {
 		if (m_Camera.x < 1600) {
 			m_Camera.x += 6;
+			PLAYER->setIsMovingMap(true);
 			if (1605 > PLAYER->getPlayerX()) {
 				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 1600) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.x = 1600;
 				CurrMapNum = 1;
 				MovingCamera[0] = false;
@@ -631,10 +634,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[1] == true && CurrMapNum == 1) {
 		if (m_Camera.x < 2000) {
 			m_Camera.x += 6;
+			PLAYER->setIsMovingMap(true);
 			if (2004 > PLAYER->getPlayerX()) {
 				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 2000) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.x = 2000;
 				//PLAYER->SetCurr(2);
 				CurrMapNum = 2;
@@ -650,10 +655,12 @@ void MapManager::MovingMap()
 	if (CurrMapNum == 2 && MovingCamera[1] == true) {
 		if (m_Camera.x > 1600) {
 			m_Camera.x -= 6;
+			PLAYER->setIsMovingMap(true);
 			if (1973 < PLAYER->getPlayerX()) {
 				PLAYER->SetPlayerX(PLAYER->getPlayerX() - 0.5f);
 			}
 			if (m_Camera.x <= 1600) {
+				PLAYER->setIsMovingMap(false);
 				CurrMapNum = 1;
 				MovingCamera[1] = false;
 				MapOn[2] = false;
@@ -669,10 +676,13 @@ void MapManager::MovingMap()
 	if (MovingCamera[2] == true && CurrMapNum == 2) {
 		if (m_Camera.y > 426) {
 			m_Camera.y -= 5;
-			if (580 < PLAYER->getPlayerY()) {
-				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 0.9f);
+			PLAYER->setIsMovingMap(true);
+			if (620 < PLAYER->getPlayerY()) {
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 0.4f);
+				PLAYER->setState(P_LADDERUP);
 			}
 			if (m_Camera.y <= 426) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.y = 424;
 				CurrMapNum = 3;
 				MovingCamera[2] = false;
@@ -684,13 +694,15 @@ void MapManager::MovingMap()
 	}
 
 	// ##### 3 --> 4  #####
-	if (MovingCamera[3] == true && CurrMapNum == 3) {
+	if (MovingCamera[3] == true && CurrMapNum == 3 && PLAYER->getIsAfterLoad() == false) {
 		if (m_Camera.x < 2400) {
 			m_Camera.x += 6;
+			PLAYER->setIsMovingMap(true);
 			if (2410 > PLAYER->getPlayerX()) {
 				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 2400) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.x = 2400;
 				CurrMapNum = 4;
 				MovingCamera[3] = false;
@@ -703,18 +715,41 @@ void MapManager::MovingMap()
 		}
 	}
 
+	// ##### 3 --> 4  ##### 세이브 후
+	if (MovingCamera[3] == true && CurrMapNum == 3 && PLAYER->getIsAfterLoad() == true) {
+		if (m_Camera.x < 2400) {
+			m_Camera.x += 6;
+			PLAYER->setIsMovingMap(true);
+			if (2410 > PLAYER->getPlayerX()) {
+				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
+			}
+			if (m_Camera.x >= 2400) {
+				PLAYER->setIsMovingMap(false);
+				m_Camera.x = 2400;
+				CurrMapNum = 4;
+				MovingCamera[3] = false;
+				MapOn[3] = false;
+				m_pObjectMgr->setDirtblock();
+				m_pObjectMgr->setSmallBlock();
+			}
+		}
+	}
+
 	// ##### 3 <-- 4  #####
 	if (MovingCamera[3] == true && CurrMapNum == 4) {
 		if (m_Camera.x > 2000) {
 			m_Camera.x -= 6;
+			PLAYER->setIsMovingMap(true);
 			if (2350 < PLAYER->getPlayerX()) {
 				PLAYER->SetPlayerX(PLAYER->getPlayerX() - 0.5f);
 			}
 			if (m_Camera.x <= 2000) {
+				PLAYER->setIsMovingMap(false);
 				MapOn[4] = false;
 				CurrMapNum = 3;
 				MovingCamera[3] = false;
-				PushRect();
+				m_pEnemyMgr->setBug();
+				//PushRect();
 			}
 		}
 	}
@@ -724,10 +759,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[4] == true && CurrMapNum == 4) {
 		if (m_Camera.x < 2800) {
 			m_Camera.x += 6;
+			PLAYER->setIsMovingMap(true);
 			if (2810 > PLAYER->getPlayerX()) {
 				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 2800) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.x = 2800;
 				CurrMapNum = 5;
 				MovingCamera[4] = false;
@@ -737,31 +774,17 @@ void MapManager::MovingMap()
 		}
 	}
 
-	// ##### 4 <-- 5  #####
-	if (MovingCamera[4] == true && CurrMapNum == 5) {
-		if (m_Camera.x > 2400) {
-			m_Camera.x -= 6;
-			if (2760 < PLAYER->getPlayerX()) {
-				PLAYER->SetPlayerX(PLAYER->getPlayerX() - 0.5f);
-			}
-			if (m_Camera.x <= 2400) {
-				MapOn[5] = false;
-				CurrMapNum = 4;
-				MovingCamera[4] = false;
-			}
-		}
-	}
-
-
 
 	// ##### 5 --> 6  #####
 	if (MovingCamera[5] == true && CurrMapNum == 5) {
 		if (m_Camera.y < 634) {
 			m_Camera.y += 5;
+			PLAYER->setIsMovingMap(true);
 			if (670 > PLAYER->getPlayerY()) {
-				PLAYER->SetPlayerY(PLAYER->getPlayerY() + 0.9f);
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() + 0.5f);
 			}
 			if (m_Camera.y >= 634) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.y = 634;
 				CurrMapNum = 6;
 				MovingCamera[5] = false;
@@ -776,10 +799,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[6] == true && CurrMapNum == 6) {
 		if (m_Camera.y < 842) {
 			m_Camera.y += 5;
+			PLAYER->setIsMovingMap(true);
 			if (863 > PLAYER->getPlayerY()) {
-				PLAYER->SetPlayerY(PLAYER->getPlayerY() + 0.9f);
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() + 0.5f);
 			}
 			if (m_Camera.y >= 842) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.y = 842;
 				CurrMapNum = 7;
 				MovingCamera[6] = false;
@@ -794,10 +819,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[7] == true && CurrMapNum == 7) {
 		if (m_Camera.y < 1050) {
 			m_Camera.y += 5;
+			PLAYER->setIsMovingMap(true);
 			if (1070 > PLAYER->getPlayerY()) {
-				PLAYER->SetPlayerY(PLAYER->getPlayerY() + 0.9f);
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() + 0.5f);
 			}
 			if (m_Camera.y >= 1050) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.y = 1050;
 				CurrMapNum = 8;
 				MovingCamera[7] = false;
@@ -813,10 +840,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[8] == true && CurrMapNum == 8) {
 		if (m_Camera.x > 2400) {
 			m_Camera.x -= 6;
+			PLAYER->setIsMovingMap(true);
 			if (2760 < PLAYER->getPlayerX()) {
 				PLAYER->SetPlayerX(PLAYER->getPlayerX() - 0.5f);
 			}
 			if (m_Camera.x <= 2400) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.x = 2400;
 				CurrMapNum = 9;
 				MovingCamera[8] = false;
@@ -830,10 +859,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[8] == true && CurrMapNum == 9) {
 		if (m_Camera.x < 2800) {
 			m_Camera.x += 6;
+			PLAYER->setIsMovingMap(true);
 			if (2810 > PLAYER->getPlayerX()) {
 				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 2800) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.x = 2800;
 				CurrMapNum = 8;
 				MovingCamera[8] = false;
@@ -848,10 +879,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[9] == true && CurrMapNum == 8) {
 		if (m_Camera.x < 3200) {
 			m_Camera.x += 6;
+			PLAYER->setIsMovingMap(true);
 			if (3240 > PLAYER->getPlayerX()) {
 				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 3200) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.x = 3200;
 				CurrMapNum = 12;
 				MovingCamera[9] = false;
@@ -868,10 +901,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[12] == true && CurrMapNum == 12) {
 		if (m_Camera.y > 842) {
 			m_Camera.y -= 5;
+			PLAYER->setIsMovingMap(true);
 			if (995 < PLAYER->getPlayerY()) {
-				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 0.9f);
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 0.5f);
 			}
 			if (m_Camera.y <= 842) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.y = 842;
 				m_Camera.x = 4000;
 				CurrMapNum = 13;
@@ -888,10 +923,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[13] == true && CurrMapNum == 13) {
 		if (m_Camera.x < 4400) {
 			m_Camera.x += 6;
+			PLAYER->setIsMovingMap(true);
 			if (4600 > PLAYER->getPlayerX()) {
 				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 4400) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.x = 4400;
 				CurrMapNum = 14;
 				MovingCamera[13] = false;
@@ -907,10 +944,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[13] == true && CurrMapNum == 14) {
 		if (m_Camera.x > 4000) {
 			m_Camera.x -= 6;
+			PLAYER->setIsMovingMap(true);
 			if (4365 < PLAYER->getPlayerX()) {
 				PLAYER->SetPlayerX(PLAYER->getPlayerX() - 0.5f);
 			}
 			if (m_Camera.x <= 4000) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.x = 4000;
 				CurrMapNum = 13;
 				MovingCamera[13] = false;
@@ -924,10 +963,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[14] == true && CurrMapNum == 13) {
 		if (m_Camera.y > 634) {
 			m_Camera.y -= 5;
+			PLAYER->setIsMovingMap(true);
 			if (785 < PLAYER->getPlayerY()) {
-				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 0.9f);
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 0.5f);
 			}
 			if (m_Camera.y <= 634) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.y = 634;
 				CurrMapNum = 15;
 				MovingCamera[14] = false;
@@ -944,10 +985,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[15] == true && CurrMapNum == 15) {
 		if (m_Camera.y > 426) {
 			m_Camera.y -= 5;
-			if (360 < PLAYER->getPlayerY()) {
+			PLAYER->setIsMovingMap(true);
+			if (600 < PLAYER->getPlayerY()) {
 				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 0.9f);
 			}
 			if (m_Camera.y <= 426) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.y = 426;
 				CurrMapNum = 16;
 				MovingCamera[15] = false;
@@ -963,10 +1006,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[15] == true && CurrMapNum == 16) {
 		if (m_Camera.y < 634) {
 			m_Camera.y += 5;
-			if (660 > PLAYER->getPlayerY()) {
-				PLAYER->SetPlayerY(PLAYER->getPlayerY() + 0.9f);
+			PLAYER->setIsMovingMap(true);
+			if (640 > PLAYER->getPlayerY()) {
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() + 0.5f);
 			}
 			if (m_Camera.y >= 634) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.y = 634;
 				CurrMapNum = 15;
 				MovingCamera[15] = false;
@@ -980,10 +1025,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[16] == true && CurrMapNum == 16) {
 		if (m_Camera.x < 4400) {
 			m_Camera.x += 6;
+			PLAYER->setIsMovingMap(true);
 			if (4600 > PLAYER->getPlayerX()) {
 				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 4400) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.x = 4400;
 				CurrMapNum = 17;
 				MovingCamera[16] = false;
@@ -999,10 +1046,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[17] == true && CurrMapNum == 17) {
 		if (m_Camera.x < 5200) {
 			m_Camera.x += 6;
+			PLAYER->setIsMovingMap(true);
 			if (5250 > PLAYER->getPlayerX()) {
 				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 5200) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.x = 5200;
 				CurrMapNum = 18;
 				MovingCamera[17] = false;
@@ -1017,10 +1066,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[18] == true && CurrMapNum == 18) {
 		if (m_Camera.x < 5600) {
 			m_Camera.x += 6;
+			PLAYER->setIsMovingMap(true);
 			if (5650 > PLAYER->getPlayerX()) {
 				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 5600) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.x = 5600;
 				CurrMapNum = 19;
 				MovingCamera[18] = false;
@@ -1034,10 +1085,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[19] == true && CurrMapNum == 19) {
 		if (m_Camera.y > 218) {
 			m_Camera.y -= 5;
+			PLAYER->setIsMovingMap(true);
 			if (150 < PLAYER->getPlayerY()) {
-				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 0.9f);
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 0.5f);
 			}
 			if (m_Camera.y <= 218) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.y = 218;
 				CurrMapNum = 20;
 				MovingCamera[19] = false;
@@ -1053,10 +1106,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[20] == true && CurrMapNum == 20) {
 		if (m_Camera.y > 10) {
 			m_Camera.y -= 5;
+			PLAYER->setIsMovingMap(true);
 			if (0 < PLAYER->getPlayerY()) {
-				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 0.9f);
+				PLAYER->SetPlayerY(PLAYER->getPlayerY() - 0.5f);
 			}
 			if (m_Camera.y <= 10) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.y = 10;
 				CurrMapNum = 21;
 				MovingCamera[20] = false;
@@ -1071,10 +1126,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[21] == true && CurrMapNum == 21) {
 		if (m_Camera.x < 6000) {
 			m_Camera.x += 6;
+			PLAYER->setIsMovingMap(true);
 			if (6050 > PLAYER->getPlayerX()) {
 				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 6000) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.x = 6000;
 				CurrMapNum = 22;
 				MovingCamera[21] = false;
@@ -1088,10 +1145,12 @@ void MapManager::MovingMap()
 	if (MovingCamera[22] == true && CurrMapNum == 22) {
 		if (m_Camera.x < 6400) {
 			m_Camera.x += 6;
+			PLAYER->setIsMovingMap(true);
 			if (6450 > PLAYER->getPlayerX()) {
 				PLAYER->SetPlayerX(PLAYER->getPlayerX() + 0.5f);
 			}
 			if (m_Camera.x >= 6400) {
+				PLAYER->setIsMovingMap(false);
 				m_Camera.x = 6400;
 				CurrMapNum = 23;
 				MovingCamera[22] = false;
@@ -1182,10 +1241,6 @@ void MapManager::PushRect()
 		_RectInfo._rc = RectMake(2225, 742, 80, 122);
 		vRect.push_back(_RectInfo);
 
-		//// 비눗방울 대신 밟을 임시 렉트, 지울거임
-		//_RectInfo._rc = RectMake(2126, 780, 50, 52);
-		//vRect.push_back(_RectInfo);
-
 		_RectInfo._rc = RectMake(2306, 615, 20, 132);
 		vRect.push_back(_RectInfo);
 		// 사다리
@@ -1196,9 +1251,6 @@ void MapManager::PushRect()
 
 	// 3번맵
 	if (CurrMapNum == 3) {
-	
-		// 1+2번맵 삭제
-		//vRect.erase(vRect.begin(), vRect.begin() + 10);
 
 		_RectInfo._rc = RectMake(2019, 615, 270, 40);
 		vRect.push_back(_RectInfo);
@@ -1237,12 +1289,12 @@ void MapManager::PushRect()
 	// 5번맵
 	if (CurrMapNum == 5) {
 
-		vRect.erase(vRect.begin(), vRect.begin() + 6);
+		vRect.erase(vRect.begin(), vRect.begin() + 16);
 
 		_RectInfo._rc = RectMake(2688, 615, 430, 40);
 		vRect.push_back(_RectInfo);
 
-		_RectLadder._rc = RectMake(3140, 615, 6, 60);
+		_RectLadder._rc = RectMake(3140, 615, 6, 30);
 		vLadderRect.push_back(_RectLadder);
 	}
 
@@ -1879,8 +1931,11 @@ void MapManager::SavePoint()
 
 void MapManager::LoadPoint()
 {
+	MapOn[4] = false;
 	MapOn[3] = true;
+	m_pEnemyMgr->setBug();
 	CurrMapNum = 3;
+	PLAYER->setIsAfterLoad(true);
 	PLAYER->SetPlayerX(atof(m_szText));
 	PLAYER->SetPlayerY(atof(m_szText2));
 	MAPMANAGER->setCameraX(atoi(m_szText3));
