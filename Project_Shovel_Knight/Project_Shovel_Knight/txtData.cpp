@@ -46,13 +46,13 @@ char * txtData::vectorArrayCombine(vector<string> vecArray)
 	//이순현
 	//정지수
 	//정민욱
-	char str[128];
+	char str[256];
 	ZeroMemory(str, sizeof(str));
 	//memset(str, 0, sizeof(str));
 
 	for (int i = 0; i < vecArray.size(); i++)
 	{
-		strncat_s(str, 128, vecArray[i].c_str(), 126);
+		strncat_s(str, 256, vecArray[i].c_str(), 256);
 		if (i + 1 < vecArray.size())
 			strcat_s(str, ",");
 	}

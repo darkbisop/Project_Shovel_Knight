@@ -1487,7 +1487,7 @@ void MapManager::PushRect()
 		_RectInfo._rc = RectMake(4283, 631, 70, 15);
 		vRect.push_back(_RectInfo);
 
-		_RectSave._rc = RectMake(4284, 503, 1, 50);
+		_RectSave._rc = RectMake(4293, 503, 1, 50);
 		vSaveRect.push_back(_RectSave);
 
 		_RectInfo._rc = RectMake(4159, 583, 40, 15);
@@ -1611,11 +1611,11 @@ void MapManager::PushRect()
 		_RectInfo._rc = RectMake(5940, 200, 220, 15);
 		vRect.push_back(_RectInfo);
 
-		_RectSave._rc = RectMake(6193, 87, 1, 50);
-		vSaveRect.push_back(_RectSave);
-
 		_RectInfo._rc = RectMake(6165, 135, 80, 50);
 		vRect.push_back(_RectInfo);
+
+		_RectSave._rc = RectMake(6193, 87, 1, 50);
+		vSaveRect.push_back(_RectSave);
 
 		_RectInfo._rc = RectMake(6253, 167, 40, 50);
 		vRect.push_back(_RectInfo);
@@ -2008,7 +2008,6 @@ void MapManager::LoadPoint()
 	PLAYER->SetPlayerY(atof(m_szText2));
 	MAPMANAGER->setCameraX(atoi(m_szText3));
 	MAPMANAGER->setCameraY(atoi(m_szText4));
-	PLAYER->setHp(atoi(m_szText5));
 	m_vecLoad = TXTDATA->txtLoad("test.txt");
 }
 

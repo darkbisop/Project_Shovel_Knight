@@ -84,11 +84,11 @@ private:
 	bool	ScreenSFXREV2;
 	bool	SaveCheck;
 
-	char m_szText[64];
-	char m_szText2[64];
-	char m_szText3[64];
-	char m_szText4[64];
-	char m_szText5[64];
+	char m_szText[128];
+	char m_szText2[128];
+	char m_szText3[128];
+	char m_szText4[128];
+	char m_szText5[128];
 
 	vector<string> vec;
 	vector<std::string> m_vecLoad;
