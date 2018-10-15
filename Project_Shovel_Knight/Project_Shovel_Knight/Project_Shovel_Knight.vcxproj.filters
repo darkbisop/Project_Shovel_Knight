@@ -255,6 +255,9 @@
     <ClInclude Include="small_Dragon.h">
       <Filter>메인게임\에너미</Filter>
     </ClInclude>
+    <ClInclude Include="TempItem.h">
+      <Filter>메인게임\상점\아이템</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -406,6 +409,9 @@
     </ClCompile>
     <ClCompile Include="small_Dragon.cpp">
       <Filter>메인게임\에너미</Filter>
+    </ClCompile>
+    <ClCompile Include="TempItem.cpp">
+      <Filter>메인게임\상점\아이템</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

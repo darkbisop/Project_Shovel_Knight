@@ -1,13 +1,15 @@
 #include "stdafx.h"
 #include "Shop.h"
-#include "Flame_Wand.h"
 #include "Inventory.h"
+#include "Flame_Wand.h"
+#include "TempItem.h"
 
 HRESULT Shop::init(void)
 {
 	m_rc = RectMake(WINSIZEX / 2 - 100, 30, 223, 60);
 
 	v_Item_List.push_back(new Flame_Wand);
+	v_Item_List.push_back(new TempItem);
 
 	ShopOn = false;
 
@@ -53,7 +55,7 @@ void Shop::update(void)
 	RECT rc;
 	if (ShopOn == true) {
 		for (int i = 0; i < v_Item_List.size(); i++) {
-			ItemListRect = RectMake(m_rc.left + 16 + i, m_rc.top + 6 + i * 70, 13, 13);
+			ItemListRect = RectMake(m_rc.left + 16 + i * 35, m_rc.top + 6, 13, 13);
 
 			if (IntersectRect(&rc, &ItemListRect, &MoveRect)) {
 				if (KEYMANAGER->isOnceKeyDown(VK_RETURN)) {
@@ -75,6 +77,7 @@ void Shop::render(HDC hdc)
 		Rectangle(hdc, MoveRect.left, MoveRect.top, MoveRect.right, MoveRect.bottom);
 		
 		for (int i = 0; i < v_Item_List.size(); i++) {
+			ItemListRect = RectMake(m_rc.left + 16 + i * 35, m_rc.top + 6, 13, 13);
 			Rectangle(hdc, ItemListRect.left, ItemListRect.top, ItemListRect.right, ItemListRect.bottom);
 			v_Item_List[i]->getImage()->render(hdc, ItemListRect.left, ItemListRect.top);
 		}

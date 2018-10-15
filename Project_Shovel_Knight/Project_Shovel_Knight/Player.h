@@ -3,6 +3,13 @@
 #include "Equipment.h"
 #include "Inventory.h"
 
+struct FireBall
+{
+	float x, y;
+	RECT rc;
+	float angle;
+};
+
 enum State
 {
 	P_APPEAR, P_IDLE, P_MOVE, P_ATTACK, P_DOWNATTACK, P_MAGIC, P_JUMP, P_LADDERUP, P_LADDERSTOP, P_DAMAGED, P_DEAD
@@ -12,8 +19,12 @@ class Player : public singletonBase<Player>
 {
 private:
 
+	vector<FireBall> v_Bullet;
+	vector<FireBall>::iterator v_IterBullet;
+
 	Inventory*	m_inventory;
 	Equipment*	m_Equipment;
+	FireBall m_bullet;
 
 	RECT	m_rc;
 	RECT	m_AttackRc;
@@ -64,9 +75,11 @@ private:
 	bool	m_isCheck;
 	bool	m_isDeadCHeck;
 	bool	m_isAfterLoad;
+	bool	m_isFireLeft;
 	
 	int		Money;
 	int		Hp;
+	int		Mana;
 	int		m_DamagedTime;
 	int		m_AppearTime;
 	int		m_invincibleCount;
@@ -81,6 +94,7 @@ public:
 
 	void KeyProcess();
 	void Animation();
+	void FireBallMove();
 	void ShovelRender(HDC hdc);
 	void RectColliosion(RECT x);
 	void LadderColliosion(RECT x);

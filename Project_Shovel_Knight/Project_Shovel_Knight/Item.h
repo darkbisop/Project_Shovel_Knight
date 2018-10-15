@@ -7,7 +7,7 @@ struct Option
 
 enum Item_Type
 {
-	ITEM_WEAPON
+	ITEM_EQUIP
 };
 
 typedef vector<Option> vOption;

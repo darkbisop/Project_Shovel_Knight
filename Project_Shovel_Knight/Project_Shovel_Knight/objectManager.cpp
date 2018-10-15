@@ -320,6 +320,12 @@ void objectManager::setSmallBlock()
 		}
 	}
 
+	if (MAPMANAGER->getMapOn(13)) {
+		for (int i = 0; i < v_SmallBlock.size(); i++) {
+			v_SmallBlock.erase(v_SmallBlock.begin() + i);
+		}
+	}
+
 
 	// 20번맵 오브젝트
 	if (MAPMANAGER->getMapOn(20)) {

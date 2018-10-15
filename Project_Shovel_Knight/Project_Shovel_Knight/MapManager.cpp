@@ -1987,13 +1987,11 @@ void MapManager::SavePoint()
 	sprintf_s(m_szText2, "%f", PLAYER->getPlayerY());
 	sprintf_s(m_szText3, "%d", m_Camera.x);
 	sprintf_s(m_szText4, "%d", m_Camera.y);
-	sprintf_s(m_szText5, "%d", PLAYER->getHP());
 
 	vec.push_back(m_szText);
 	vec.push_back(m_szText2);
 	vec.push_back(m_szText3);
 	vec.push_back(m_szText4);
-	vec.push_back(m_szText5);
 	TXTDATA->txtSave("test.txt", vec);
 }
 

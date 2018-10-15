@@ -42,6 +42,7 @@ HRESULT Player::init()
 	/*m_fX = -35;
 	m_fY = 790;*/
 	Hp = 12;
+	Mana = 40;
 	m_fSpeed = 2.0f;
 	jumpSpeed = 0;
 	gravity = 0;
@@ -71,6 +72,7 @@ HRESULT Player::init()
 	m_isMovingMap = false;
 	m_isAfterLoad = false;
 	m_isDeadCHeck = false;
+	m_isFireLeft = false;
 
 	m_State = P_IDLE;
 	
@@ -94,6 +96,7 @@ void Player::update()
 
 	KeyProcess();
 	Animation();
+	FireBallMove();
 
 	if (m_isMovingMap == false) {
 		if (m_isGround == false) {
@@ -129,8 +132,8 @@ void Player::render(HDC hdc)
 	//SetTextColor(hdc, RGB(255, 255, 255));
 	//SetBkColor(hdc, RGB(255, 0, 255));
 	char str[64];
-	//wsprintf(str, "%d", m_State);
-	sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
+	wsprintf(str, "%d", Mana);
+	//sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
 	TextOut(hdc, m_fX - 100, m_fY, str, strlen(str));
 }
 
@@ -385,6 +388,55 @@ void Player::Animation()
 	}
 }
 
+void Player::FireBallMove()
+{
+	if (KEYMANAGER->isOnceKeyDown('V')) {
+		if (Mana >= 2) {
+			Mana -= 2;
+			//m_State = KnifeShot;
+			if (m_isRight) {
+				m_bullet.x = m_fX + 30;
+				m_bullet.y = m_fY + 8;
+				m_bullet.angle = 0;
+				v_Bullet.push_back(m_bullet);
+			}
+			else if (!m_isRight) {
+				m_isFireLeft = true;
+				m_bullet.x = m_fX - 4;
+				m_bullet.y = m_fY + 8;
+				m_bullet.angle = 0;
+				v_Bullet.push_back(m_bullet);
+			}
+		}
+	}
+
+	for (v_IterBullet = v_Bullet.begin(); v_IterBullet != v_Bullet.end();) {
+		if (m_isFireLeft == false) {
+			v_IterBullet->x += cosf(v_IterBullet->angle) * 2.5f;
+			v_IterBullet->y -= sinf(v_IterBullet->angle) * 2.5f;
+			v_IterBullet->rc = RectMakeCenter(v_IterBullet->x, v_IterBullet->y, 12, 12);
+
+			if (v_IterBullet->x > MAPMANAGER->getCamera().x + 400) {
+				v_IterBullet = v_Bullet.erase(v_IterBullet);
+			}
+			else ++v_IterBullet;
+		}
+		else if (m_isFireLeft == true) {
+			v_IterBullet->x -= cosf(v_IterBullet->angle) * 2.5f;
+			v_IterBullet->y -= sinf(v_IterBullet->angle) * 2.5f;
+			v_IterBullet->rc = RectMakeCenter(v_IterBullet->x, v_IterBullet->y, 12, 12);
+
+			if (v_IterBullet->x < MAPMANAGER->getCamera().x) {
+				v_IterBullet = v_Bullet.erase(v_IterBullet);
+				m_isFireLeft = false;
+			}
+			else ++v_IterBullet;
+		}
+
+		
+	}
+}
+
 void Player::ShovelRender(HDC hdc)
 {
 	if (m_State == P_IDLE) {
@@ -480,6 +532,10 @@ void Player::ShovelRender(HDC hdc)
 
 	else if (m_State == P_DEAD) {
 		if (m_isRight) m_DeathImg->frameRender(hdc, m_fX - 5, m_fY - 7, m_DEADCount, 0);
+	}
+
+	for (v_IterBullet = v_Bullet.begin(); v_IterBullet != v_Bullet.end(); v_IterBullet++) {
+		Rectangle(hdc, v_IterBullet->rc.left, v_IterBullet->rc.top, v_IterBullet->rc.right, v_IterBullet->rc.bottom);
 	}
 }
 
