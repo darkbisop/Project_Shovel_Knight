@@ -26,6 +26,7 @@ HRESULT Player::init()
 	SOUNDMANAGER->addSound("플레이어점프", "Sound/JumpSFX.mp3", false, false);
 	SOUNDMANAGER->addSound("플레이어공격", "Sound/AttackSFX.mp3", false, false);
 	SOUNDMANAGER->addSound("플레이어착지", "Sound/LandingSFX.mp3", false, false);
+	SOUNDMANAGER->addSound("으앙주금", "Sound/Death.mp3", false, false);
 
 	m_inventory = new Inventory;
 	m_inventory->init();
@@ -69,6 +70,7 @@ HRESULT Player::init()
 
 	m_isMovingMap = false;
 	m_isAfterLoad = false;
+	m_isDeadCHeck = false;
 
 	m_State = P_IDLE;
 	
@@ -126,10 +128,10 @@ void Player::render(HDC hdc)
 
 	//SetTextColor(hdc, RGB(255, 255, 255));
 	//SetBkColor(hdc, RGB(255, 0, 255));
-	//char str[64];
-	////wsprintf(str, "%d", m_State);
-	//sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
-	//TextOut(hdc, m_fX - 100, m_fY, str, strlen(str));
+	char str[64];
+	//wsprintf(str, "%d", m_State);
+	sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
+	TextOut(hdc, m_fX - 100, m_fY, str, strlen(str));
 }
 
 void Player::KeyProcess()
@@ -544,6 +546,7 @@ void Player::SpikeColliosion(RECT x)
 {
 	RECT rc;
 	if (IntersectRect(&rc, &m_rc, &x)) {
+		if (m_isDeadCHeck == false) SOUNDMANAGER->play("으앙주금", 0.8f);
 		m_isFalling = false;
 		m_fY = x.top - 24;
 		gravity = 0;
@@ -552,6 +555,8 @@ void Player::SpikeColliosion(RECT x)
 		Hp = 0;
 		m_isDead = true;
 		m_State = P_DEAD;
+		m_isDeadCHeck = true;
+
 	}
 }
 
@@ -560,7 +565,8 @@ void Player::SaveColliosion(RECT x)
 	if (m_isCheck == false) {
 		RECT rc;
 		if (IntersectRect(&rc, &m_rc, &x)) {
-			MAPMANAGER->setCheckOn(true);
+			SOUNDMANAGER->play("세이브체크", 0.7f);
+			//MAPMANAGER->setCheckOn(true);
 			MAPMANAGER->SavePoint();
 			m_isCheck = true;
 		}

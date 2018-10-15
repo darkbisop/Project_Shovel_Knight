@@ -17,6 +17,8 @@ struct MapLadder
 struct saveRect
 {
 	RECT _rc;
+	bool SaveCheck;
+	int m_CheckSaveFrame;
 };
 
 struct SpikeRect

@@ -62,6 +62,7 @@ private:
 
 	bool	m_isMovingMap;
 	bool	m_isCheck;
+	bool	m_isDeadCHeck;
 	bool	m_isAfterLoad;
 	
 	int		Money;

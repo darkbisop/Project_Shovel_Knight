@@ -54,8 +54,11 @@ HRESULT MapManager::init(void)
 	ScreenSFXOn = false;
 	ScreenSFXREV2 = false;
 	m_ReverseFrameX = 8;
-	m_CheckSaveFrame = 0;
 	m_screenFrame = 8;
+
+	for (vIterSaveRC = vSaveRect.begin(); vIterSaveRC != vSaveRect.end(); vIterSaveRC++) {
+		vIterSaveRC->m_CheckSaveFrame = 0;
+	}
 
 	CheckMapRect();
 	PushRect();
@@ -122,8 +125,8 @@ void MapManager::render(HDC hdc)
 	
 
 	for (vIterSaveRC = vSaveRect.begin(); vIterSaveRC != vSaveRect.end(); vIterSaveRC++) {
-		//Rectangle(_empty->getMemDC(), vIterSaveRC->_rc.left, vIterSaveRC->_rc.top, vIterSaveRC->_rc.right, vIterSaveRC->_rc.bottom);
-		if (SaveCheck == true) m_SaveCheckPoint->frameRender(_empty->getMemDC(), vIterSaveRC->_rc.left - 7, vIterSaveRC->_rc.top - 1, m_CheckSaveFrame, 0);
+		Rectangle(_empty->getMemDC(), vIterSaveRC->_rc.left, vIterSaveRC->_rc.top, vIterSaveRC->_rc.right, vIterSaveRC->_rc.bottom);
+		if (vIterSaveRC->SaveCheck == true) m_SaveCheckPoint->frameRender(_empty->getMemDC(), vIterSaveRC->_rc.left - 7, vIterSaveRC->_rc.top - 1, vIterSaveRC->m_CheckSaveFrame, 0);
 	}
 
 	//for (vIterSpikeRC = vSpikeRect.begin(); vIterSpikeRC != vSpikeRect.end(); vIterSpikeRC++) {
@@ -1392,6 +1395,9 @@ void MapManager::PushRect()
 		_RectInfo._rc = RectMake(3157, 1207, 120, 15);
 		vRect.push_back(_RectInfo);
 
+		_RectSave._rc = RectMake(4052, 1191, 1, 50);
+		vSaveRect.push_back(_RectSave);
+
 		_RectInfo._rc = RectMake(3280, 1175, 30, 15);
 		vRect.push_back(_RectInfo);
 
@@ -1480,6 +1486,9 @@ void MapManager::PushRect()
 
 		_RectInfo._rc = RectMake(4283, 631, 70, 15);
 		vRect.push_back(_RectInfo);
+
+		_RectSave._rc = RectMake(4284, 503, 1, 50);
+		vSaveRect.push_back(_RectSave);
 
 		_RectInfo._rc = RectMake(4159, 583, 40, 15);
 		vRect.push_back(_RectInfo);
@@ -1602,6 +1611,9 @@ void MapManager::PushRect()
 		_RectInfo._rc = RectMake(5940, 200, 220, 15);
 		vRect.push_back(_RectInfo);
 
+		_RectSave._rc = RectMake(6193, 87, 1, 50);
+		vSaveRect.push_back(_RectSave);
+
 		_RectInfo._rc = RectMake(6165, 135, 80, 50);
 		vRect.push_back(_RectInfo);
 
@@ -1639,9 +1651,21 @@ void MapManager::CollisionMap()
 		PLAYER->SpikeColliosion(MAPMANAGER->getSpikeVECRc(i));
 	}
 
-	for (int i = 0; i < vSaveRect.size(); i++) {
-		PLAYER->SaveColliosion(MAPMANAGER->getSaveVECRc(i));
+	for (vIterSaveRC = vSaveRect.begin(); vIterSaveRC != vSaveRect.end(); vIterSaveRC++) {
+		RECT rc;
+		if (vIterSaveRC->SaveCheck == false) {
+			if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &vIterSaveRC->_rc)) {
+				SOUNDMANAGER->play("세이브체크", 0.7f);
+				MAPMANAGER->SavePoint();
+
+				if (m_CheckSaveFrame != 0) m_CheckSaveFrame = 0;
+				vIterSaveRC->SaveCheck = true;
+			}
+		}
 	}
+		/*for (int i = 0; i < vSaveRect.size(); i++) {
+			PLAYER->SaveColliosion(MAPMANAGER->getSaveVECRc(i));
+		}*/
 }
 
 void MapManager::CollisionEnemy()
@@ -1682,23 +1706,22 @@ void MapManager::CollisionEnemy()
 
 	for (iterSMALL = vSmallDRG.begin(); iterSMALL != vSmallDRG.end();) {
 		RECT rc;
-		if ((*iterSMALL)->getIsAlive() == true && IntersectRect(&rc, &PLAYER->getAttacRect(), &(*iterSMALL)->getRect())) {
-			(*iterSMALL)->setCrash(true);
-
-			if ((*iterSMALL)->getCrash() == true) (*iterSMALL)->damage(1);
-			
-			if ((*iterSMALL)->getHP() <= 0) {
-				iterSMALL = vSmallDRG.erase(iterSMALL);
+		if ((*iterSMALL)->getHP() > 0) {
+			if (IntersectRect(&rc, &PLAYER->getAttacRect(), &(*iterSMALL)->getRect())) {
+				(*iterSMALL)->damage(1);
 			}
 		}
+		if ((*iterSMALL)->getHP() <= 0) {
+			iterSMALL = vSmallDRG.erase(iterSMALL);
+		}
+		else iterSMALL++;
 
 		/*else if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterSMALL)->getRect())) {
 			(*iterSMALL)->damage(1);
 			PLAYER->DownATKCollision((*iterSMALL)->getRect());
 			iterSMALL = vSmallDRG.erase(iterSMALL);
-		}
-*/
-		else iterSMALL++;
+		}*/
+		
 	}
 
 	for (iterSMALL = vSmallDRG.begin(); iterSMALL != vSmallDRG.end(); iterSMALL++) {
@@ -1804,6 +1827,7 @@ void MapManager::CollisionObject()
 		}
 
 		else if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterDIrt)->getRect())) {
+			SOUNDMANAGER->play("오브젝트다운어택", 0.7f);
 			PLAYER->DownATKtoOBJCollision((*iterDIrt)->getRect());
 			(*iterDIrt)->DigOut();
 			(*iterDIrt)->setCrash(true);
@@ -1831,6 +1855,7 @@ void MapManager::CollisionObject()
 		}
 
 		else if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterSmall)->getRect())) {
+			SOUNDMANAGER->play("오브젝트다운어택", 0.7f);
 			PLAYER->DownATKtoOBJCollision((*iterSmall)->getRect());
 			(*iterSmall)->DigOut();
 			(*iterSmall)->setCrash(true);
@@ -1941,14 +1966,16 @@ void MapManager::ScreenEffect()
 		}
 	}
 
-	if (SaveCheck) {
-		m_FrameCount++;
-		if (m_FrameCount % 7 == 0) {
-			m_CheckSaveFrame++;
-			m_SaveCheckPoint->setFrameX(m_CheckSaveFrame);
+	for (vIterSaveRC = vSaveRect.begin(); vIterSaveRC != vSaveRect.end(); vIterSaveRC++) {
+		if (vIterSaveRC->SaveCheck) {
+			m_FrameCount++;
+			if (m_FrameCount % 7 == 0) {
+				vIterSaveRC->m_CheckSaveFrame++;
+				m_SaveCheckPoint->setFrameX(vIterSaveRC->m_CheckSaveFrame);
 
-			if (m_CheckSaveFrame >= 11) {
-				m_CheckSaveFrame = 8;
+				if (vIterSaveRC->m_CheckSaveFrame >= 11) {
+					vIterSaveRC->m_CheckSaveFrame = 8;
+				}
 			}
 		}
 	}

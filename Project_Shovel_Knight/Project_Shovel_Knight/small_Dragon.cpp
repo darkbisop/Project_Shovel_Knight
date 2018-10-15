@@ -15,14 +15,13 @@ HRESULT small_Dragon::init(float x, float y, smallDG_State phase)
 	m_fSpeed = 1.0f;
 	m_nCurrFrameX_Move = 0;
 	m_nCurrFrameY_Move = 0;
-	m_nLife = 5;
+	m_nLife = 3;
 	m_nPower = 1;
 	m_nFrameCount_Move = 0;
 	m_nScalar = 1;
 	m_isAlive = true;
 	m_isDamage = false;	// 피격 당했을 때
 	m_nDamageCount = 0;
-	m_isCrash = false;
 
 	// 범위 Rect
 	m_rcUpDownRange = RectMakeCenter(m_fX + m_pImg_Move->getFrameWidth() / 2, m_fY, m_pImg_Move->getFrameWidth(), 100);
@@ -48,10 +47,6 @@ void small_Dragon::release()
 
 void small_Dragon::update()
 {
-	if (KEYMANAGER->isOnceKeyDown('G'))	// 임의로 데미지 함수 호출 ( 게임 씬에서 호출 할 예정 )
-	{
-		damage(1);
-	}
 	m_nDamageCount++;
 	if (m_nDamageCount % 30 == 0)	// hit이미지를 깜빡이게 하기위한 식
 	{
@@ -134,10 +129,10 @@ void small_Dragon::render(HDC hdc)
 		}
 	}
 
-	char str[64];
-	wsprintf(str, "%d", m_nLife);
-	//sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
-	TextOut(hdc, m_fX, m_fY, str, strlen(str));
+	//char str[64];
+	//wsprintf(str, "%d", m_nLife);
+	////sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
+	//TextOut(hdc, m_fX, m_fY, str, strlen(str));
 }
 
 void small_Dragon::move()
@@ -266,12 +261,9 @@ void small_Dragon::damage(int damage)
 {
 	if (m_isAlive)
 	{
-		if (m_isCrash) {
-			m_nLife -= damage;
-			m_isDamage = true;
-			m_isCrash = false;
-		}
-
+		m_nLife -= damage;
+		m_isDamage = true;
+	
 		if (m_nLife == 0)
 		{
 			EFFECTMANAGER->play("smallDG_effect", m_fX, m_fY);

@@ -17,6 +17,11 @@ HRESULT PileOfRocks::init(float x, float y)
 	RanD = 0;
 	RandGems = 0;
 
+	SOUNDMANAGER->addSound("보석드랍", "Sound/GemDrop.mp3", false, false);
+	SOUNDMANAGER->addSound("보석득", "Sound/MoneyGet.mp3", false, false);
+	SOUNDMANAGER->addSound("오브젝트다운어택", "Sound/OBJDownATK.mp3", false, false);
+	SOUNDMANAGER->addSound("세이브체크", "Sound/CheckSave.mp3", false, false);
+
 	return S_OK;
 }
 
@@ -40,8 +45,10 @@ void PileOfRocks::update()
 		RECT rc;
 		for (int i = 0; i < MAPMANAGER->getMapVectorRcSize(); i++) {
 			if (IntersectRect(&rc, &v_Iter->rc, &MAPMANAGER->getMapVectorRc(i))) {
+				if (v_Iter->soundOn == false) SOUNDMANAGER->play("보석드랍", 0.8f);
 				v_Iter->gravity = 0;
 				v_Iter->y = MAPMANAGER->getMapVectorRc(i).top - 7;
+				v_Iter->soundOn = true;
 			}
 		}
 	}
@@ -49,6 +56,7 @@ void PileOfRocks::update()
 	for (v_Iter = v_VecJewel.begin(); v_Iter != v_VecJewel.end();) {
 		RECT rc;
 		if (IntersectRect(&rc, &v_Iter->rc, &PLAYER->getPlayerRect())) {
+			SOUNDMANAGER->play("보석득", 0.5f);
 			v_Iter->isAlive = false;
 			v_Iter = v_VecJewel.erase(v_Iter);
 		}
@@ -83,7 +91,7 @@ void PileOfRocks::DigOut()
 	_Count++;
 
 	if (_Count <= 5) {
-		RanD = RANDOM->getFromIntTo(2, 5);
+		RanD = RANDOM->getFromIntTo(1, 3);
 		for (int i = 0; i < RanD; i++) {
 			m_Drop.x = m_fX + 17;
 			m_Drop.y = m_fY + 2;
@@ -91,6 +99,7 @@ void PileOfRocks::DigOut()
 			m_Drop.angle = RANDOM->getFromFloatTo(1.0f, 1.3f);
 			m_Drop.speed = RANDOM->getFromFloatTo(1.3f, 3.0f);
 			m_Drop.RandGem = RANDOM->getFromIntTo(0, 3);
+			m_Drop.soundOn = false;
 			v_VecJewel.push_back(m_Drop);
 		}
 	}

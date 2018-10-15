@@ -27,8 +27,6 @@ private:
 	int		m_nDamageCount;
 	int		m_nPhase;
 
-	bool	m_isCrash;
-
 public:
 	virtual HRESULT init(float x, float y, smallDG_State phase);
 	virtual void release();
@@ -39,8 +37,6 @@ public:
 	void damage(int damage);
 
 	inline int getHP() { return m_nLife; }
-	inline bool getCrash() { return m_isCrash; }
-	inline void setCrash(bool a) { m_isCrash = a; }
 
 	small_Dragon();
 	~small_Dragon();

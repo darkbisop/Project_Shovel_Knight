@@ -11,6 +11,7 @@ struct tagJewelInfo
 	float speed;
 	bool isAlive;
 	int RandGem;
+	bool soundOn;
 };
 
 class PileOfRocks : obejectBasicInfo
@@ -29,7 +30,6 @@ private:
 	int RandGems;
 
 	float m_fX, m_fY, m_angle, m_gravity;
-	
 
 public:
 

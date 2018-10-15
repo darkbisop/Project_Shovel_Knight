@@ -50,6 +50,7 @@ void dirtBlock::update()
 	for (v_Iter = v_VecJewel.begin(); v_Iter != v_VecJewel.end();) {
 		RECT rc;
 		if (IntersectRect(&rc, &v_Iter->rc, &PLAYER->getPlayerRect())) {
+			SOUNDMANAGER->play("º¸¼®µæ", 0.5f);
 			v_Iter->isAlive = false;
 			v_Iter = v_VecJewel.erase(v_Iter);
 		}
