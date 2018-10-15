@@ -38,7 +38,7 @@ HRESULT MapManager::init(void)
 	m_Shop->init();
 	m_Shop->setInventoryLink(PLAYER->getInventory());
 
-	EFFECTMANAGER->addEffect("enemy_effect", "image/effect/enemy_effect.bmp", 120, 16, 24, 16, 10, 10);
+	//EFFECTMANAGER->addEffect("enemy_effect", "image/effect/enemy_effect.bmp", 120, 16, 24, 16, 10, 10);
 	SOUNDMANAGER->addSound("¸¶À»", "Sound/Village.mp3", false, false);
 
 	for (int i = 0; i < 24; i++) {
@@ -84,7 +84,6 @@ void MapManager::update(void)
 	m_pObjectMgr->update();
 	EFFECTMANAGER->update();
 	CollisionObject();
-
 	CollisionEnemy();
 	CollisionBoss();
 	CollisionMap();
@@ -889,6 +888,7 @@ void MapManager::MovingMap()
 				CurrMapNum = 12;
 				MovingCamera[9] = false;
 				MapOn[8] = false;
+				m_pEnemyMgr->setSmallDragon();
 				m_pObjectMgr->setDirtblock();
 				m_pObjectMgr->setSmallBlock();
 				PushRect();
@@ -913,6 +913,7 @@ void MapManager::MovingMap()
 				MovingCamera[12] = false;
 				MapOn[10] = false;
 				m_pObjectMgr->setMovingFloor();
+				m_pEnemyMgr->setSmallDragon();
 				PushRect();
 			}
 		}
@@ -973,6 +974,7 @@ void MapManager::MovingMap()
 				CurrMapNum = 15;
 				MovingCamera[14] = false;
 				MapOn[13] = false;
+				m_pEnemyMgr->setSmallDragon();
 				//m_pObjectMgr->setDirtblock();
 				//m_pObjectMgr->setSmallBlock();
 				PushRect();
@@ -1116,6 +1118,7 @@ void MapManager::MovingMap()
 				CurrMapNum = 21;
 				MovingCamera[20] = false;
 				MapOn[20] = false;
+				m_pEnemyMgr->setSmallDragon();
 				PushRect();
 			}
 		}
@@ -1671,6 +1674,42 @@ void MapManager::CollisionEnemy()
 			}
 		}
 	}
+
+
+
+	vector<small_Dragon*> vSmallDRG = m_pEnemyMgr->getVecSmallDRG();
+	vector<small_Dragon*>::iterator iterSMALL;
+
+	for (iterSMALL = vSmallDRG.begin(); iterSMALL != vSmallDRG.end();) {
+		RECT rc;
+		if ((*iterSMALL)->getIsAlive() == true && IntersectRect(&rc, &PLAYER->getAttacRect(), &(*iterSMALL)->getRect())) {
+			(*iterSMALL)->setCrash(true);
+
+			if ((*iterSMALL)->getCrash() == true) (*iterSMALL)->damage(1);
+			
+			if ((*iterSMALL)->getHP() <= 0) {
+				iterSMALL = vSmallDRG.erase(iterSMALL);
+			}
+		}
+
+		/*else if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterSMALL)->getRect())) {
+			(*iterSMALL)->damage(1);
+			PLAYER->DownATKCollision((*iterSMALL)->getRect());
+			iterSMALL = vSmallDRG.erase(iterSMALL);
+		}
+*/
+		else iterSMALL++;
+	}
+
+	for (iterSMALL = vSmallDRG.begin(); iterSMALL != vSmallDRG.end(); iterSMALL++) {
+		RECT rc;
+		if (PLAYER->getInvincibleTime() == false) {
+			if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &(*iterSMALL)->getRect())) {
+				PLAYER->setIsDamaged(true);
+				PLAYER->setInvincibleTime(true);
+			}
+		}
+	}
 }
 
 void MapManager::CollisionBoss()
@@ -1723,12 +1762,14 @@ void MapManager::CollisionBoss()
 				iterBuble = vbuble.erase(iterBuble);
 			}
 
-			else if (PLAYER->getInvincibleTime() == false) {
-				if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &(*iterBuble)->getRECT())) {
+			else if ((*iterBuble)->getIsFire() == true && IntersectRect(&rc, &PLAYER->getPlayerRect(), &(*iterBuble)->getRECT())) {
+				if (PLAYER->getInvincibleTime() == false) {
 					PLAYER->setIsDamaged(true);
 					PLAYER->setInvincibleTime(true);
-					iterBuble = vbuble.erase(iterBuble);
+					
 				}
+				((*iterBuble)->setIsFire(false));
+				iterBuble = vbuble.erase(iterBuble);
 			}
 
 			else iterBuble++;

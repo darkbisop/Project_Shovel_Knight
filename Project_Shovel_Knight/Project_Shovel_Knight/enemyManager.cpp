@@ -1,7 +1,5 @@
 #include "stdafx.h"
 #include "enemyManager.h"
-#include "spaceShip.h"
-
 
 HRESULT enemyManager::init()
 {
@@ -16,8 +14,12 @@ void enemyManager::release()
 	for (m_IterBBD = m_VecBBD.begin(); m_IterBBD != m_VecBBD.end(); m_IterBBD++) {
 		delete (*m_IterBBD);
 	}
+	for (m_IterSmallDRG = m_VecSmallDRG.begin(); m_IterSmallDRG != m_VecSmallDRG.end(); m_IterSmallDRG++) {
+		delete (*m_IterSmallDRG);
+	}
 	m_VecBug.clear();
 	m_VecBBD.clear();
+	m_VecSmallDRG.clear();
 }
 
 void enemyManager::update()
@@ -28,6 +30,9 @@ void enemyManager::update()
 	for (m_IterBBD = m_VecBBD.begin(); m_IterBBD != m_VecBBD.end(); m_IterBBD++) {
 		(*m_IterBBD)->update();
 	}
+	for (m_IterSmallDRG = m_VecSmallDRG.begin(); m_IterSmallDRG != m_VecSmallDRG.end(); m_IterSmallDRG++) {
+		(*m_IterSmallDRG)->update();
+	}
 }
 
 void enemyManager::render(HDC hdc)
@@ -37,6 +42,9 @@ void enemyManager::render(HDC hdc)
 	}
 	for (m_IterBBD = m_VecBBD.begin(); m_IterBBD != m_VecBBD.end(); m_IterBBD++) {
 		(*m_IterBBD)->render(hdc);
+	}
+	for (m_IterSmallDRG = m_VecSmallDRG.begin(); m_IterSmallDRG != m_VecSmallDRG.end(); m_IterSmallDRG++) {
+		(*m_IterSmallDRG)->render(hdc);
 	}
 }
 
@@ -89,6 +97,30 @@ void enemyManager::setBubleDragon()
 		pBBD = new bubble_Dragon;
 		pBBD->init(5374, 546);
 		m_VecBBD.push_back(pBBD);
+	}
+}
+
+void enemyManager::setSmallDragon()
+{
+	if (MAPMANAGER->getMapOn(10)) {
+		small_Dragon* pSMD;
+		pSMD = new small_Dragon;
+		pSMD->init(3575, 1130, smallDG_CIRCLE);
+		m_VecSmallDRG.push_back(pSMD);
+	}
+
+	if (MAPMANAGER->getMapOn(13)) {
+		small_Dragon* pSMD;
+		pSMD = new small_Dragon;
+		pSMD->init(4110, 950, smallDG_CIRCLE);
+		m_VecSmallDRG.push_back(pSMD);
+	}
+
+	if (MAPMANAGER->getMapOn(15)) {
+		small_Dragon* pSMD;
+		pSMD = new small_Dragon;
+		pSMD->init(4060, 705, smallDG_UPDOWN);
+		m_VecSmallDRG.push_back(pSMD);
 	}
 }
 

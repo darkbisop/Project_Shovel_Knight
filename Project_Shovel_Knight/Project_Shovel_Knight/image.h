@@ -61,6 +61,11 @@ private:
 	BLENDFUNCTION	m_blendFunc;	// 알파 블렌드를 위한 정보
 	LPIMAGE_INFO	m_pBlendImage;	// 알파 블렌드를 사용하기 위한 중간 이미지
 
+									// 피격 블렌드
+	BLENDFUNCTION	m_blendFuncHit;		// 피격 블렌드를 위한 정보
+	LPIMAGE_INFO	m_pBlendImageHit;	// 피격 블렌드를 사용하기 위한 생성 이미지
+	LPIMAGE_INFO	m_pTempImageHit;	// 피격 블렌드를 사용하기 위한 임시 이미지
+
 public:
 	image();
 	~image();
@@ -101,6 +106,11 @@ public:
 	void aniRender(HDC hdc, int destX, int destY, animation* ani, int scalar = 1);
 
 	void loopRender(HDC hdc, const LPRECT drawArea, int offsetX, int offsetY);
+
+	// 피격 렌더
+	void hitRender(HDC hdc, int destX, int destY, COLORREF color);
+
+	void hitRender(HDC hdc, int destX, int destY, COLORREF color, int scalar);
 
 	void setTransColor(bool trans, COLORREF transColor);
 

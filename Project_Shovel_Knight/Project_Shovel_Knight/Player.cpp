@@ -111,7 +111,7 @@ void Player::render(HDC hdc)
 {
 	//Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
 	Rectangle(hdc, m_AttackRc.left, m_AttackRc.top, m_AttackRc.right, m_AttackRc.bottom);
-	Rectangle(hdc, m_AttackDownRc.left, m_AttackDownRc.top, m_AttackDownRc.right, m_AttackDownRc.bottom);
+	//Rectangle(hdc, m_AttackDownRc.left, m_AttackDownRc.top, m_AttackDownRc.right, m_AttackDownRc.bottom);
 
 	ShovelRender(hdc);
 
@@ -176,7 +176,7 @@ void Player::KeyProcess()
 
 	if (jumpSpeed > 1.0f && KEYMANAGER->isStayKeyDown(VK_DOWN) || gravity > 0.1f && KEYMANAGER->isStayKeyDown(VK_DOWN)) {
 		m_State = P_DOWNATTACK;
-		m_AttackDownRc = RectMake(m_fX + 7, m_fY + 20, 10, 10);
+		m_AttackDownRc = RectMake(m_fX + 7, m_fY + 20, 17, 10);
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('X')) {

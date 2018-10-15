@@ -23,32 +23,31 @@ void objectManager::release()
 	for (m_IterPOR = v_PileOfRocks.begin(); m_IterPOR != v_PileOfRocks.end(); m_IterPOR++) {
 		delete (*m_IterPOR);
 	}
+	v_PileOfRocks.clear();
 
 	for (m_IterDirtBlock = v_dirtBlock.begin(); m_IterDirtBlock != v_dirtBlock.end(); m_IterDirtBlock++) {
 		delete (*m_IterDirtBlock);
 	}
+	v_dirtBlock.clear();
 
 	for (m_IterSmallBlock = v_SmallBlock.begin(); m_IterSmallBlock != v_SmallBlock.end(); m_IterSmallBlock++) {
 		delete (*m_IterSmallBlock);
 	}
+	v_SmallBlock.clear();
 
 	for (m_iter = m_vecBubble.begin(); m_iter != m_vecBubble.end(); m_iter++) {
 		delete (*m_iter);
 	}
+	m_vecBubble.clear();
 
 	for (m_IterMoving = v_MovingFloor.begin(); m_IterMoving != v_MovingFloor.end(); m_IterMoving++) {
 		delete (*m_IterMoving);
 	}
+	v_MovingFloor.clear();
 
 	for (m_IterBuble = v_BubleBuble.begin(); m_IterBuble != v_BubleBuble.end(); m_IterBuble++) {
 		delete (*m_IterBuble);
 	}
-
-	v_PileOfRocks.clear();
-	v_dirtBlock.clear();
-	v_SmallBlock.clear();
-	m_vecBubble.clear();
-	v_MovingFloor.clear();
 	v_BubleBuble.clear();
 }
 

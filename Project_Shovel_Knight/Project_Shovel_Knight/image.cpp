@@ -125,6 +125,60 @@ HRESULT image::init(const char * szFileName, int width, int height, bool trans /
 	m_pBlendImage->nWidth = WINSIZEX;
 	m_pBlendImage->nHeight = WINSIZEY;
 
+	// 피격 블렌드
+	m_blendFuncHit.AlphaFormat = 0;
+	m_blendFuncHit.BlendFlags = 0;
+	m_blendFuncHit.BlendOp = AC_SRC_OVER;
+
+	m_pBlendImageHit = new IMAGE_INFO;
+	m_pBlendImageHit->hMemDC = CreateCompatibleDC(hdc);
+	m_pBlendImageHit->hBitmap = CreateCompatibleBitmap(hdc, m_pImageInfo->nWidth, m_pImageInfo->nHeight);
+	m_pBlendImageHit->hOldBitmap = (HBITMAP)SelectObject(m_pBlendImageHit->hMemDC, m_pBlendImageHit->hBitmap);
+	m_pBlendImageHit->nWidth = m_pImageInfo->nWidth;
+	m_pBlendImageHit->nHeight = m_pImageInfo->nHeight;
+
+	// 브러시 색상 이미지 준비
+	HBRUSH brush = CreateSolidBrush(RGB(255, 0, 0));
+	HBRUSH oldBrush = (HBRUSH)SelectObject(m_pBlendImageHit->hMemDC, brush);
+	FillRect(m_pBlendImageHit->hMemDC, &RectMake(0, 0, m_pBlendImageHit->nWidth, m_pBlendImageHit->nHeight), brush);
+	SelectObject(m_pBlendImageHit->hMemDC, oldBrush);
+	DeleteObject(brush);
+
+	//for (int y = 0; y < m_pBlendImageHit->nHeight; y++)
+	//{
+	//	for (int x = 0; x < m_pBlendImageHit->nWidth; x++)
+	//	{
+	//		COLORREF color = GetPixel(m_pImageInfo->hMemDC, x, y);
+	//		int r = GetRValue(color);
+	//		int g = GetGValue(color);
+	//		int b = GetBValue(color);
+	//		if (!(r == 255 && g == 0 && b == 255))
+	//		{
+	//			SetPixel(m_pBlendImageHit->hMemDC, x, y, RGB(255, 0, 0));
+	//		}
+	//		else
+	//		{
+	//			SetPixel(m_pBlendImageHit->hMemDC, x, y, RGB(255, 0, 255));
+	//		}
+	//	}
+	//}
+
+	m_pTempImageHit = new IMAGE_INFO;
+	// 기본 DC와 분리되는 메모리 DC, 비트맵 출력을 위한 공간
+	m_pTempImageHit->hMemDC = CreateCompatibleDC(hdc);
+	// 원본 DC와 호환되는 비트맵 생성
+	m_pTempImageHit->hBitmap = (HBITMAP)LoadImage(
+		g_hInstance,
+		szFileName,
+		IMAGE_BITMAP,
+		width, height,
+		LR_LOADFROMFILE);
+	// 새로 생성한 메모리DC 와 새로 생성한 비트맵을 연동시킨다
+	m_pTempImageHit->hOldBitmap = (HBITMAP)SelectObject(m_pTempImageHit->hMemDC, m_pTempImageHit->hBitmap);
+
+	m_pTempImageHit->nWidth = width;
+	m_pTempImageHit->nHeight = height;
+
 	// 투명 컬러 셋팅
 	m_isTransparent = trans;
 	m_transColor = transColor;
@@ -186,6 +240,61 @@ HRESULT image::init(const char * szFileName, float x, float y,
 		m_pBlendImage->hMemDC, m_pBlendImage->hBitmap);
 	m_pBlendImage->nWidth = WINSIZEX;
 	m_pBlendImage->nHeight = WINSIZEY;
+
+	// 피격 블렌드
+	m_blendFuncHit.AlphaFormat = 0;
+	m_blendFuncHit.BlendFlags = 0;
+	m_blendFuncHit.BlendOp = AC_SRC_OVER;
+
+	m_pBlendImageHit = new IMAGE_INFO;
+	m_pBlendImageHit->hMemDC = CreateCompatibleDC(hdc);
+	m_pBlendImageHit->hBitmap = CreateCompatibleBitmap(hdc, m_pImageInfo->nFrameWidth, m_pImageInfo->nFrameHeight);
+	m_pBlendImageHit->hOldBitmap = (HBITMAP)SelectObject(m_pBlendImageHit->hMemDC, m_pBlendImageHit->hBitmap);
+	m_pBlendImageHit->nWidth = m_pImageInfo->nFrameWidth;
+	m_pBlendImageHit->nHeight = m_pImageInfo->nFrameHeight;
+
+	//for (int y = 0; y < m_pBlendImageHit->nHeight; y++)
+	//{
+	//	for (int x = 0; x < m_pBlendImageHit->nWidth; x++)
+	//	{
+	//		COLORREF color = GetPixel(m_pImageInfo->hMemDC, x, y);
+	//		int r = GetRValue(color);
+	//		int g = GetGValue(color);
+	//		int b = GetBValue(color);
+	//		if (!(r == 255 && g == 0 && b == 255))
+	//		{
+	//			SetPixel(m_pBlendImageHit->hMemDC, x, y, RGB(255, 0, 0));
+	//		}
+	//		else
+	//		{
+	//			SetPixel(m_pBlendImageHit->hMemDC, x, y, RGB(255, 0, 255));
+	//		}
+	//	}
+	//}
+
+	m_pTempImageHit = new IMAGE_INFO;
+	// 기본 DC와 분리되는 메모리 DC, 비트맵 출력을 위한 공간
+	m_pTempImageHit->hMemDC = CreateCompatibleDC(hdc);
+	// 원본 DC와 호환되는 비트맵 생성
+	m_pTempImageHit->hBitmap = (HBITMAP)LoadImage(
+		g_hInstance,
+		szFileName,
+		IMAGE_BITMAP,
+		width, height,
+		LR_LOADFROMFILE);
+	// 새로 생성한 메모리DC 와 새로 생성한 비트맵을 연동시킨다
+	m_pTempImageHit->hOldBitmap = (HBITMAP)SelectObject(m_pTempImageHit->hMemDC, m_pTempImageHit->hBitmap);
+
+	m_pTempImageHit->fX = x;
+	m_pTempImageHit->fY = y;
+	m_pTempImageHit->nCurrFrameX = 0;
+	m_pTempImageHit->nCurrFrameY = 0;
+	m_pTempImageHit->nWidth = width;
+	m_pTempImageHit->nHeight = height;
+	m_pTempImageHit->nFrameWidth = width / frameX;
+	m_pTempImageHit->nFrameHeight = height / frameY;
+	m_pTempImageHit->nMaxFrameX = frameX - 1;
+	m_pTempImageHit->nMaxFrameY = frameY - 1;
 
 	// 투명 컬러 셋팅
 	m_isTransparent = trans;
@@ -620,6 +729,152 @@ void image::loopRender(HDC hdc, const LPRECT drawArea, int offsetX, int offsetY)
 			// 그려주자
 			render(hdc, rcDest.left, rcDest.top, rcSour.left, rcSour.top, rcSour.right - rcSour.left, rcSour.bottom - rcSour.top);
 		}
+	}
+}
+
+void image::hitRender(HDC hdc, int destX, int destY, COLORREF color)
+{
+	//// 브러시 색상 이미지 준비
+	//HBRUSH brush = CreateSolidBrush(color);
+	//HBRUSH oldBrush = (HBRUSH)SelectObject(m_pBlendImageHit->hMemDC, brush);
+
+	//BitBlt(
+	//	// 목적지
+	//	m_pBlendImageHit->hMemDC,
+	//	0, 0,
+	//	m_pBlendImageHit->nWidth, m_pBlendImageHit->nHeight,
+
+	//	// 대상
+	//	m_pBlendImageHit->hMemDC,
+	//	0, 0,
+	//	PATCOPY);
+
+	//SelectObject(m_pBlendImageHit->hMemDC, oldBrush);
+	//DeleteObject(brush);
+
+	// 임시 이미지 준비
+	BitBlt(
+		// 목적지
+		m_pTempImageHit->hMemDC,
+		0, 0,
+		m_pTempImageHit->nWidth, m_pTempImageHit->nHeight,
+
+		// 대상
+		m_pImageInfo->hMemDC,
+		0, 0,
+		SRCCOPY);
+
+	// 브러시 + 임시
+	BitBlt(
+		// 목적지
+		m_pTempImageHit->hMemDC,
+		0, 0,
+		m_pTempImageHit->nWidth, m_pTempImageHit->nHeight,
+
+		// 대상
+		m_pBlendImageHit->hMemDC,
+		0, 0,
+		SRCPAINT);
+
+	if (m_isTransparent)
+	{
+		// 임시 이미지 출력
+		GdiTransparentBlt(
+			// 목적지
+			hdc,
+			destX, destY,
+			m_pImageInfo->nWidth, m_pImageInfo->nHeight,
+			// 대상
+			m_pTempImageHit->hMemDC,
+			0, 0,
+			m_pTempImageHit->nWidth, m_pTempImageHit->nHeight,
+			m_transColor);
+	}
+	else
+	{
+		// 임시 이미지 출력
+		BitBlt(
+			// 목적지
+			hdc,
+			destX, destY,
+			m_pImageInfo->nWidth, m_pImageInfo->nHeight,
+			// 대상
+			m_pTempImageHit->hMemDC,
+			0, 0,
+			SRCCOPY);
+	}
+}
+
+void image::hitRender(HDC hdc, int destX, int destY, COLORREF color, int scalar)
+{
+	//// 브러시 색상 이미지 준비
+	//HBRUSH brush = CreateSolidBrush(color);
+	//HBRUSH oldBrush = (HBRUSH)SelectObject(m_pBlendImageHit->hMemDC, brush);
+
+	//BitBlt(
+	//	// 목적지
+	//	m_pBlendImageHit->hMemDC,
+	//	0, 0,
+	//	m_pBlendImageHit->nWidth, m_pBlendImageHit->nHeight,
+
+	//	// 대상
+	//	m_pBlendImageHit->hMemDC,
+	//	0, 0,
+	//	PATCOPY);
+
+	//SelectObject(m_pBlendImageHit->hMemDC, oldBrush);
+	//DeleteObject(brush);
+
+	// 임시 이미지 준비
+	BitBlt(
+		// 목적지
+		m_pTempImageHit->hMemDC,
+		0, 0,
+		m_pTempImageHit->nWidth * scalar, m_pTempImageHit->nHeight * scalar,
+
+		// 대상
+		m_pImageInfo->hMemDC,
+		0, 0,
+		SRCCOPY);
+
+	// 브러시 + 임시
+	BitBlt(
+		// 목적지
+		m_pTempImageHit->hMemDC,
+		0, 0,
+		m_pTempImageHit->nWidth * scalar, m_pTempImageHit->nHeight * scalar,
+
+		// 대상
+		m_pBlendImageHit->hMemDC,
+		0, 0,
+		SRCPAINT);
+
+	if (m_isTransparent)
+	{
+		// 임시 이미지 출력
+		GdiTransparentBlt(
+			// 목적지
+			hdc,
+			destX, destY,
+			m_pImageInfo->nWidth * scalar, m_pImageInfo->nHeight * scalar,
+			// 대상
+			m_pTempImageHit->hMemDC,
+			0, 0,
+			m_pTempImageHit->nWidth, m_pTempImageHit->nHeight,
+			m_transColor);
+	}
+	else
+	{
+		// 임시 이미지 출력
+		BitBlt(
+			// 목적지
+			hdc,
+			destX, destY,
+			m_pImageInfo->nWidth * scalar, m_pImageInfo->nHeight * scalar,
+			// 대상
+			m_pTempImageHit->hMemDC,
+			0, 0,
+			SRCCOPY);
 	}
 }
 

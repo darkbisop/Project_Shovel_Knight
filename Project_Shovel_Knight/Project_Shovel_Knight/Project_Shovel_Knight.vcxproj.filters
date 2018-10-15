@@ -249,6 +249,12 @@
     <ClInclude Include="BubleBuble.h">
       <Filter>메인게임\오브젝트\오브젝트들</Filter>
     </ClInclude>
+    <ClInclude Include="enemyInfo.h">
+      <Filter>메인게임\에너미</Filter>
+    </ClInclude>
+    <ClInclude Include="small_Dragon.h">
+      <Filter>메인게임\에너미</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -394,6 +400,12 @@
     </ClCompile>
     <ClCompile Include="BubleBuble.cpp">
       <Filter>메인게임\오브젝트\오브젝트들</Filter>
+    </ClCompile>
+    <ClCompile Include="enemyInfo.cpp">
+      <Filter>메인게임\에너미</Filter>
+    </ClCompile>
+    <ClCompile Include="small_Dragon.cpp">
+      <Filter>메인게임\에너미</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
