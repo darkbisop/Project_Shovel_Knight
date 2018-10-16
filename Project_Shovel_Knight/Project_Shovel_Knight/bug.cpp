@@ -225,6 +225,20 @@ void bug::damage(int damage)
 	}
 }
 
+void bug::Updamage(int damage)
+{
+	if (m_isAlive)
+	{
+		m_nLife -= damage;
+		if (m_nLife == 0)
+		{
+			m_isAlive = false;
+			EFFECTMANAGER->play("bug_effect", m_fX, m_fY);
+			m_rc = RectMake(-1, -1, -1, -1);
+		}
+	}
+}
+
 bug::bug()
 {
 }

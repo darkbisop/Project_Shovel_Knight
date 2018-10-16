@@ -1679,8 +1679,8 @@ void MapManager::CollisionEnemy()
 		}
 
 		else if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iter)->getRect())) {
-			(*iter)->damage(1);
 			PLAYER->DownATKCollision((*iter)->getRect());
+			(*iter)->Updamage(1);
 			iter = vBug.erase(iter);
 		}
 

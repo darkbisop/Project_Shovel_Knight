@@ -191,10 +191,10 @@ void Player::KeyProcess()
 	}
 	
 
-	if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && m_isRight == true && m_isMovingMap && m_State == P_MOVE) {
+	if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && m_isRight == true && m_isMovingMap) {
 		m_State = P_MOVE;
 	}
-	if (KEYMANAGER->isStayKeyDown(VK_LEFT) && m_isRight == false && m_State == P_MOVE) {
+	if (KEYMANAGER->isStayKeyDown(VK_LEFT) && m_isRight == false && m_isMovingMap) {
 		m_State = P_MOVE;
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_UP) && m_isMovingMap && m_State == P_LADDERUP) {
@@ -206,7 +206,8 @@ void Player::KeyProcess()
 	if (KEYMANAGER->isStayKeyDown(VK_DOWN) && m_isMovingMap && m_State == P_DOWNATTACK) {
 		m_State = P_DOWNATTACK;
 	}
-	if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && m_isMovingMap && m_State == P_DOWNATTACK) {
+
+	if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && KEYMANAGER->isStayKeyDown(VK_DOWN) && m_isMovingMap && m_State == P_DOWNATTACK) {
 		m_State = P_DOWNATTACK;
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && m_isMovingMap && m_State == P_JUMP) {
@@ -711,7 +712,7 @@ void Player::OBJCollision(RECT x)
 	}
 }
 
-Player::Player() : Money(10000)
+Player::Player() 
 {
 }
 

@@ -105,7 +105,7 @@ void Inventory::render(HDC hdc)
 
 		for (int y = 0; y < INVENTORY_Y; y++) {
 			for (int x = 0; x < INVENTORY_X; x++) {
-				Rectangle(hdc, m_Inventory[y][x]._rect.left, m_Inventory[y][x]._rect.top, m_Inventory[y][x]._rect.right, m_Inventory[y][x]._rect.bottom);
+				//Rectangle(hdc, m_Inventory[y][x]._rect.left, m_Inventory[y][x]._rect.top, m_Inventory[y][x]._rect.right, m_Inventory[y][x]._rect.bottom);
 				if (m_Inventory[y][x].m_pItem) {
 					m_Inventory[y][x].m_pItem->getImage()->render(hdc, m_Inventory[y][x]._rect.left + MAPMANAGER->getCamera().x,
 						m_Inventory[y][x]._rect.top + MAPMANAGER->getCamera().y);

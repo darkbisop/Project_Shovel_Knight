@@ -58,15 +58,15 @@ HRESULT titleScene::init()
 	m_fMusicVolumeX_Audio = WINSIZEX / 2 + 70;
 	m_fSoundVolumeX_Audio = WINSIZEX / 2 + 70;
 
-	m_rcBack_Audio = RectMake(m_fX_Audio, m_fY_Audio, 51, 18);
+	m_rcBack_Audio = RectMake(m_fX_Audio, m_fY_Audio - 5, 51, 15);
 
-	m_rcSoundVolume_Audio = RectMake(m_fX_Audio, m_fY_Audio + 18, 80, 18);
-	m_rcMusicVolume_Audio = RectMake(m_fX_Audio, m_fY_Audio + 36, 80, 18);
+	m_rcSoundVolume_Audio = RectMake(m_fX_Audio, m_fY_Audio + 13, 80, 15);
+	m_rcMusicVolume_Audio = RectMake(m_fX_Audio, m_fY_Audio + 33, 80, 15);
 
-	m_rcSelect_Audio = RectMake(m_fX_Audio+10, m_fY_Audio, 80, 20);
+	m_rcSelect_Audio = RectMake(m_fX_Audio+10, m_fY_Audio - 5, 80, 15);
 
-	m_rcSound_Audio = RectMake(m_fSoundVolumeX_Audio + 5, 109, 5, 10);
-	m_rcMusic_Audio = RectMake(m_fMusicVolumeX_Audio + 5, 128, 5, 10);
+	m_rcSound_Audio = RectMake(m_fSoundVolumeX_Audio + 5, 106, 5, 10);
+	m_rcMusic_Audio = RectMake(m_fMusicVolumeX_Audio + 5, 125, 5, 10);
 
 	m_rcSoundRange_Audio = RectMake(m_fSoundVolumeX_Audio + 5, 109, 55, 10);
 
@@ -135,7 +135,7 @@ void titleScene::audioRender(HDC hdc)
 {
 	if (m_isAudio && !m_isOptions)
 	{
-		m_pWindow_Audio->render(hdc, WINSIZEX / 2 - m_pWindow_Audio->getWidth() / 2, WINSIZEY / 2 - m_pWindow_Audio->getHeight() / 2 + 40);
+		m_pWindow_Audio->render(hdc, WINSIZEX / 2 - m_pWindow_Audio->getWidth() / 2, WINSIZEY / 2 - m_pWindow_Audio->getHeight() / 2 + 38);
 		//Rectangle(hdc, m_rcSoundVolume_Audio.left, m_rcSoundVolume_Audio.top, m_rcSoundVolume_Audio.right, m_rcSoundVolume_Audio.bottom);
 		//Rectangle(hdc, m_rcMusicVolume_Audio.left, m_rcMusicVolume_Audio.top, m_rcMusicVolume_Audio.right, m_rcMusicVolume_Audio.bottom);
 		//Rectangle(hdc, m_rcBack_Audio.left, m_rcBack_Audio.top, m_rcBack_Audio.right, m_rcBack_Audio.bottom);
@@ -145,11 +145,11 @@ void titleScene::audioRender(HDC hdc)
 		//Rectangle(hdc, m_rcSoundRange_Audio.left, m_rcSoundRange_Audio.top, m_rcSoundRange_Audio.right, m_rcSoundRange_Audio.bottom);
 		if (!m_isDown_Audio)
 		{
-			m_pSelect_Audio->render(hdc, m_fX_Audio + 5, m_fY_Audio - 5);
+			m_pSelect_Audio->render(hdc, m_fX_Audio + 4, m_fY_Audio - 8);
 		}
 		else
 		{
-			m_pVolume_Audio->render(hdc, m_fX_Audio + 5, m_fY_Audio - 3);
+			m_pVolume_Audio->render(hdc, m_fX_Audio + 4, m_fY_Audio - 8);
 		}
 	}
 }
@@ -171,6 +171,7 @@ void titleScene::titleUpdate()
 		}
 		if (m_isFlash)
 		{
+			m_fX += 8.0f;
 			m_nFrameCount_Start ++;
 			if (m_nFrameCount_Start % 5 == 0)
 			{
@@ -261,8 +262,8 @@ void titleScene::audioUpdate()
 			if (m_rcSelect_Audio.bottom < m_rcMusicVolume_Audio.bottom)
 			{
 				m_fX_Audio += 0.0f;
-				m_fY_Audio += 18.0f;
-				m_rcSelect_Audio = RectMake(m_fX_Audio, m_fY_Audio, 80, 20);
+				m_fY_Audio += 20.0f;
+				m_rcSelect_Audio = RectMake(m_fX_Audio + 10, m_fY_Audio - 5, 80, 15);
 				m_isDown_Audio = true;
 			}
 		}
@@ -272,8 +273,8 @@ void titleScene::audioUpdate()
 			if (m_rcSelect_Audio.top > m_rcBack_Audio.top)
 			{
 				m_fX_Audio += 0.0f;
-				m_fY_Audio -= 18.0f;
-				m_rcSelect_Audio = RectMake(m_fX_Audio, m_fY_Audio, 80, 20);
+				m_fY_Audio -= 20.0f;
+				m_rcSelect_Audio = RectMake(m_fX_Audio + 10, m_fY_Audio - 5, 80, 15);
 			}
 		}
 	}
@@ -360,12 +361,12 @@ void titleScene::audioCollide()
 			if (KEYMANAGER->isOnceKeyDown(VK_RIGHT) && m_rcSound_Audio.right < m_rcSoundRange_Audio.right)
 			{
 				m_fSoundVolumeX_Audio += 5.0f;
-				m_rcSound_Audio = RectMake(m_fSoundVolumeX_Audio + 5, 109, 5, 10);
+				m_rcSound_Audio = RectMake(m_fSoundVolumeX_Audio + 5, 106, 5, 10);
 			}
 			if (KEYMANAGER->isOnceKeyDown(VK_LEFT) && m_rcSound_Audio.left > m_rcSoundRange_Audio.left)
 			{
 				m_fSoundVolumeX_Audio -= 5.0f;
-				m_rcSound_Audio = RectMake(m_fSoundVolumeX_Audio + 5, 109, 5, 10);
+				m_rcSound_Audio = RectMake(m_fSoundVolumeX_Audio + 5, 106, 5, 10);
 			}
 		}
 		if (IntersectRect(&rc, &m_rcMusicVolume_Audio, &m_rcSelect_Audio))
@@ -373,12 +374,12 @@ void titleScene::audioCollide()
 			if (KEYMANAGER->isOnceKeyDown(VK_RIGHT) && m_rcMusic_Audio.right < m_rcSoundRange_Audio.right)
 			{
 				m_fMusicVolumeX_Audio += 5.0f;
-				m_rcMusic_Audio = RectMake(m_fMusicVolumeX_Audio + 5, 128, 5, 10);
+				m_rcMusic_Audio = RectMake(m_fMusicVolumeX_Audio + 5, 125, 5, 10);
 			}
 			if (KEYMANAGER->isOnceKeyDown(VK_LEFT) && m_rcMusic_Audio.left > m_rcSoundRange_Audio.left)
 			{
 				m_fMusicVolumeX_Audio -= 5.0f;
-				m_rcMusic_Audio = RectMake(m_fMusicVolumeX_Audio + 5, 128, 5, 10);
+				m_rcMusic_Audio = RectMake(m_fMusicVolumeX_Audio + 5, 125, 5, 10);
 			}
 		}
 	}

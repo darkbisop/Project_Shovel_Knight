@@ -21,6 +21,7 @@ public:
 	void move();
 	void dieMove();
 	void damage(int damage);
+	void Updamage(int damage);
 	void moveFrame();
 	void dieFrame();
 	void frameChange();

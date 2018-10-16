@@ -34,10 +34,12 @@ void Shop::update(void)
 {
 	if (ShopOn == false && KEYMANAGER->isOnceKeyDown('S')) {
 		ShopOn = true;
+		PLAYER->setIsMovingMap(true);
 	}
 
 	else if (ShopOn == true && KEYMANAGER->isOnceKeyDown('S')) {
 		ShopOn = false;
+		PLAYER->setIsMovingMap(false);
 	}
 
 	if (ShopOn) {
