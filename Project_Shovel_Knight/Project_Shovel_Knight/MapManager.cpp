@@ -19,7 +19,7 @@ HRESULT MapManager::init(void)
 	m_Screen = IMAGEMANAGER->addImage("ScreenSFX", "image/effect/ScreenSFX.bmp", 3200, 238, 8, 1, true, RGB(255, 0, 255));
 	m_ScreenRvs = IMAGEMANAGER->addImage("ScreenSFXRR", "image/effect/ScreenSFX.bmp", 3200, 238, 8, 1, true, RGB(255, 0, 255));
 	m_SaveCheckPoint = IMAGEMANAGER->addImage("Check", "image/Object/Check.bmp", 231, 48, 11, 1, true, RGB(255, 0, 255));
-
+	
 	m_pMapImage = new MapImage;
 	m_pMapImage->init();
 
@@ -55,6 +55,9 @@ HRESULT MapManager::init(void)
 	ScreenSFXREV2 = false;
 	m_ReverseFrameX = 8;
 	m_screenFrame = 8;
+
+	m_ScreenRVS = true;
+	m_ScreenRVSFrame = 10;
 
 	for (vIterSaveRC = vSaveRect.begin(); vIterSaveRC != vSaveRect.end(); vIterSaveRC++) {
 		vIterSaveRC->m_CheckSaveFrame = 0;
@@ -122,7 +125,7 @@ void MapManager::render(HDC hdc)
 	if (ScreenSFXOn == true) m_Screen->frameRender(_empty->getMemDC(), m_Camera.x, m_Camera.y, m_CurrFrameX, 0);
 	if (ScreenSFXREV == true) m_Screen->frameRender(_empty->getMemDC(), m_Camera.x, m_Camera.y, m_CurrFrameX, 0);
 	if (ScreenSFXREV2 == true) m_Screen->frameRender(_empty->getMemDC(), m_Camera.x, m_Camera.y, m_screenFrame, 0);
-	
+	if (m_ScreenRVS) IMAGEMANAGER->findImage("ScreenClose")->frameRender(_empty->getMemDC(), 0, 0, m_ScreenRVSFrame, 0);
 
 	for (vIterSaveRC = vSaveRect.begin(); vIterSaveRC != vSaveRect.end(); vIterSaveRC++) {
 		Rectangle(_empty->getMemDC(), vIterSaveRC->_rc.left, vIterSaveRC->_rc.top, vIterSaveRC->_rc.right, vIterSaveRC->_rc.bottom);
@@ -1924,6 +1927,21 @@ void MapManager::CollisionObject()
 
 void MapManager::ScreenEffect()
 {
+	if (m_ScreenRVS == true) {
+		m_FrameCount++;
+
+		if (m_FrameCount % 5 == 0) {
+			m_ScreenRVSFrame--;
+			IMAGEMANAGER->findImage("ScreenClose")->setFrameX(m_ScreenRVSFrame);
+
+			if (m_ScreenRVSFrame <= 0) {
+				m_ScreenRVSFrame = 0;
+				m_ScreenRVS = false;
+				//SCENEMANAGER->changeScene("PlayScene");
+			}
+		}
+	}
+
 	if (ScreenSFXOn == true) {
 		m_FrameCount++;
 		if (m_FrameCount % 7 == 0) {

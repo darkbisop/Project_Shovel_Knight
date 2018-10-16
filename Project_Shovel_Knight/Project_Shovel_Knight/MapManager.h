@@ -67,9 +67,9 @@ private:
 	image*	m_Screen;
 	image*	m_ScreenRvs;
 	image*	m_SaveCheckPoint;
-	
-	RECT	CheckChangeMapRect[25];
 
+	RECT	CheckChangeMapRect[25];
+	
 	int		CurrMapNum;
 	int		m_FrameCount;
 	int		m_CurrFrameX;
@@ -88,6 +88,9 @@ private:
 	char m_szText2[128];
 	char m_szText3[128];
 	char m_szText4[128];
+
+	bool	m_ScreenRVS;
+	int		m_ScreenRVSFrame;
 
 	vector<string> vec;
 	vector<std::string> m_vecLoad;

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "mainGame.h"
-#include "ShopScene.h"
 #include "playScene.h"
+#include "titleScene.h"
 
 void mainGame::setBackBuffer()
 {
@@ -22,13 +22,13 @@ HRESULT mainGame::init()
 
 	setBackBuffer();
 
-	m_ShopScene = new ShopScene;
-	SCENEMANAGER->addScene("ShopScene", m_ShopScene);
+	m_titleScene = new titleScene;
+	SCENEMANAGER->addScene("titleScene", m_titleScene);
 
 	m_PlayScene = new PlayScene;
 	SCENEMANAGER->addScene("PlayScene", m_PlayScene);
 
-	SCENEMANAGER->changeScene("PlayScene");
+	SCENEMANAGER->changeScene("titleScene");
 
 	//m_ScreenAni->start();
 

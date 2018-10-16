@@ -258,6 +258,9 @@
     <ClInclude Include="TempItem.h">
       <Filter>메인게임\상점\아이템</Filter>
     </ClInclude>
+    <ClInclude Include="titleScene.h">
+      <Filter>메인게임\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -412,6 +415,9 @@
     </ClCompile>
     <ClCompile Include="TempItem.cpp">
       <Filter>메인게임\상점\아이템</Filter>
+    </ClCompile>
+    <ClCompile Include="titleScene.cpp">
+      <Filter>메인게임\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

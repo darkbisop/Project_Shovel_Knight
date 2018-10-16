@@ -197,6 +197,7 @@
     <ClInclude Include="TempItem.h" />
     <ClInclude Include="timeManager.h" />
     <ClInclude Include="timer.h" />
+    <ClInclude Include="titleScene.h" />
     <ClInclude Include="txtData.h" />
     <ClInclude Include="uiButton.h" />
     <ClInclude Include="uiImageView.h" />
@@ -255,6 +256,7 @@
     <ClCompile Include="TempItem.cpp" />
     <ClCompile Include="timeManager.cpp" />
     <ClCompile Include="timer.cpp" />
+    <ClCompile Include="titleScene.cpp" />
     <ClCompile Include="txtData.cpp" />
     <ClCompile Include="uiButton.cpp" />
     <ClCompile Include="uiImageView.cpp" />
