@@ -102,6 +102,7 @@ void Player::update()
 	Animation();
 	FireBallMove();
 
+
 	if (KEYMANAGER->isOnceKeyDown('1')) Hp--;
 	if (KEYMANAGER->isOnceKeyDown('2')) {
 		m_isPlusHp = true;
@@ -148,33 +149,34 @@ void Player::KeyProcess()
 {
 	
 	if (m_State != P_LADDERUP) {
-		if (m_isMovingMap == false) {
-			if (KEYMANAGER->isStayKeyDown(VK_RIGHT)) {
-				if (m_State != P_JUMP && m_State != P_MOVE && m_State != P_DOWNATTACK) {
-					m_State = P_ATTACK;
-				}
-				if (m_State != P_JUMP && m_State != P_DOWNATTACK) {
-					m_State = P_MOVE;
-				}
 
-				m_fX += m_fSpeed;
-				m_isRight = true;
+		if (KEYMANAGER->isStayKeyDown(VK_RIGHT)) {
+			if (m_State != P_JUMP && m_State != P_MOVE && m_State != P_DOWNATTACK) {
+				m_State = P_ATTACK;
+			}
+			if (m_State != P_JUMP && m_State != P_DOWNATTACK) {
+				m_State = P_MOVE;
 			}
 
-			else if (KEYMANAGER->isStayKeyDown(VK_LEFT)) {
-				if (m_State != P_JUMP && m_State != P_MOVE && m_State != P_DOWNATTACK) {
-					m_State = P_ATTACK;
-				}
+			if (m_isMovingMap == false) {
+				m_fX += m_fSpeed;
 
-				if (m_State != P_JUMP && m_State != P_DOWNATTACK) {
-					m_State = P_MOVE;
-				}
-
-				m_fX -= m_fSpeed;
-				m_isRight = false;
+				m_isRight = true;
 			}
 		}
 
+		else if (KEYMANAGER->isStayKeyDown(VK_LEFT)) {
+			if (m_State != P_JUMP && m_State != P_MOVE && m_State != P_DOWNATTACK) {
+				m_State = P_ATTACK;
+			}
+
+			if (m_State != P_JUMP && m_State != P_DOWNATTACK) {
+				m_State = P_MOVE;
+			}
+
+			if (m_isMovingMap == false)m_fX -= m_fSpeed;
+			m_isRight = false;
+		}
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('C') && gravity <= 0) {
@@ -197,29 +199,33 @@ void Player::KeyProcess()
 		m_isAttack = true;
 	}
 	
-
-	if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && m_isRight == true && m_isMovingMap) {
+	if (m_State == P_MOVE) {
+		if (m_isMovingMap == true) {
+			m_State = P_MOVE;
+		}
+	}
+	/*if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && m_isRight == true && m_isMovingMap) {
 		m_State = P_MOVE;
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_LEFT) && m_isRight == false && m_isMovingMap) {
 		m_State = P_MOVE;
-	}
-	if (KEYMANAGER->isStayKeyDown(VK_UP) && m_isMovingMap && m_State == P_LADDERUP) {
+	}*/
+	/*if (KEYMANAGER->isStayKeyDown(VK_UP) && m_isMovingMap && m_State == P_LADDERUP) {
 		m_State = P_LADDERUP;
 	}
-	if (KEYMANAGER->isStayKeyDown(VK_DOWN) && m_isMovingMap && m_State == P_LADDERUP) {
+	else if (KEYMANAGER->isStayKeyDown(VK_DOWN) && m_isMovingMap && m_State == P_LADDERUP) {
 		m_State = P_LADDERUP;
 	}
-	if (KEYMANAGER->isStayKeyDown(VK_DOWN) && m_isMovingMap && m_State == P_DOWNATTACK) {
+	else if (KEYMANAGER->isStayKeyDown(VK_DOWN) && m_isMovingMap && m_State == P_DOWNATTACK) {
 		m_State = P_DOWNATTACK;
 	}
 
-	if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && KEYMANAGER->isStayKeyDown(VK_DOWN) && m_isMovingMap && m_State == P_DOWNATTACK) {
+	else if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && m_isMovingMap && m_State == P_DOWNATTACK) {
 		m_State = P_DOWNATTACK;
 	}
-	if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && m_isMovingMap && m_State == P_JUMP) {
+	else if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && m_isMovingMap && m_State == P_JUMP) {
 		m_State = P_JUMP;
-	}
+	}*/
 }
 
 void Player::Animation()
