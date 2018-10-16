@@ -57,16 +57,11 @@ private:
 	POINT	m_Camera;
 
 	image*	_empty;
-	image*	m_SkyBg;
 	image*	BackGround_Castle;
 	image*	Back_3_Ground;
 	image*	Back_2_Ground;
 	image*	Back_Ground;
 	image*  m_pImg;
-	image*  m_shopBg;
-	image*	m_Screen;
-	image*	m_ScreenRvs;
-	image*	m_SaveCheckPoint;
 
 	RECT	CheckChangeMapRect[25];
 	

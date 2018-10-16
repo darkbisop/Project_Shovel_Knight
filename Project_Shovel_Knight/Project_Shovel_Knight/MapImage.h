@@ -25,7 +25,11 @@ private:
 	image*	Stage_22;
 	image*	Stage_23;
 	image*	Stage_24;
-
+	image*	m_SkyBg;
+	image*  m_shopBg;
+	image*	m_Screen;
+	image*	m_ScreenRvs;
+	image*	m_SaveCheckPoint;
 public:
 	
 	HRESULT init();

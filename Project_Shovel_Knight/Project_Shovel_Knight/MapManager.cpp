@@ -14,11 +14,6 @@ HRESULT MapManager::init(void)
 	Back_2_Ground = IMAGEMANAGER->addImage("Back_2_Ground", "image/BackGround/Back_2_Ground.bmp", 1000, 176, true, RGB(255, 0, 255));
 	Back_Ground = IMAGEMANAGER->addImage("Back_Ground", "image/BackGround/Back_Ground.bmp", 2500, 199, true, RGB(255, 0, 255));
 	m_pImg = IMAGEMANAGER->addImage("bubble", "image/Enemy/bubble_dragon/bubble_move.bmp", 108, 27, 4, 1, true, RGB(255, 0, 255));
-	m_SkyBg = IMAGEMANAGER->addImage("SkyBG", "image/BackGround/Sky.bmp", 399, 208, true, RGB(255, 0, 255));
-	m_shopBg = IMAGEMANAGER->addImage("ShopBG", "image/BackGround/Shop.bmp", 400, 208, true, RGB(255, 0, 255));
-	m_Screen = IMAGEMANAGER->addImage("ScreenSFX", "image/effect/ScreenSFX.bmp", 3200, 238, 8, 1, true, RGB(255, 0, 255));
-	m_ScreenRvs = IMAGEMANAGER->addImage("ScreenSFXRR", "image/effect/ScreenSFX.bmp", 3200, 238, 8, 1, true, RGB(255, 0, 255));
-	m_SaveCheckPoint = IMAGEMANAGER->addImage("Check", "image/Object/Check.bmp", 231, 48, 11, 1, true, RGB(255, 0, 255));
 	
 	m_pMapImage = new MapImage;
 	m_pMapImage->init();
@@ -99,7 +94,7 @@ void MapManager::update(void)
 void MapManager::render(HDC hdc)
 {
 
-	m_SkyBg->render(_empty->getMemDC(), (int)m_Camera.x , (int)m_Camera.y);
+	IMAGEMANAGER->findImage("SkyBG")->render(_empty->getMemDC(), (int)m_Camera.x , (int)m_Camera.y);
 	if (CurrMapNum == 0 || CurrMapNum == 1) {
 		BackGround_Castle->loopRender(_empty->getMemDC(), &RectMake(0, 634, 2500, 176), -(int)m_Camera.x * 0.8f, 0);
 		Back_3_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 714, 2500, 108), -(int)m_Camera.x * 0.8f, 0);
@@ -107,7 +102,7 @@ void MapManager::render(HDC hdc)
 		Back_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 666, 2500, 199), -(int)m_Camera.x * 0.3f, 0);
 	}
 	
-	if (MapOn[11] == true) m_shopBg->render(_empty->getMemDC(), 0, 12);
+	if (MapOn[11] == true) IMAGEMANAGER->findImage("ShopBG")->render(_empty->getMemDC(), 0, 12);
 
 	Rectangle(_empty->getMemDC(), CheckChangeMapRect[15].left, CheckChangeMapRect[15].top, CheckChangeMapRect[15].right, CheckChangeMapRect[15].bottom);
 
@@ -122,14 +117,14 @@ void MapManager::render(HDC hdc)
 	EFFECTMANAGER->render(_empty->getMemDC());
 	PLAYER->render(_empty->getMemDC());
 	m_Shop->render(_empty->getMemDC());
-	if (ScreenSFXOn == true) m_Screen->frameRender(_empty->getMemDC(), m_Camera.x, m_Camera.y, m_CurrFrameX, 0);
-	if (ScreenSFXREV == true) m_Screen->frameRender(_empty->getMemDC(), m_Camera.x, m_Camera.y, m_CurrFrameX, 0);
-	if (ScreenSFXREV2 == true) m_Screen->frameRender(_empty->getMemDC(), m_Camera.x, m_Camera.y, m_screenFrame, 0);
+	if (ScreenSFXOn == true) IMAGEMANAGER->findImage("ScreenSFX")->frameRender(_empty->getMemDC(), m_Camera.x, m_Camera.y, m_CurrFrameX, 0);
+	if (ScreenSFXREV == true) IMAGEMANAGER->findImage("ScreenSFX")->frameRender(_empty->getMemDC(), m_Camera.x, m_Camera.y, m_CurrFrameX, 0);
+	if (ScreenSFXREV2 == true) IMAGEMANAGER->findImage("ScreenSFX")->frameRender(_empty->getMemDC(), m_Camera.x, m_Camera.y, m_screenFrame, 0);
 	if (m_ScreenRVS) IMAGEMANAGER->findImage("ScreenClose")->frameRender(_empty->getMemDC(), 0, 0, m_ScreenRVSFrame, 0);
 
 	for (vIterSaveRC = vSaveRect.begin(); vIterSaveRC != vSaveRect.end(); vIterSaveRC++) {
 		Rectangle(_empty->getMemDC(), vIterSaveRC->_rc.left, vIterSaveRC->_rc.top, vIterSaveRC->_rc.right, vIterSaveRC->_rc.bottom);
-		if (vIterSaveRC->SaveCheck == true) m_SaveCheckPoint->frameRender(_empty->getMemDC(), vIterSaveRC->_rc.left - 7, vIterSaveRC->_rc.top - 1, vIterSaveRC->m_CheckSaveFrame, 0);
+		if (vIterSaveRC->SaveCheck == true) IMAGEMANAGER->findImage("Check")->frameRender(_empty->getMemDC(), vIterSaveRC->_rc.left - 7, vIterSaveRC->_rc.top - 1, vIterSaveRC->m_CheckSaveFrame, 0);
 	}
 
 	//for (vIterSpikeRC = vSpikeRect.begin(); vIterSpikeRC != vSpikeRect.end(); vIterSpikeRC++) {
@@ -142,7 +137,7 @@ void MapManager::render(HDC hdc)
 
 	_empty->render(hdc, 0, 0, m_Camera.x, m_Camera.y, WINSIZEX, WINSIZEY);
 
-	TIMEMANAGER->render(hdc);
+	//TIMEMANAGER->render(hdc);
 	
 	//char str[64];
 	//for (int i = 0; i < vRect.size(); i++) {
@@ -1946,7 +1941,7 @@ void MapManager::ScreenEffect()
 		m_FrameCount++;
 		if (m_FrameCount % 7 == 0) {
 			m_CurrFrameX++;
-			m_Screen->setFrameX(m_CurrFrameX);
+			IMAGEMANAGER->findImage("ScreenSFX")->setFrameX(m_CurrFrameX);
 
 			if (m_CurrFrameX >= 8) {
 				m_CurrFrameX = 8;
@@ -1958,7 +1953,7 @@ void MapManager::ScreenEffect()
 		m_FrameCount++;
 		if (m_FrameCount % 7 == 0) {
 			m_CurrFrameX--;
-			m_Screen->setFrameX(m_CurrFrameX);
+			IMAGEMANAGER->findImage("ScreenSFX")->setFrameX(m_CurrFrameX);
 
 			if (m_CurrFrameX <= 0) {
 				m_CurrFrameX = 0;
@@ -1974,7 +1969,7 @@ void MapManager::ScreenEffect()
 
 		if (m_FrameCount % 7 == 0) {
 			m_screenFrame--;
-			m_Screen->setFrameX(m_screenFrame);
+			IMAGEMANAGER->findImage("ScreenSFX")->setFrameX(m_screenFrame);
 
 			if (m_screenFrame <= 0) {
 				m_screenFrame = 0;
@@ -1989,7 +1984,7 @@ void MapManager::ScreenEffect()
 			m_FrameCount++;
 			if (m_FrameCount % 7 == 0) {
 				vIterSaveRC->m_CheckSaveFrame++;
-				m_SaveCheckPoint->setFrameX(vIterSaveRC->m_CheckSaveFrame);
+				IMAGEMANAGER->findImage("Check")->setFrameX(vIterSaveRC->m_CheckSaveFrame);
 
 				if (vIterSaveRC->m_CheckSaveFrame >= 11) {
 					vIterSaveRC->m_CheckSaveFrame = 8;

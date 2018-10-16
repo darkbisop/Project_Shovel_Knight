@@ -11,6 +11,9 @@ private:
 	Inventory* m_Inventory;
 	vector<Item*> v_Item_List;
 
+	image*	m_shopIMG;
+	image*	m_Select;
+
 	float m_fx, m_fy;
 	bool ShopOn;
 	RECT MoveRect;

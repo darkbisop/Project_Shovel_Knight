@@ -26,7 +26,11 @@ HRESULT MapImage::init()
 	Stage_22 = IMAGEMANAGER->addImage("MainRunMap22", "image/RunAndGun_Map/Stage_22.bmp", 400, 208, true, RGB(255, 0, 255));
 	Stage_23 = IMAGEMANAGER->addImage("MainRunMap23", "image/RunAndGun_Map/Stage_24.bmp", 400, 208, true, RGB(255, 0, 255));
 	Stage_24 = IMAGEMANAGER->addImage("MainRunMap24", "image/RunAndGun_Map/Stage_25.bmp", 400, 208, true, RGB(255, 0, 255));
-
+	m_SkyBg = IMAGEMANAGER->addImage("SkyBG", "image/BackGround/Sky.bmp", 399, 208, true, RGB(255, 0, 255));
+	m_shopBg = IMAGEMANAGER->addImage("ShopBG", "image/BackGround/Shop.bmp", 400, 208, true, RGB(255, 0, 255));
+	m_Screen = IMAGEMANAGER->addImage("ScreenSFX", "image/effect/ScreenSFX.bmp", 3200, 238, 8, 1, true, RGB(255, 0, 255));
+	m_ScreenRvs = IMAGEMANAGER->addImage("ScreenSFXRR", "image/effect/ScreenSFX.bmp", 3200, 238, 8, 1, true, RGB(255, 0, 255));
+	m_SaveCheckPoint = IMAGEMANAGER->addImage("Check", "image/Object/Check.bmp", 231, 48, 11, 1, true, RGB(255, 0, 255));
 
 	return S_OK;
 }
