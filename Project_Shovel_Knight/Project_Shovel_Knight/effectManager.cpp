@@ -117,8 +117,12 @@ void effectManager::play(string effectName, int x, int y)
 
 	for (m_iter = m_mapEffects.begin(); m_iter != m_mapEffects.end(); m_iter++) {
 		for (iterVE = (m_iter->second).begin(); iterVE != (m_iter->second).end(); iterVE++) {
-			if ((*iterVE)) {
-				(*iterVE)->startEffect(x, y);
+			if ((*m_iter).first == name) {
+				if ((*iterVE)) {
+					if ((*iterVE)->getIsAlive() == true) continue;
+					(*iterVE)->startEffect(x, y);
+					return;
+				}
 			}
 		}
 	}

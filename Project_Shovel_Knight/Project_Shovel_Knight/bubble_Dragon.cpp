@@ -64,7 +64,7 @@ HRESULT bubble_Dragon::init(float x, float y)
 	m_nCurrFrameY_Die = 0;
 	m_nFrameCount_Die = 0;
 
-	EFFECTMANAGER->addEffect("effect", "image/effect/bubble_dragon_effect.bmp", 140, 29, 28, 29, 30, 1);
+	EFFECTMANAGER->addEffect("effect", "image/effect/bubble_dragon_effect.bmp", 140, 29, 28, 29, 30, 3);
 	m_nEffectCount = 0;
 	return S_OK;
 }

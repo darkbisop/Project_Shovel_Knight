@@ -23,6 +23,7 @@ public:
 
 	void startEffect(int x, int y);
 	void endEffect();
+	bool getIsAlive() { return m_isAlive; }
 
 	effect();
 	~effect();
