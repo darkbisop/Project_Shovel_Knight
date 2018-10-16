@@ -149,12 +149,12 @@ void MapManager::render(HDC hdc)
 
 	//TIMEMANAGER->render(hdc);
 	
-	//char str[64];
-	//for (int i = 0; i < vRect.size(); i++) {
-	//	wsprintf(str, "x : %d", vRect.size());
-	//	//sprintf_s(str, "x : %f, y : %f", PLAYER->getPlayerX(), PLAYER->getPlayerY());
-	//	TextOut(hdc, PLAYER->getPlayerX(), PLAYER->getPlayerY() - 100, str, strlen(str));
-	//}
+	char str[64];
+
+	wsprintf(str, "x : %d", ScreenSFXREV2);
+	//sprintf_s(str, "x : %f, y : %f", PLAYER->getPlayerX(), PLAYER->getPlayerY());
+		TextOut(hdc, PLAYER->getPlayerX(), PLAYER->getPlayerY() - 100, str, strlen(str));
+	
 }
 
 void MapManager::CheckMapRect()
@@ -280,7 +280,7 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	}
 
 	if (CurrMapNum == 4 && PLAYER->getHP() <= 0) {
-		if (ScreenSFXOn && m_CurrFrameX == 8) {
+		if (ScreenSFXOn == true && m_CurrFrameX == 8) {
 			ScreenSFXREV2 = true;
 			LoadPoint();
 		}
@@ -1685,6 +1685,7 @@ void MapManager::CollisionEnemy()
 	for (iter = vBug.begin(); iter != vBug.end();) {
 		RECT rc;
 		if (IntersectRect(&rc, &PLAYER->getAttacRect(), &(*iter)->getRect())) {
+			SOUNDMANAGER->play("¹ö±×Å³", 1.0f);
 			(*iter)->damage(1);
 			iter = vBug.erase(iter);
 		}
@@ -1955,21 +1956,6 @@ void MapManager::CollisionObject()
 
 void MapManager::ScreenEffect()
 {
-	if (m_ScreenRVS == true) {
-		m_FrameCount++;
-
-		if (m_FrameCount % 5 == 0) {
-			m_ScreenRVSFrame--;
-			IMAGEMANAGER->findImage("ScreenClose")->setFrameX(m_ScreenRVSFrame);
-
-			if (m_ScreenRVSFrame <= 0) {
-				m_ScreenRVSFrame = 0;
-				m_ScreenRVS = false;
-				//SCENEMANAGER->changeScene("PlayScene");
-			}
-		}
-	}
-
 	if (ScreenSFXOn == true) {
 		m_FrameCount++;
 		if (m_FrameCount % 7 == 0) {
@@ -2006,8 +1992,23 @@ void MapManager::ScreenEffect()
 
 			if (m_screenFrame <= 0) {
 				m_screenFrame = 0;
-				PLAYER->setHp(12);
 				ScreenSFXREV2 = false;
+				PLAYER->setHp(10);
+			}
+		}
+	}
+
+	if (m_ScreenRVS == true) {
+		m_FrameCount++;
+
+		if (m_FrameCount % 5 == 0) {
+			m_ScreenRVSFrame--;
+			IMAGEMANAGER->findImage("ScreenClose")->setFrameX(m_ScreenRVSFrame);
+
+			if (m_ScreenRVSFrame <= 0) {
+				m_ScreenRVSFrame = 0;
+				m_ScreenRVS = false;
+				//SCENEMANAGER->changeScene("PlayScene");
 			}
 		}
 	}

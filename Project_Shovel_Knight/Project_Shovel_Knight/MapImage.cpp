@@ -47,6 +47,7 @@ HRESULT MapImage::init()
 	SOUNDMANAGER->addSound("보석득", "Sound/MoneyGet.mp3", false, false);
 	SOUNDMANAGER->addSound("오브젝트다운어택", "Sound/OBJDownATK.mp3", false, false);
 	SOUNDMANAGER->addSound("세이브체크", "Sound/CheckSave.mp3", false, false);
+	SOUNDMANAGER->addSound("버그킬", "Sound/MC_Enemy_Kill.wav", false, false);
 
 	return S_OK;
 }

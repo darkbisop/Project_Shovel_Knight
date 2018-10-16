@@ -168,6 +168,7 @@ void bug::dieFrame()
 					m_nFrameCount_Die = 0;
 
 					EFFECTMANAGER->play("bug_effect", m_fX, m_fY);
+					SOUNDMANAGER->play("버그다운킬", 1.0f);
 					m_isAlive = false;
 				}
 			}
