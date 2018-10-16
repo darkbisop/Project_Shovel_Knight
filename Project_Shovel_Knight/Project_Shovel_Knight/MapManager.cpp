@@ -1857,7 +1857,7 @@ void MapManager::CollisionObject()
 		}
 
 		else if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterDIrt)->getRect())) {
-			SOUNDMANAGER->play("오브젝트다운어택", 1.0f);
+			SOUNDMANAGER->play("오브젝트다운어택", 0.9f);
 			PLAYER->DownATKtoOBJCollision((*iterDIrt)->getRect());
 			(*iterDIrt)->DigOut();
 			(*iterDIrt)->setCrash(true);
@@ -1885,7 +1885,7 @@ void MapManager::CollisionObject()
 		}
 
 		else if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterSmall)->getRect())) {
-			SOUNDMANAGER->play("오브젝트다운어택", 0.7f);
+			SOUNDMANAGER->play("오브젝트다운어택", 0.9f);
 			PLAYER->DownATKtoOBJCollision((*iterSmall)->getRect());
 			(*iterSmall)->DigOut();
 			(*iterSmall)->setCrash(true);
