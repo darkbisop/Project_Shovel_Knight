@@ -117,6 +117,7 @@ void MapManager::render(HDC hdc)
 	EFFECTMANAGER->render(_empty->getMemDC());
 	PLAYER->render(_empty->getMemDC());
 	m_Shop->render(_empty->getMemDC());
+
 	if (ScreenSFXOn == true) IMAGEMANAGER->findImage("ScreenSFX")->frameRender(_empty->getMemDC(), m_Camera.x, m_Camera.y, m_CurrFrameX, 0);
 	if (ScreenSFXREV == true) IMAGEMANAGER->findImage("ScreenSFX")->frameRender(_empty->getMemDC(), m_Camera.x, m_Camera.y, m_CurrFrameX, 0);
 	if (ScreenSFXREV2 == true) IMAGEMANAGER->findImage("ScreenSFX")->frameRender(_empty->getMemDC(), m_Camera.x, m_Camera.y, m_screenFrame, 0);
@@ -127,6 +128,15 @@ void MapManager::render(HDC hdc)
 		if (vIterSaveRC->SaveCheck == true) IMAGEMANAGER->findImage("Check")->frameRender(_empty->getMemDC(), vIterSaveRC->_rc.left - 7, vIterSaveRC->_rc.top - 1, vIterSaveRC->m_CheckSaveFrame, 0);
 	}
 
+
+	vector<black_Knight*> vBlack = m_pEnemyMgr->getVecBlack();
+	vector<black_Knight*>::iterator iterBlack;
+
+	for (iterBlack = vBlack.begin(); iterBlack != vBlack.end(); iterBlack++) {
+		
+		(*iterBlack)->renderUI(_empty->getMemDC());
+		
+	}
 	//for (vIterSpikeRC = vSpikeRect.begin(); vIterSpikeRC != vSpikeRect.end(); vIterSpikeRC++) {
 	//	Rectangle(_empty->getMemDC(), vIterSpikeRC->_rc.left, vIterSpikeRC->_rc.top, vIterSpikeRC->_rc.right, vIterSpikeRC->_rc.bottom);
 	//}
@@ -1159,6 +1169,7 @@ void MapManager::MovingMap()
 				CurrMapNum = 23;
 				MovingCamera[22] = false;
 				MapOn[22] = false;
+				m_pEnemyMgr->setBlackKnight();
 				PushRect();
 			}
 		}
@@ -1388,7 +1399,7 @@ void MapManager::PushRect()
 	// 10번맵
 	if (CurrMapNum == 12) {
 
-		vRect.erase(vRect.begin(), vRect.begin() + 6);
+		vRect.erase(vRect.begin(), vRect.begin() + 4);
 
 		_RectInfo._rc = RectMake(3157, 1207, 120, 15);
 		vRect.push_back(_RectInfo);
@@ -1459,7 +1470,7 @@ void MapManager::PushRect()
 	// 15번 맵
 	if (CurrMapNum == 15) {
 
-		vRect.erase(vRect.begin(), vRect.begin() + 7);
+		vRect.erase(vRect.begin(), vRect.begin() + 2);
 
 		_RectInfo._rc = RectMake(4023, 807, 290, 15);
 		vRect.push_back(_RectInfo);
@@ -1612,7 +1623,7 @@ void MapManager::PushRect()
 		_RectInfo._rc = RectMake(6165, 135, 80, 50);
 		vRect.push_back(_RectInfo);
 
-		_RectSave._rc = RectMake(6193, 87, 1, 50);
+		_RectSave._rc = RectMake(6195, 87, 1, 50);
 		vSaveRect.push_back(_RectSave);
 
 		_RectInfo._rc = RectMake(6253, 167, 40, 50);
@@ -1680,6 +1691,7 @@ void MapManager::CollisionEnemy()
 
 		else if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iter)->getRect())) {
 			PLAYER->DownATKCollision((*iter)->getRect());
+			SOUNDMANAGER->play("버그다운킬", 1.0f);
 			(*iter)->Updamage(1);
 			iter = vBug.erase(iter);
 		}
@@ -1752,6 +1764,7 @@ void MapManager::CollisionBoss()
 
 			if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterBBD)->getBody())) {
 				PLAYER->DownATKtoOBJCollision((*iterBBD)->getBody());
+				SOUNDMANAGER->play("안부서짐", 1.0f);
 			}
 		}
 
@@ -1796,6 +1809,24 @@ void MapManager::CollisionBoss()
 			else iterBuble++;
 		}
 	}
+
+
+
+
+	vector<black_Knight*> vBlack = m_pEnemyMgr->getVecBlack();
+	vector<black_Knight*>::iterator iterBlack;
+
+	for (iterBlack = vBlack.begin(); iterBlack != vBlack.end(); iterBlack++) {
+		RECT rc;
+		if (IntersectRect(&rc, &PLAYER->getAttacRect(), &(*iterBlack)->getRect())) {
+			(*iterBlack)->damage(1);
+		}
+
+		else if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterBlack)->getRect())) {
+			(*iterBlack)->damage(1);
+			PLAYER->DownATKCollision((*iterBlack)->getRect());
+		}
+	}
 }
 
 void MapManager::CollisionObject()
@@ -1806,6 +1837,7 @@ void MapManager::CollisionObject()
 	for (iter = vPOR.begin(); iter != vPOR.end();) {
 		RECT rc;
 		if (IntersectRect(&rc, &PLAYER->getAttacRect(), &(*iter)->getRect())) {
+			SOUNDMANAGER->play("삽푸기", 1.0f);
 			(*iter)->DigOut();
 			iter = vPOR.erase(iter);
 		}
@@ -1825,7 +1857,7 @@ void MapManager::CollisionObject()
 		}
 
 		else if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterDIrt)->getRect())) {
-			SOUNDMANAGER->play("오브젝트다운어택", 0.7f);
+			SOUNDMANAGER->play("오브젝트다운어택", 1.0f);
 			PLAYER->DownATKtoOBJCollision((*iterDIrt)->getRect());
 			(*iterDIrt)->DigOut();
 			(*iterDIrt)->setCrash(true);
@@ -1912,6 +1944,7 @@ void MapManager::CollisionObject()
 
 		if (IntersectRect(&rc, &PLAYER->getAttacDWRect(), &(*iterBBB)->getRect())) {
 			PLAYER->DownATKtoOBJCollision((*iterBBB)->getRect());
+			SOUNDMANAGER->play("안부서짐", 1.0f);
 			(*iterBBB)->setIsAlive(false);
 			iterBBB = vBBB.erase(iterBBB);
 		}

@@ -17,9 +17,13 @@ void enemyManager::release()
 	for (m_IterSmallDRG = m_VecSmallDRG.begin(); m_IterSmallDRG != m_VecSmallDRG.end(); m_IterSmallDRG++) {
 		delete (*m_IterSmallDRG);
 	}
+	for (m_IterBlack = m_VecBlack.begin(); m_IterBlack != m_VecBlack.end(); m_IterBlack++) {
+		delete (*m_IterBlack);
+	}
 	m_VecBug.clear();
 	m_VecBBD.clear();
 	m_VecSmallDRG.clear();
+	m_VecBlack.clear();
 }
 
 void enemyManager::update()
@@ -33,6 +37,9 @@ void enemyManager::update()
 	for (m_IterSmallDRG = m_VecSmallDRG.begin(); m_IterSmallDRG != m_VecSmallDRG.end(); m_IterSmallDRG++) {
 		(*m_IterSmallDRG)->update();
 	}
+	for (m_IterBlack = m_VecBlack.begin(); m_IterBlack != m_VecBlack.end(); m_IterBlack++) {
+		(*m_IterBlack)->update();
+	}
 }
 
 void enemyManager::render(HDC hdc)
@@ -45,6 +52,9 @@ void enemyManager::render(HDC hdc)
 	}
 	for (m_IterSmallDRG = m_VecSmallDRG.begin(); m_IterSmallDRG != m_VecSmallDRG.end(); m_IterSmallDRG++) {
 		(*m_IterSmallDRG)->render(hdc);
+	}
+	for (m_IterBlack = m_VecBlack.begin(); m_IterBlack != m_VecBlack.end(); m_IterBlack++) {
+		(*m_IterBlack)->render(hdc);
 	}
 }
 
@@ -121,6 +131,16 @@ void enemyManager::setSmallDragon()
 		pSMD = new small_Dragon;
 		pSMD->init(4060, 705, smallDG_UPDOWN);
 		m_VecSmallDRG.push_back(pSMD);
+	}
+}
+
+void enemyManager::setBlackKnight()
+{
+	if (MAPMANAGER->getMapOn(23)) {
+		black_Knight* pBlack;
+		pBlack = new black_Knight;
+		pBlack->init(6680, 150);
+		m_VecBlack.push_back(pBlack);
 	}
 }
 

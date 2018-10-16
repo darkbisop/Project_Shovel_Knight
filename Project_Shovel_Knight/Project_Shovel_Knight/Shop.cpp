@@ -8,7 +8,7 @@ HRESULT Shop::init(void)
 {
 	m_shopIMG = IMAGEMANAGER->addImage("ShopArr", "image/Item/ShopArr.bmp", 400, 89, true, RGB(255, 0, 255));
 	m_Select = IMAGEMANAGER->addImage("itemSelect", "image/Item/itemSelect.bmp", 30, 28, true, RGB(255, 0, 255));
-	
+
 	m_rc = RectMake(83, 15, 142, 59);
 
 	v_Item_List.push_back(new Flame_Wand);
@@ -81,6 +81,12 @@ void Shop::render(HDC hdc)
 	
 		m_shopIMG->render(hdc, 0, 0);
 		m_Select->render(hdc, m_fx, m_fy);
+
+		IMAGEMANAGER->findImage("Number")->frameRender(hdc, MAPMANAGER->getCamera().x + 25, MAPMANAGER->getCamera().y + 29, PLAYER->getMoney() / 1000, 0);
+		IMAGEMANAGER->findImage("Number")->frameRender(hdc, MAPMANAGER->getCamera().x + 33, MAPMANAGER->getCamera().y + 29, PLAYER->getMoney() % 1000 % 1000 / 100, 0);
+		IMAGEMANAGER->findImage("Number")->frameRender(hdc, MAPMANAGER->getCamera().x + 41, MAPMANAGER->getCamera().y + 29, PLAYER->getMoney() % 1000 % 100 / 10, 0);
+		IMAGEMANAGER->findImage("Number")->frameRender(hdc, MAPMANAGER->getCamera().x + 49, MAPMANAGER->getCamera().y + 29, 0, 0);
+
 		//Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
 		//Rectangle(hdc, MoveRect.left, MoveRect.top, MoveRect.right, MoveRect.bottom);
 

@@ -149,10 +149,13 @@
   <ItemGroup>
     <ClInclude Include="action.h" />
     <ClInclude Include="animation.h" />
+    <ClInclude Include="black_Knight.h" />
     <ClInclude Include="bubble.h" />
     <ClInclude Include="bubble_Dragon.h" />
     <ClInclude Include="BubleBuble.h" />
     <ClInclude Include="bug.h" />
+    <ClInclude Include="bullet.h" />
+    <ClInclude Include="bulletManager.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="dirtBlock.h" />
@@ -208,10 +211,13 @@
   <ItemGroup>
     <ClCompile Include="action.cpp" />
     <ClCompile Include="animation.cpp" />
+    <ClCompile Include="black_Knight.cpp" />
     <ClCompile Include="bubble.cpp" />
     <ClCompile Include="bubble_Dragon.cpp" />
     <ClCompile Include="BubleBuble.cpp" />
     <ClCompile Include="bug.cpp" />
+    <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="bulletManager.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="dirtBlock.cpp" />
     <ClCompile Include="dirtBlock_Small.cpp" />

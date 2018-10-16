@@ -32,6 +32,22 @@ HRESULT MapImage::init()
 	m_ScreenRvs = IMAGEMANAGER->addImage("ScreenSFXRR", "image/effect/ScreenSFX.bmp", 3200, 238, 8, 1, true, RGB(255, 0, 255));
 	m_SaveCheckPoint = IMAGEMANAGER->addImage("Check", "image/Object/Check.bmp", 231, 48, 11, 1, true, RGB(255, 0, 255));
 
+
+	SOUNDMANAGER->addSound("플레이어등장", "Sound/Player_Appear.mp3", false, false);
+	SOUNDMANAGER->addSound("플레이어점프", "Sound/JumpSFX.mp3", false, false);
+	SOUNDMANAGER->addSound("플레이어공격", "Sound/AttackSFX.mp3", false, false);
+	SOUNDMANAGER->addSound("플레이어착지", "Sound/LandingSFX.mp3", false, false);
+	SOUNDMANAGER->addSound("으앙주금", "Sound/Death.mp3", false, false);
+
+	SOUNDMANAGER->addSound("안부서짐", "Sound/ObjAttack.mp3", false, false);
+	SOUNDMANAGER->addSound("버그다운킬", "Sound/BugDownDie.mp3", false, false);
+	SOUNDMANAGER->addSound("삽푸기", "Sound/OOOBJ.mp3", false, false);
+
+	SOUNDMANAGER->addSound("보석드랍", "Sound/GemDrop.mp3", false, false);
+	SOUNDMANAGER->addSound("보석득", "Sound/MoneyGet.mp3", false, false);
+	SOUNDMANAGER->addSound("오브젝트다운어택", "Sound/OBJDownATK.mp3", false, false);
+	SOUNDMANAGER->addSound("세이브체크", "Sound/CheckSave.mp3", false, false);
+
 	return S_OK;
 }
 

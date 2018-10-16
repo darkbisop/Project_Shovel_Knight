@@ -21,6 +21,9 @@ HRESULT Inventory::init(void)
 		}
 	}
 
+	SOUNDMANAGER->addSound("인벤클로즈", "Sound/InvenClose.mp3", false, false);
+	SOUNDMANAGER->addSound("인벤오픈", "Sound/InvenOpen.mp3", false, false);
+
 	m_InvenY = 0;
 	invenOn = false;
 
@@ -63,11 +66,13 @@ void Inventory::update(void)
 	if (invenOn == false && KEYMANAGER->isOnceKeyDown('E')) {
 		invenOn = true;
 		PLAYER->setIsMovingMap(true);
+		SOUNDMANAGER->play("인벤오픈", 0.9f);
 	}
 	else if (invenOn == true && KEYMANAGER->isOnceKeyDown('E')) {
 		invenOn = false;
 		m_InvenY = 0;
 		PLAYER->setIsMovingMap(false);
+		SOUNDMANAGER->play("인벤클로즈", 0.9f);
 	}
 
 	if (invenOn) {

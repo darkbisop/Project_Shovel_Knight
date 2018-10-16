@@ -42,11 +42,19 @@ private:
 	image*	m_DamagedImg;
 	image*	m_AppearImg;
 	image*	m_DeathImg;
+	
 
 	image*	m_Number_1;
 	image*	m_Number_2;
 	image*	m_Number_3;
 	image*	m_Number_4;
+
+	image*	m_HpBar1;
+	image*	m_HpBar2;
+	image*	m_HpBar3;
+	image*	m_HpBar4;
+	image*	m_HpBar5;
+	image*	m_HpKAn;
 
 	int		m_CurrFrameX;
 	int		m_CurrFrameY;
@@ -76,6 +84,9 @@ private:
 	bool	m_isDeadCHeck;
 	bool	m_isAfterLoad;
 	bool	m_isFireLeft;
+
+	bool	m_EquipFlameWand;
+	bool	m_isPlusHp;
 	
 	int		Money;
 	int		Hp;
@@ -103,6 +114,7 @@ public:
 	void DownATKCollision(RECT x);
 	void DownATKtoOBJCollision(RECT x);
 	void OBJCollision(RECT x);
+	void UIrender(HDC hdc);
 
 	inline RECT getPlayerRect() { return m_rc; }
 	inline RECT getAttacRect() { return m_AttackRc; }
@@ -136,6 +148,9 @@ public:
 
 	inline bool getIsDamaged() { return m_isDamaged; }
 	inline void setIsDamaged(bool a) { m_isDamaged = a; }
+
+	inline bool getEquipFlameWand() { return m_EquipFlameWand; }
+	inline void setEquipFlameWand(bool a) { m_EquipFlameWand = a; }
 
 	inline Inventory* getInventory() { return m_inventory; }
 

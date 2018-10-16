@@ -17,11 +17,6 @@ HRESULT PileOfRocks::init(float x, float y)
 	RanD = 0;
 	RandGems = 0;
 
-	SOUNDMANAGER->addSound("보석드랍", "Sound/GemDrop.mp3", false, false);
-	SOUNDMANAGER->addSound("보석득", "Sound/MoneyGet.mp3", false, false);
-	SOUNDMANAGER->addSound("오브젝트다운어택", "Sound/OBJDownATK.mp3", false, false);
-	SOUNDMANAGER->addSound("세이브체크", "Sound/CheckSave.mp3", false, false);
-
 	return S_OK;
 }
 

@@ -261,6 +261,15 @@
     <ClInclude Include="titleScene.h">
       <Filter>메인게임\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="black_Knight.h">
+      <Filter>메인게임\에너미\보스</Filter>
+    </ClInclude>
+    <ClInclude Include="bulletManager.h">
+      <Filter>2D_FrameWork\총알</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet.h">
+      <Filter>2D_FrameWork\총알</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -418,6 +427,15 @@
     </ClCompile>
     <ClCompile Include="titleScene.cpp">
       <Filter>메인게임\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="black_Knight.cpp">
+      <Filter>메인게임\에너미\보스</Filter>
+    </ClCompile>
+    <ClCompile Include="bulletManager.cpp">
+      <Filter>2D_FrameWork\총알</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet.cpp">
+      <Filter>2D_FrameWork\총알</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

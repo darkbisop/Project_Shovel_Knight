@@ -14,6 +14,12 @@ HRESULT Player::init()
 	m_DamagedImg = IMAGEMANAGER->addImage("Player_damaged", "image/Player/Player_damaged.bmp", 35, 78, 1, 2, true, RGB(255, 0, 255));
 	m_AppearImg = IMAGEMANAGER->addImage("Player_appear", "image/Player/Player_appear.bmp", 540, 51, 9, 1, true, RGB(255, 0, 255));
 	m_DeathImg = IMAGEMANAGER->addImage("PlayerDeath", "image/Player/PlayerDeath.bmp", 333, 34, 9, 1, true, RGB(255, 0, 255));
+	m_HpBar1 = IMAGEMANAGER->addImage("PlayerHP", "image/Player/PlayerHP.bmp", 24, 8, 3, 1, true, RGB(255, 0, 255));
+	m_HpBar2 = IMAGEMANAGER->addImage("PlayerHP", "image/Player/PlayerHP.bmp", 24, 8, 3, 1, true, RGB(255, 0, 255));
+	m_HpBar3 = IMAGEMANAGER->addImage("PlayerHP", "image/Player/PlayerHP.bmp", 24, 8, 3, 1, true, RGB(255, 0, 255));
+	m_HpBar4 = IMAGEMANAGER->addImage("PlayerHP", "image/Player/PlayerHP.bmp", 24, 8, 3, 1, true, RGB(255, 0, 255));
+	m_HpBar5 = IMAGEMANAGER->addImage("PlayerHP", "image/Player/PlayerHP.bmp", 24, 8, 3, 1, true, RGB(255, 0, 255));
+	m_HpKAn = IMAGEMANAGER->addImage("HPKAN", "image/Player/HPKAN.bmp", 8, 8, 1, 1, true, RGB(255, 0, 255));
 
 	m_Number_1 = IMAGEMANAGER->addImage("Number", "image/Number.bmp", 70, 7, 10, 1, true, RGB(255, 0, 255));
 	m_Number_2 = IMAGEMANAGER->addImage("Number", "image/Number.bmp", 70, 7, 10, 1, true, RGB(255, 0, 255));
@@ -22,12 +28,8 @@ HRESULT Player::init()
 
 	m_UI = IMAGEMANAGER->addImage("UI", "image/UI.bmp", 400, 18, true, RGB(255, 0, 255));
 
-	SOUNDMANAGER->addSound("플레이어등장", "Sound/Player_Appear.mp3", false, false);
-	SOUNDMANAGER->addSound("플레이어점프", "Sound/JumpSFX.mp3", false, false);
-	SOUNDMANAGER->addSound("플레이어공격", "Sound/AttackSFX.mp3", false, false);
-	SOUNDMANAGER->addSound("플레이어착지", "Sound/LandingSFX.mp3", false, false);
-	SOUNDMANAGER->addSound("으앙주금", "Sound/Death.mp3", false, false);
-
+	
+	
 	m_inventory = new Inventory;
 	m_inventory->init();
 
@@ -41,7 +43,7 @@ HRESULT Player::init()
 	m_fY = 183;
 	/*m_fX = -35;
 	m_fY = 790;*/
-	Hp = 12;
+	Hp = 8;
 	Mana = 40;
 	m_fSpeed = 2.0f;
 	jumpSpeed = 0;
@@ -73,6 +75,8 @@ HRESULT Player::init()
 	m_isAfterLoad = false;
 	m_isDeadCHeck = false;
 	m_isFireLeft = false;
+	m_EquipFlameWand = false;
+	m_isPlusHp = false;
 
 	m_State = P_IDLE;
 	
@@ -97,6 +101,12 @@ void Player::update()
 	KeyProcess();
 	Animation();
 	FireBallMove();
+
+	if (KEYMANAGER->isOnceKeyDown('1')) Hp--;
+	if (KEYMANAGER->isOnceKeyDown('2')) {
+		m_isPlusHp = true;
+		Hp = 10;
+	}
 
 	if (m_isMovingMap == false) {
 		if (m_isGround == false) {
@@ -124,15 +134,12 @@ void Player::render(HDC hdc)
 	m_inventory->render(hdc);
 	m_Equipment->render(m_UI->getMemDC());
 
-	m_Number_1->frameRender(hdc, MAPMANAGER->getCamera().x + 15, MAPMANAGER->getCamera().y + 9, Money / 1000, 0);
-	m_Number_2->frameRender(hdc, MAPMANAGER->getCamera().x + 23, MAPMANAGER->getCamera().y + 9, Money % 1000 % 1000 / 100, 0);
-	m_Number_3->frameRender(hdc, MAPMANAGER->getCamera().x + 31, MAPMANAGER->getCamera().y + 9, Money % 1000 % 100 / 10, 0);
-	m_Number_4->frameRender(hdc, MAPMANAGER->getCamera().x + 39, MAPMANAGER->getCamera().y + 9, 0, 0);
+	UIrender(hdc);
 
 	//SetTextColor(hdc, RGB(255, 255, 255));
 	//SetBkColor(hdc, RGB(255, 0, 255));
 	char str[64];
-	wsprintf(str, "%d", Mana);
+	wsprintf(str, "%d", Hp);
 	//sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
 	TextOut(hdc, m_fX - 100, m_fY, str, strlen(str));
 }
@@ -387,26 +394,30 @@ void Player::Animation()
 			m_invincibleCount = 100;
 		}
 	}
+
+	if (Hp <= 0) m_isDead = true;
 }
 
 void Player::FireBallMove()
 {
-	if (KEYMANAGER->isOnceKeyDown('V')) {
-		if (Mana >= 2) {
-			Mana -= 2;
-			//m_State = KnifeShot;
-			if (m_isRight) {
-				m_bullet.x = m_fX + 30;
-				m_bullet.y = m_fY + 8;
-				m_bullet.angle = 0;
-				v_Bullet.push_back(m_bullet);
-			}
-			else if (!m_isRight) {
-				m_isFireLeft = true;
-				m_bullet.x = m_fX - 4;
-				m_bullet.y = m_fY + 8;
-				m_bullet.angle = 0;
-				v_Bullet.push_back(m_bullet);
+	if (m_EquipFlameWand == true) {
+		if (KEYMANAGER->isOnceKeyDown('V')) {
+			if (Mana >= 2) {
+				Mana -= 2;
+				//m_State = KnifeShot;
+				if (m_isRight) {
+					m_bullet.x = m_fX + 30;
+					m_bullet.y = m_fY + 8;
+					m_bullet.angle = 0;
+					v_Bullet.push_back(m_bullet);
+				}
+				else if (!m_isRight) {
+					m_isFireLeft = true;
+					m_bullet.x = m_fX - 4;
+					m_bullet.y = m_fY + 8;
+					m_bullet.angle = 0;
+					v_Bullet.push_back(m_bullet);
+				}
 			}
 		}
 	}
@@ -710,6 +721,26 @@ void Player::OBJCollision(RECT x)
 		m_isGround = false;
 		m_isFalling = true;
 	}
+}
+
+void Player::UIrender(HDC hdc)
+{
+	m_Number_1->frameRender(hdc, MAPMANAGER->getCamera().x + 15, MAPMANAGER->getCamera().y + 9, Money / 1000, 0);
+	m_Number_2->frameRender(hdc, MAPMANAGER->getCamera().x + 23, MAPMANAGER->getCamera().y + 9, Money % 1000 % 1000 / 100, 0);
+	m_Number_3->frameRender(hdc, MAPMANAGER->getCamera().x + 31, MAPMANAGER->getCamera().y + 9, Money % 1000 % 100 / 10, 0);
+	m_Number_4->frameRender(hdc, MAPMANAGER->getCamera().x + 39, MAPMANAGER->getCamera().y + 9, 0, 0);
+
+	if (m_isPlusHp) m_HpBar5->frameRender(hdc, MAPMANAGER->getCamera().x + 193, MAPMANAGER->getCamera().y + 8, Hp - 8, 0);
+	m_HpBar4->frameRender(hdc, MAPMANAGER->getCamera().x + 184, MAPMANAGER->getCamera().y + 8, Hp - 6, 0);
+	m_HpBar3->frameRender(hdc, MAPMANAGER->getCamera().x + 175, MAPMANAGER->getCamera().y + 8, Hp - 4, 0);
+	m_HpBar2->frameRender(hdc, MAPMANAGER->getCamera().x + 166, MAPMANAGER->getCamera().y + 8, Hp - 2, 0);
+	m_HpBar1->frameRender(hdc, MAPMANAGER->getCamera().x + 157, MAPMANAGER->getCamera().y + 8, Hp, 0);
+
+	m_HpKAn->render(hdc, MAPMANAGER->getCamera().x + 157, MAPMANAGER->getCamera().y + 8);
+	m_HpKAn->render(hdc, MAPMANAGER->getCamera().x + 166, MAPMANAGER->getCamera().y + 8);
+	m_HpKAn->render(hdc, MAPMANAGER->getCamera().x + 175, MAPMANAGER->getCamera().y + 8);
+	m_HpKAn->render(hdc, MAPMANAGER->getCamera().x + 184, MAPMANAGER->getCamera().y + 8);
+	if (m_isPlusHp) m_HpKAn->render(hdc, MAPMANAGER->getCamera().x + 193, MAPMANAGER->getCamera().y + 8);
 }
 
 Player::Player() 

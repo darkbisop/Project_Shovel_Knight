@@ -57,13 +57,14 @@ Item * Equipment::setEquipment(Item * item)
 
 void Equipment::setItemEffect()
 {
-	//for (int i = 0; i < ITEM_EQUIPMENT_SIZE; i++) {
-	//	if (m_Equipment[i]._item != NULL) {
-	//		if (m_Equipment[i]._item->getType() == ITEM_WEAPON) {
-	//			// 여기다 지팡이 착용했을때 총알 발사하기
-	//		}
-	//	}
-	//}
+	for (int i = 0; i < ITEM_EQUIPMENT_SIZE; i++) {
+		if (m_Equipment[i]._item != NULL) {
+			if (m_Equipment[i]._item->getWeaponType() == TYPE_WEAPON) {
+				PLAYER->setEquipFlameWand(true);
+			}
+			else PLAYER->setEquipFlameWand(false);
+		}
+	}
 }
 
 Equipment::Equipment()

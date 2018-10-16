@@ -3,6 +3,7 @@
 #include "bug.h"
 #include "bubble_Dragon.h"
 #include "small_Dragon.h"
+#include "black_Knight.h"
 
 class enemyManager
 {
@@ -17,6 +18,9 @@ private:
 	vector<small_Dragon*> m_VecSmallDRG;
 	vector<small_Dragon*>::iterator m_IterSmallDRG;
 
+	vector<black_Knight*> m_VecBlack;
+	vector<black_Knight*>::iterator m_IterBlack;
+
 public:
 	HRESULT init();
 	void release();
@@ -26,6 +30,7 @@ public:
 	void setBug();
 	void setBubleDragon();
 	void setSmallDragon();
+	void setBlackKnight();
 
 	inline vector<bug*> getVecBug() { return m_VecBug; }
 	inline vector<bug*>::iterator getIterBug() { return m_IterBug; }
@@ -35,6 +40,9 @@ public:
 
 	inline vector<small_Dragon*> getVecSmallDRG() { return m_VecSmallDRG; }
 	inline vector<small_Dragon*>::iterator getIterSmallDRG() { return m_IterSmallDRG; }
+
+	inline vector<black_Knight*> getVecBlack() { return m_VecBlack; }
+	inline vector<black_Knight*>::iterator getIterBlack() { return m_IterBlack; }
 
 	enemyManager();
 	~enemyManager();

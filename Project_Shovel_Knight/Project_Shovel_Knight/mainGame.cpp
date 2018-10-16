@@ -30,8 +30,6 @@ HRESULT mainGame::init()
 
 	SCENEMANAGER->changeScene("titleScene");
 
-	//m_ScreenAni->start();
-
 	return S_OK;
 }
 
