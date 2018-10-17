@@ -210,9 +210,6 @@
     <ClInclude Include="Inventory.h">
       <Filter>메인게임\상점\아이템\인벤토리</Filter>
     </ClInclude>
-    <ClInclude Include="ShopScene.h">
-      <Filter>메인게임\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Shop.h">
       <Filter>메인게임\상점</Filter>
     </ClInclude>
@@ -269,6 +266,12 @@
     </ClInclude>
     <ClInclude Include="bullet.h">
       <Filter>2D_FrameWork\총알</Filter>
+    </ClInclude>
+    <ClInclude Include="SkullObject.h">
+      <Filter>메인게임\오브젝트\오브젝트들</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene.h">
+      <Filter>메인게임\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -377,9 +380,6 @@
     <ClCompile Include="Inventory.cpp">
       <Filter>메인게임\상점\아이템\인벤토리</Filter>
     </ClCompile>
-    <ClCompile Include="ShopScene.cpp">
-      <Filter>메인게임\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Shop.cpp">
       <Filter>메인게임\상점</Filter>
     </ClCompile>
@@ -436,6 +436,12 @@
     </ClCompile>
     <ClCompile Include="bullet.cpp">
       <Filter>2D_FrameWork\총알</Filter>
+    </ClCompile>
+    <ClCompile Include="SkullObject.cpp">
+      <Filter>메인게임\오브젝트\오브젝트들</Filter>
+    </ClCompile>
+    <ClCompile Include="TestScene.cpp">
+      <Filter>메인게임\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

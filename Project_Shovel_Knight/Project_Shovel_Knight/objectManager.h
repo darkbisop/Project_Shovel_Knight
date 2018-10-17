@@ -5,6 +5,7 @@
 #include "bubble.h"
 #include "movingFloor.h"
 #include "BubleBuble.h"
+#include "SkullObject.h"
 
 class objectManager
 {
@@ -28,6 +29,9 @@ private:
 	vector<BubleBuble*> v_BubleBuble;
 	vector<BubleBuble*>::iterator m_IterBuble;
 
+	vector<SkullObject*> v_Skull;
+	vector<SkullObject*>::iterator m_IterSkull;
+
 	const char* m_szImageName;
 	float		m_fRange;
 	int			m_nMaxCount;
@@ -45,6 +49,7 @@ public:
 	void setSmallBlock();
 	void setMovingFloor();
 	void setBubleBuble();
+	void setSkull();
 
 	inline vector<PileOfRocks*> getVecPOR() { return v_PileOfRocks; }
 	inline vector<PileOfRocks*>::iterator getIterPOR() { return m_IterPOR; }
@@ -63,6 +68,9 @@ public:
 
 	inline vector<BubleBuble*> getVecBB() { return v_BubleBuble; }
 	inline vector<BubleBuble*>::iterator getIterBB() { return m_IterBuble; }
+
+	inline vector<SkullObject*> getVecSkull() { return v_Skull; }
+	inline vector<SkullObject*>::iterator getIterSkull() { return m_IterSkull; }
 
 	void fire(float x, float y, float angle, float speed);
 	void deleteBubble();

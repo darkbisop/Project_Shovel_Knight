@@ -1,11 +1,12 @@
 #pragma once
+#include "singletonBase.h"
 #include <vector>
 #include "bug.h"
 #include "bubble_Dragon.h"
 #include "small_Dragon.h"
 #include "black_Knight.h"
 
-class enemyManager
+class enemyManager : public singletonBase<enemyManager>
 {
 private:
 
@@ -31,6 +32,7 @@ public:
 	void setBubleDragon();
 	void setSmallDragon();
 	void setBlackKnight();
+
 
 	inline vector<bug*> getVecBug() { return m_VecBug; }
 	inline vector<bug*>::iterator getIterBug() { return m_IterBug; }

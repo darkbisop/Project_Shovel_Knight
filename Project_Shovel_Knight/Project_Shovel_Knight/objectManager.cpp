@@ -49,6 +49,11 @@ void objectManager::release()
 		delete (*m_IterBuble);
 	}
 	v_BubleBuble.clear();
+
+	for (m_IterSkull = v_Skull.begin(); m_IterSkull != v_Skull.end(); m_IterSkull++) {
+		delete (*m_IterSkull);
+	}
+	v_Skull.clear();
 }
 
 void objectManager::update()
@@ -71,6 +76,9 @@ void objectManager::update()
 	for (m_IterBuble = v_BubleBuble.begin(); m_IterBuble != v_BubleBuble.end(); m_IterBuble++) {
 		(*m_IterBuble)->update();
 	}
+	for (m_IterSkull = v_Skull.begin(); m_IterSkull != v_Skull.end(); m_IterSkull++) {
+		(*m_IterSkull)->update();
+	}
 }
 
 void objectManager::render(HDC hdc)
@@ -92,6 +100,9 @@ void objectManager::render(HDC hdc)
 	}
 	for (m_IterBuble = v_BubleBuble.begin(); m_IterBuble != v_BubleBuble.end(); m_IterBuble++) {
 		(*m_IterBuble)->render(hdc);
+	}
+	for (m_IterSkull = v_Skull.begin(); m_IterSkull != v_Skull.end(); m_IterSkull++) {
+		(*m_IterSkull)->render(hdc);
 	}
 }
 
@@ -383,6 +394,16 @@ void objectManager::setBubleBuble()
 		pbuble = new BubleBuble;
 		pbuble->init(2176, 800, 100, true);
 		v_BubleBuble.push_back(pbuble);
+	}
+}
+
+void objectManager::setSkull()
+{
+	if (MAPMANAGER->getMapNum() == 0) {
+		SkullObject* pSkull;
+		pSkull = new SkullObject;
+		pSkull->init(500, 812);
+		v_Skull.push_back(pSkull);
 	}
 }
 

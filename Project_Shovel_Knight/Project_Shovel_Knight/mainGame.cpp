@@ -2,6 +2,7 @@
 #include "mainGame.h"
 #include "playScene.h"
 #include "titleScene.h"
+#include "TestScene.h"
 
 void mainGame::setBackBuffer()
 {
@@ -22,13 +23,16 @@ HRESULT mainGame::init()
 
 	setBackBuffer();
 
+	m_TestScene = new TestScene;
+	SCENEMANAGER->addScene("TestScene", m_TestScene);
+
 	m_titleScene = new titleScene;
 	SCENEMANAGER->addScene("titleScene", m_titleScene);
 
 	m_PlayScene = new PlayScene;
 	SCENEMANAGER->addScene("PlayScene", m_PlayScene);
 
-	SCENEMANAGER->changeScene("titleScene");
+	SCENEMANAGER->changeScene("TestScene");
 
 	return S_OK;
 }
@@ -48,6 +52,7 @@ void mainGame::release()
 	EFFECTMANAGER->release();
 	MAPMANAGER->release();
 	PLAYER->release();
+	ENEMYMANAGER->release();
 
 	TXTDATA->releaseSingleton();
 	KEYMANAGER->releaseSingleton();
@@ -58,6 +63,7 @@ void mainGame::release()
 	EFFECTMANAGER->releaseSingleton();
 	MAPMANAGER->releaseSingleton();
 	PLAYER->releaseSingleton();
+	ENEMYMANAGER->releaseSingleton();
 }
 
 LRESULT mainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)

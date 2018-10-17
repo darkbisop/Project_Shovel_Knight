@@ -26,6 +26,7 @@ HRESULT MapManager::init(void)
 	m_pObjectMgr->init();
 	m_pObjectMgr->setPileOfRocks();
 	m_pObjectMgr->setDirtblock();
+	m_pObjectMgr->setSkull();
 
 	PLAYER->init();
 
@@ -1754,6 +1755,26 @@ void MapManager::CollisionEnemy()
 		}
 	}
 
+	for (iter = vBug.begin(); iter != vBug.end(); iter++) {
+		vector<SkullObject*> vSkull = m_pObjectMgr->getVecSkull();
+		vector<SkullObject*>::iterator iterSkull;
+
+		for (iterSkull = vSkull.begin(); iterSkull != vSkull.end(); iterSkull++) {
+			RECT rc;
+			if ((*iterSkull)->getMoveRight() == true && IntersectRect(&rc, &(*iterSkull)->getRect(), &(*iter)->getRect())) {
+				if ((*iterSkull)->getMoveRight() == true && (*iterSkull)->getGravity() > 0.1f) {
+					(*iterSkull)->setMoveRight(false);
+					(*iterSkull)->setGravity(0);
+					(*iterSkull)->setMoveLeft(true);
+					SOUNDMANAGER->play("¹ö±×Å³", 1.0f);
+					(*iter)->damage(1);
+					iter = vBug.erase(iter);
+				}
+				else iter++;
+			}
+		}
+	}
+
 
 
 	vector<small_Dragon*> vSmallDRG = m_pEnemyMgr->getVecSmallDRG();
@@ -1915,7 +1936,6 @@ void MapManager::CollisionObject()
 	for (iterDIrt = vdirt.begin(); iterDIrt != vdirt.end(); iterDIrt++) {
 		PLAYER->OBJCollision((*iterDIrt)->getRect());
 	}
-
 
 
 	vector<dirtBlock_Small*> vSmall = m_pObjectMgr->getVecSmall();
