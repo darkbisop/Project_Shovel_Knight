@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "black_Knight.h"
 #include "bulletManager.h"
-#include "spaceShip.h"
 
 black_Knight::black_Knight()
 {
@@ -22,9 +21,12 @@ HRESULT black_Knight::init(float x, float y)
 	m_fRange = 100;
 	m_fSpeed = 1.0f;
 	m_fAngle = 0.0f;
-
+	m_fGravity_BackStep = 0.0f;
+	m_fGravity_Damage = 0.0f;
+	m_fGravity_Die = 0.0f;
 	m_isAlive = true;
 	m_isRight = false;
+	m_isLeft = false;
 	m_isDying = false;
 	m_isAtk = false;
 	m_isJump = false;
@@ -37,50 +39,42 @@ HRESULT black_Knight::init(float x, float y)
 	m_fGravity = 0;
 	m_fJumpSpeed = 7.0f;
 	m_fBackStepSpeed = 3.0f;
+	m_nBossState = BOSS_IDLE;	// 보스 현재 상태
+	m_nEventIdleCount2 = 0;
+	m_fDieJumpSpeed = 5.0f;
+	m_fDamageJumpSpeed = 3.0f;
+
+	m_nAtkCount = 0;		// 기본 공격 시 렉트 생성 카운트
+	m_nAtkCount2 = 0;		// 기본 공격 시 렉트 생성 카운트
+	m_nMoveCount = 0;		// 무브 카운트
+	m_nMoveCount2 = 0;		// 무브 카운트
+	m_nMoveCount_2 = 0;		// 무브 카운트
+	m_nMoveCount2_2 = 0;		// 무브 카운트
+	m_nBasicAtkCount = 0;	// 기본 공격 카운트
+	m_nBasicAtkCount2 = 0;	// 기본 공격 카운트
+	m_nShootAtkCount = 0;	// 슈팅 공격 카운트
+	m_nShootAtkCount2 = 0;	// 슈팅 공격 카운트
+	m_nJumpAtkCount = 0;	// 점프 공격 카운트
+	m_nJumpAtkCount2 = 0;	// 점프 공격 카운트
 
 	m_pBulletMgr = new bulletManager;
 	m_pBulletMgr->init("image/boss/black_knight/atk/black_knight_bullet.bmp",1000,3);
 
-	m_fDieJumpSpeed = 5.0f;
-	m_nDamageTime = 0;
-	m_fDamageJumpSpeed = 5.0f;
+	m_nCurrFrameX_Idle = 0;
+	m_nCurrFrameY_Idle = 0;
+	m_nFrameCount_Idle = 0;
 
-	if (m_isRight)
-	{
-		m_nCurrFrameX_Idle = 0;
-		m_nCurrFrameY_Idle = 0;
-		m_nFrameCount_Idle = 0;
+	m_nCurrFrameX_eventIdle = 0;
+	m_nCurrFrameY_eventIdle = 0;
+	m_nFrameCount_eventIdle = 0;
 
-		m_nCurrFrameX_eventIdle = 0;
-		m_nCurrFrameY_eventIdle = 0;
-		m_nFrameCount_eventIdle = 0;
+	m_nCurrFrameX_Move = 0;
+	m_nCurrFrameY_Move = 0;
+	m_nFrameCount_Move = 0;
 
-		m_nCurrFrameX_Move = 0;
-		m_nCurrFrameY_Move = 0;
-		m_nFrameCount_Move = 0;
-
-		m_nCurrFrameX_basicAtk = 0;
-		m_nCurrFrameY_basicAtk = 0;
-		m_nFrameCount_basicAtk = 0;
-	}
-	if (!m_isRight)
-	{
-		m_nCurrFrameX_Idle = 2;
-		m_nCurrFrameY_Idle = 1;
-		m_nFrameCount_Idle = 0;
-
-		m_nCurrFrameX_eventIdle = 2;
-		m_nCurrFrameY_eventIdle = 1;
-		m_nFrameCount_eventIdle = 0;
-
-		m_nCurrFrameX_Move = 6;
-		m_nCurrFrameY_Move = 1;
-		m_nFrameCount_Move = 0;
-
-		m_nCurrFrameX_basicAtk = 4;
-		m_nCurrFrameY_basicAtk = 1;
-		m_nFrameCount_basicAtk = 0;
-	}
+	m_nCurrFrameX_basicAtk = 0;
+	m_nCurrFrameY_basicAtk = 0;
+	m_nFrameCount_basicAtk = 0;
 
 	m_nCurrFrameX_jumpAtk2 = 0;
 	m_nCurrFrameY_jumpAtk2 = 0;
@@ -95,18 +89,9 @@ HRESULT black_Knight::init(float x, float y)
 	m_nFrameCount_Die = 0;
 
 	m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2, m_fY + m_pImg_Idle->getFrameHeight() / 2, m_pImg_Idle->getFrameWidth(), m_pImg_Idle->getFrameHeight());
-	m_rcRange = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2, m_fY + m_pImg_Idle->getFrameHeight() / 2, m_fRange + 300, 50);
-	m_rcTemp = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2, m_fY + m_pImg_Idle->getFrameHeight() / 2 + 50, m_fRange + 300, 50);
+	m_rcRange = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2, 100.0f + m_pImg_Idle->getFrameHeight() / 2, m_fRange + 300, 50);
+	m_rcTemp = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2, 100.0f + m_pImg_Idle->getFrameHeight() / 2, m_fRange + 500, 50);
 
-	m_nBossState = BOSS_IDLE;	// 보스 현재 상태
-
-	m_nAtkCount = 0;		// 기본 공격 시 렉트 생성 카운트
-	m_nMoveCount = 0;		// 무브 카운트
-	m_nBasicAtkCount = 0;	// 기본 공격 카운트
-	m_nShootAtkCount = 0;	// 슈팅 공격 카운트
-	m_nJumpAtkCount = 0;	// 점프 공격 카운트
-
-	// 보스 체력 위치
 	m_fX_Hp = MAPMANAGER->getCamera().x + 388;
 	m_fY_Hp = MAPMANAGER->getCamera().y + 9;
 
@@ -154,7 +139,11 @@ void black_Knight::update()
 {
 	if (KEYMANAGER->isOnceKeyUp('A'))
 	{
-		m_nBossState = BOSS_MOVE;
+		m_nBossState = BOSS_BACKSTEP;
+		m_isAtk = false;
+		m_isJump = false;
+		m_isDamage = false;
+		m_isFire = false;
 	}
 	if (KEYMANAGER->isOnceKeyUp('S'))
 	{
@@ -180,10 +169,12 @@ void black_Knight::update()
 	if (m_fX < PLAYER->getPlayerX())	//  플레이어 위치에 따른 프레임 변경
 	{
 		m_isRight = true;
+		m_isLeft = false;
 	}
-	if (m_fX > PLAYER->getPlayerX())
+	else if (m_fX > PLAYER->getPlayerX())
 	{
 		m_isRight = false;
+		m_isLeft = true;
 	}
 
 	m_nFrameCount_Die++;
@@ -201,7 +192,6 @@ void black_Knight::update()
 	leftFrame();
 	rightFrame();
 	move();
-	attackPhase();
 	for (int i = 0; i < MAPMANAGER->getMapVectorRcSize(); i++) {
 		jumpAtk(MAPMANAGER->getMapVectorRc(i));
 		backStep(MAPMANAGER->getMapVectorRc(i));
@@ -213,7 +203,7 @@ void black_Knight::update()
 void black_Knight::render(HDC hdc)
 {
 	renderBoss(hdc);	// 보스렌더
-	//renderUI(hdc);
+	renderUI(hdc);
 }
 
 void black_Knight::renderBoss(HDC hdc)
@@ -222,168 +212,154 @@ void black_Knight::renderBoss(HDC hdc)
 	{
 		Rectangle(hdc, rcAtk.left, rcAtk.top, rcAtk.right, rcAtk.bottom);
 		Rectangle(hdc, m_rcTemp.left, m_rcTemp.top, m_rcTemp.right, m_rcTemp.bottom);
-		Rectangle(hdc, m_rcRange.left, m_rcRange.top, m_rcRange.right, m_rcRange.bottom);
+		//Rectangle(hdc, m_rcRange.left, m_rcRange.top, m_rcRange.right, m_rcRange.bottom);
 		Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
-		if (!m_isDamage)
-		{
+		
 			if (m_nBossState == BOSS_EVENT_IDLE)
 			{
-				if (m_isRight)
+				if (m_isRight && !m_isLeft)
 				{
 					m_pImg_eventIdle->frameRender(hdc, m_fX - 10, m_fY, m_nCurrFrameX_eventIdle, 0);
 				}
-				else
+				else if(!m_isRight && m_isLeft)
 				{
 					m_pImg_eventIdle->frameRender(hdc, m_fX - 10, m_fY, m_nCurrFrameX_eventIdle, 1);
 				}
 			}
-			if (m_nBossState == BOSS_IDLE)
+			else if (m_nBossState == BOSS_IDLE)
 			{
-				if (m_isRight)
+				if (m_isRight && !m_isLeft)
 				{
 					m_pImg_Idle->frameRender(hdc, m_fX, m_fY, m_nCurrFrameX_Idle, 0);
 				}
-				else
+				else if(!m_isRight && m_isLeft)
 				{
 					m_pImg_Idle->frameRender(hdc, m_fX, m_fY, m_nCurrFrameX_Idle, 1);
 				}
 			}
-			if (m_nBossState == BOSS_MOVE)
+			else if (m_nBossState == BOSS_MOVE)
 			{
-				if (m_isRight)
+				if (m_isRight && !m_isLeft)
 				{
 					m_pImg_Move->frameRender(hdc, m_fX - 7, m_fY, m_nCurrFrameX_Move, 0);
 				}
-				else
+				else if (!m_isRight && m_isLeft)
 				{
 					m_pImg_Move->frameRender(hdc, m_fX - 7, m_fY, m_nCurrFrameX_Move, 1);
 				}
 			}
-			if (m_nBossState == BOSS_MOVE2)
+			else if (m_nBossState == BOSS_MOVE2)
 			{
-				if (m_isRight)
+				if (m_isRight && !m_isLeft)
 				{
 					m_pImg_Move->frameRender(hdc, m_fX - 7, m_fY, m_nCurrFrameX_Move, 0);
 				}
-				else
+				else if (!m_isRight && m_isLeft)
 				{
 					m_pImg_Move->frameRender(hdc, m_fX - 7, m_fY, m_nCurrFrameX_Move, 1);
 				}
 			}
-			if (m_nBossState == BOSS_BACKSTEP)
+			else if (m_nBossState == BOSS_BACKSTEP)
 			{
-				if (m_isRight)
+				if (m_isRight && !m_isLeft)
 				{
 					m_pImg_backStepR->render(hdc, m_fX - 10, m_fY - 2);
 				}
-				else
+				else if (!m_isRight && m_isLeft)
 				{
 					m_pImg_backStepL->render(hdc, m_fX - 3, m_fY - 2);
 				}
 			}
-			if (m_nBossState == BOSS_BACKSTEP2)
+			else if (m_nBossState == BOSS_ATK)
 			{
-				if (m_isRight)
-				{
-					m_pImg_backStepR->render(hdc, m_fX - 10, m_fY - 2);
-				}
-				else
-				{
-					m_pImg_backStepL->render(hdc, m_fX - 3, m_fY - 2);
-				}
-			}
-			if (m_nBossState == BOSS_ATK)
-			{
-				if (m_isRight)
+				if (m_isRight && !m_isLeft)
 				{
 					m_pImg_Atk->frameRender(hdc, m_fX - 10, m_fY, m_nCurrFrameX_basicAtk, 0);
 				}
-				else
+				else if (!m_isRight && m_isLeft)
 				{
 					m_pImg_Atk->frameRender(hdc, m_fX - 25, m_fY, m_nCurrFrameX_basicAtk, 1);
 				}
 			}
-			if (m_nBossState == BOSS_JUMP_ATK1)
+			else if (m_nBossState == BOSS_JUMP_ATK1)
 			{
-				if (m_isRight)
+				if (m_isRight && !m_isLeft)
 				{
 					m_pImg_jumpAtk_1R->render(hdc, m_fX - 23, m_fY - 3);
 				}
-				else
+				else if (!m_isRight && m_isLeft)
 				{
 					m_pImg_jumpAtk_1L->render(hdc, m_fX - 5, m_fY - 3);
 				}
 			}
-			if (m_nBossState == BOSS_JUMP_ATK2)
+			else if (m_nBossState == BOSS_JUMP_ATK2)
 			{
-				if (m_isRight)
+				if (m_isRight && !m_isLeft)
 				{
 					m_pImg_jumpAtk_2->frameRender(hdc, m_fX - 10, m_fY - 3, m_nCurrFrameX_jumpAtk2, 0);
 				}
-				else
+				else if (!m_isRight && m_isLeft)
 				{
 					m_pImg_jumpAtk_2->frameRender(hdc, m_fX - 5, m_fY - 3, m_nCurrFrameX_jumpAtk2, 1);
 				}
 			}
-			if (m_nBossState == BOSS_SHOOT_ATK1)
+
+			else if (m_nBossState == BOSS_SHOOT_ATK1)
 			{
-				if (m_isRight)
+				if (m_isRight && !m_isLeft)
 				{
 					m_pImg_shootAtk_1->frameRender(hdc, m_fX - 12, m_fY - 4, m_nCurrFrameX_shootAtk1, 0);
 				}
-				else
+				else if (!m_isRight && m_isLeft)
 				{
 					m_pImg_shootAtk_1->frameRender(hdc, m_fX - 20, m_fY - 4, m_nCurrFrameX_shootAtk1, 1);
 				}
 			}
-			if (m_nBossState == BOSS_DIE1)
+			else if (m_nBossState == BOSS_DIE1)
 			{
-				if (m_isRight)
+				if (m_isRight && !m_isLeft)
 				{
 					m_pImg_Die1->frameRender(hdc, m_fX, m_fY, 0, 1);
 				}
-				else
+				else if (!m_isRight && m_isLeft)
 				{
 					m_pImg_Die1->frameRender(hdc, m_fX, m_fY, 0, 1);
 				}
 			}
-			if (m_nBossState == BOSS_DIE2)
+			else if (m_nBossState == BOSS_DIE2)
 			{
-				if (m_isRight)
+				if (m_isRight && !m_isLeft)
 				{
 					m_pImg_Die2->frameRender(hdc, m_fX - 8, m_fY + 10, m_nCurrFrameX_Die, 0);
 				}
-				else
+				else if (!m_isRight && m_isLeft)
 				{
 					m_pImg_Die2->frameRender(hdc, m_fX - 8, m_fY + 10, m_nCurrFrameX_Die, 1);
 				}
 			}
-			if (m_nBossState == BOSS_DIE3)
+			else if (m_nBossState == BOSS_DIE3)
 			{
-				if (m_isRight)
+				if (m_isRight && !m_isLeft)
 				{
-					m_pImg_Die3->frameRender(hdc, m_fX - 8, m_fY + 10, 0, 0);
+					m_pImg_Die3->frameRender(hdc, m_fX - 8, m_fY + 12, 0, 0);
 				}
-				else
+				else if (!m_isRight && m_isLeft)
 				{
-					m_pImg_Die3->frameRender(hdc, m_fX - 8, m_fY + 10, 0, 1);
+					m_pImg_Die3->frameRender(hdc, m_fX - 8, m_fY + 12, 0, 1);
 				}
 			}
-		}
-		else
-		{
-			if (m_nBossState == BOSS_DAMAGE)
+		
+			else if (m_isDamage == true)
 			{
-				if (m_isRight)
+				if (m_isRight && !m_isLeft)
 				{
 					m_pImg_DamageR->hitRender(hdc, m_fX - 10, m_fY - 5, RGB(200, 0, 0));
 				}
-				else
+				else if (!m_isRight && m_isLeft)
 				{
 					m_pImg_DamageL->hitRender(hdc, m_fX - 3, m_fY - 5, RGB(200, 0, 0));
 				}
 			}
-		}
 
 		if (m_pBulletMgr)
 		{
@@ -408,7 +384,7 @@ void black_Knight::move()
 	{
 		if (m_nBossState == BOSS_MOVE)
 		{
-			if (m_isRight)
+			if (m_isRight && !m_isLeft)
 			{
 				m_fX += 1.0f;
 				m_fY += 0.0f;
@@ -417,7 +393,7 @@ void black_Knight::move()
 					m_pImg_Idle->getFrameWidth(),
 					m_pImg_Idle->getFrameHeight());
 			}
-			if (!m_isRight)
+			else if (!m_isRight && m_isLeft)
 			{
 				m_fX -= 1.0f;
 				m_fY += 0.0f;
@@ -429,7 +405,7 @@ void black_Knight::move()
 		}
 		if (m_nBossState == BOSS_MOVE2)
 		{
-			if (m_isRight)
+			if (m_isRight && !m_isLeft)
 			{
 				m_fX += 1.0f;
 				m_fY += 0.0f;
@@ -438,7 +414,7 @@ void black_Knight::move()
 					m_pImg_Idle->getFrameWidth(),
 					m_pImg_Idle->getFrameHeight());
 			}
-			if (!m_isRight)
+			else if (!m_isRight && m_isLeft)
 			{
 				m_fX -= 1.0f;
 				m_fY += 0.0f;
@@ -456,71 +432,54 @@ void black_Knight::backStep(RECT rcGround)
 	if (m_isAlive && !m_isDamage)
 	{
 		RECT rc;
-		m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2,
-			m_fY + m_pImg_Idle->getFrameHeight() / 2,
-			m_pImg_Idle->getFrameWidth(),
-			m_pImg_Idle->getFrameHeight());
 		if (m_nBossState == BOSS_BACKSTEP)
 		{
-			if (m_isRight)
+			if (m_isRight && !m_isLeft)
 			{
-				m_fGravity += 0.2f;
-				m_fX -= 1.0f;
-				m_fY -= m_fBackStepSpeed - m_fGravity;
-			}
-			else
-			{
-				m_fGravity += 0.2f;
-				m_fX += 1.0f;
-				m_fY -= m_fBackStepSpeed - m_fGravity;
-			}
-		}
-		if (IntersectRect(&rc, &m_rc, &rcGround))	// 바닥과의 충돌
-		{
-			m_isJump = false;
-			m_fGravity = 0;
-			m_fBackStepSpeed = m_fBackStepSpeed;
-			m_fY = rcGround.top - m_pImg_Idle->getFrameHeight();
-			m_nBossState = BOSS_BACKSTEP2;
-			m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2,
-				m_fY + m_pImg_Idle->getFrameHeight() / 2,
-				m_pImg_Idle->getFrameWidth(),
-				m_pImg_Idle->getFrameHeight());
-		}
-		if (m_nBossState == BOSS_BACKSTEP2)
-		{
-			if (m_isRight)
-			{
-				m_fGravity += 0.2f;
-				m_fX -= 1.0f;
-				m_fY -= m_fBackStepSpeed - m_fGravity;
+				m_fGravity_BackStep += 0.2f;
+				m_fX -= 1.5f;
+				m_fY -= m_fBackStepSpeed - m_fGravity_BackStep;
 				m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2,
 					m_fY + m_pImg_Idle->getFrameHeight() / 2,
 					m_pImg_Idle->getFrameWidth(),
 					m_pImg_Idle->getFrameHeight());
+				if (m_nBossState == BOSS_BACKSTEP && m_isAlive && IntersectRect(&rc, &m_rc, &rcGround))	// 바닥과의 충돌
+				{
+					m_nBossState = BOSS_SHOOT_ATK1;
+					//m_isJump = false;
+					m_isFire = true;
+					m_fGravity_BackStep = 0;
+					m_fBackStepSpeed = m_fBackStepSpeed;
+					m_fY = rcGround.top - m_pImg_Idle->getFrameHeight();
+					m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2,
+						m_fY + m_pImg_Idle->getFrameHeight() / 2,
+						m_pImg_Idle->getFrameWidth(),
+						m_pImg_Idle->getFrameHeight());
+				}
 			}
-			else
+			else if (!m_isRight && m_isLeft)
 			{
-				m_fGravity += 0.2f;
-				m_fX += 1.0f;
-				m_fY -= m_fBackStepSpeed - m_fGravity;
+				m_fGravity_BackStep += 0.2f;
+				m_fX += 1.5f;
+				m_fY -= m_fBackStepSpeed - m_fGravity_BackStep;
 				m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2,
 					m_fY + m_pImg_Idle->getFrameHeight() / 2,
 					m_pImg_Idle->getFrameWidth(),
 					m_pImg_Idle->getFrameHeight());
+				if (m_nBossState == BOSS_BACKSTEP && m_isAlive && IntersectRect(&rc, &m_rc, &rcGround))	// 바닥과의 충돌
+				{
+					m_nBossState = BOSS_SHOOT_ATK1;
+					//m_isJump = false;
+					m_isFire = true;
+					m_fGravity_BackStep = 0;
+					m_fBackStepSpeed = m_fBackStepSpeed;
+					m_fY = rcGround.top - m_pImg_Idle->getFrameHeight();
+					m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2,
+						m_fY + m_pImg_Idle->getFrameHeight() / 2,
+						m_pImg_Idle->getFrameWidth(),
+						m_pImg_Idle->getFrameHeight());
+				}
 			}
-		}
-		if (IntersectRect(&rc, &m_rc, &rcGround))
-		{
-			m_isJump = false;
-			m_fGravity = 0;
-			m_fBackStepSpeed = m_fBackStepSpeed;
-			m_fY = rcGround.top - m_pImg_Idle->getFrameHeight();
-			m_nBossState = BOSS_SHOOT_ATK1;
-			m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2,
-				m_fY + m_pImg_Idle->getFrameHeight() / 2,
-				m_pImg_Idle->getFrameWidth(),
-				m_pImg_Idle->getFrameHeight());
 		}
 	}
 }
@@ -529,12 +488,12 @@ void black_Knight::damage(int damage)
 {
 	if (m_isAlive)
 	{
+		m_nBossState = BOSS_DAMAGE;
 		m_isDamage = true;
 		m_isJump = false;
 		m_isAtk = false;
 		m_isFire = false;
-		m_nBossState = BOSS_DAMAGE;
-		m_nLife -= damage;
+		m_nLife -= damage;		
 		if (m_nLife == 0)
 		{
 			m_nBossState = BOSS_DIE1;
@@ -548,11 +507,11 @@ void black_Knight::damage(int damage)
 void black_Knight::jumpAtk(RECT rcGround)
 {
 	RECT rc;
-	if (m_isAlive && !m_isDying)
+	if (m_isAlive && !m_isDying && !m_isDamage)
 	{
 		if (m_isJump && (!m_isAtk || !m_isFire))
 		{
-			if (!m_isRight)
+			if (!m_isRight && m_isLeft)
 			{
 				m_nBossState = BOSS_JUMP_ATK1;
 				m_fGravity += 0.2f;
@@ -566,10 +525,34 @@ void black_Knight::jumpAtk(RECT rcGround)
 				{
 					m_nBossState = BOSS_JUMP_ATK2;
 					m_fGravity += 1.0f;
+					m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2,
+						m_fY + m_pImg_Idle->getFrameHeight() / 2,
+						m_pImg_Idle->getFrameWidth(),
+						m_pImg_Idle->getFrameHeight());
 				}
+				if (m_nBossState == BOSS_JUMP_ATK2 && m_isAlive &&IntersectRect(&rc, &m_rc, &rcGround))
+				{
+					m_isJump = true;
+					m_fGravity = 0;
+					m_fJumpSpeed = m_fJumpSpeed;
+					m_fY = rcGround.top - m_pImg_Idle->getFrameHeight();
+					m_nJumpAtkCount++;
+					m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2,
+						m_fY + m_pImg_Idle->getFrameHeight() / 2,
+						m_pImg_Idle->getFrameWidth(),
+						m_pImg_Idle->getFrameHeight());
 
+					if (m_nJumpAtkCount > 2)
+					{
+						m_nJumpAtkCount = 0;
+						m_nBossState = BOSS_MOVE;
+						m_isAtk = false;
+						m_isJump = false;
+						m_isFire = false;
+					}
+				}
 			}
-			else
+			else if (m_isRight && !m_isLeft)
 			{
 				m_nBossState = BOSS_JUMP_ATK1;
 				m_fGravity += 0.2f;
@@ -583,27 +566,31 @@ void black_Knight::jumpAtk(RECT rcGround)
 				{
 					m_nBossState = BOSS_JUMP_ATK2;
 					m_fGravity += 1.0f;
+					m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2,
+						m_fY + m_pImg_Idle->getFrameHeight() / 2,
+						m_pImg_Idle->getFrameWidth(),
+						m_pImg_Idle->getFrameHeight());
 				}
-			}
-			if (IntersectRect(&rc, &m_rc, &rcGround))
-			{
-				m_isJump = true;
-				m_fGravity = 0;
-				m_fJumpSpeed = m_fJumpSpeed;
-				m_fY = rcGround.top - m_pImg_Idle->getFrameHeight();
-				m_nJumpAtkCount++;
-				m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2,
-					m_fY + m_pImg_Idle->getFrameHeight() / 2,
-					m_pImg_Idle->getFrameWidth(),
-					m_pImg_Idle->getFrameHeight());
-
-				if (m_nJumpAtkCount > 2)
+				if (m_nBossState == BOSS_JUMP_ATK2 && m_isAlive &&IntersectRect(&rc, &m_rc, &rcGround))
 				{
-					m_nJumpAtkCount = 0;
-					m_nBossState = BOSS_MOVE;
-					m_isAtk = false;
-					m_isJump = false;
-					m_isFire = false;
+					m_isJump = true;
+					m_fGravity = 0;
+					m_fJumpSpeed = m_fJumpSpeed;
+					m_fY = rcGround.top - m_pImg_Idle->getFrameHeight();
+					m_nJumpAtkCount2++;
+					m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2,
+						m_fY + m_pImg_Idle->getFrameHeight() / 2,
+						m_pImg_Idle->getFrameWidth(),
+						m_pImg_Idle->getFrameHeight());
+
+					if (m_nJumpAtkCount2 > 2)
+					{
+						m_nJumpAtkCount2 = 0;
+						m_nBossState = BOSS_MOVE;
+						m_isAtk = false;
+						m_isJump = false;
+						m_isFire = false;
+					}
 				}
 			}
 		}
@@ -613,7 +600,7 @@ void black_Knight::jumpAtk(RECT rcGround)
 
 void black_Knight::fire()
 {
-	if (m_isAlive && !m_isDying)
+	if (m_isAlive && !m_isDying && !m_isDamage && !m_isJump)
 	{
 		if (m_isFire && m_nBossState == BOSS_SHOOT_ATK1)
 		{
@@ -622,7 +609,7 @@ void black_Knight::fire()
 				m_nFireCount++;
 				if (m_nFireCount % 10 == 0)
 				{
-					if (m_isRight)
+					if (m_isRight && !m_isLeft)
 					{
 						// 발사
 						m_pBulletMgr->fire(m_fX + 15, m_fY + 15, 360.0f * PI / 180, 3.0f, 0);
@@ -630,13 +617,12 @@ void black_Knight::fire()
 						m_nFireCount = 0;
 						m_nCurrFrameX_shootAtk1 = 0;
 					}
-					else
+					else if (!m_isRight && m_isLeft)
 					{
 						// 발사
 						m_pBulletMgr->fire(m_fX - 15, m_fY + 15, -180.0f * PI / 180, 3.0f, 1);
 						m_nFireCount = 0;
 						m_nBossState = BOSS_MOVE2;
-						m_nFireCount = 0;
 						m_nCurrFrameX_shootAtk1 = 0;
 					}
 
@@ -649,9 +635,9 @@ void black_Knight::fire()
 
 void black_Knight::attack()
 {
-	if (m_isAlive && m_isAtk && !m_isJump && !m_isDying)
+	if (m_isAlive && m_isAtk && !m_isJump && !m_isDying && !m_isDamage)
 	{
-		if (m_isRight)
+		if (m_isRight && !m_isLeft)
 		{
 			m_nBossState = BOSS_ATK;
 			m_nAtkCount++;
@@ -659,25 +645,25 @@ void black_Knight::attack()
 			{
 				rcAtk = RectMakeCenter(m_fX + 40, m_fY + 20, 10, 10);
 			}
-			if (m_nAtkCount == 50)
+			if (m_nAtkCount > 30)
 			{
-				rcAtk = RectMakeCenter(-1000, -1000, 10, 10);
+				rcAtk = RectMakeCenter(-10, -10, -10, -10);
 				m_nBasicAtkCount++;
 				m_nAtkCount = 0;
 			}
 		}
-		else
+		else if (!m_isRight && m_isLeft)
 		{
 			m_nBossState = BOSS_ATK;
-			m_nAtkCount++;
-			if (m_nAtkCount > 18)
+			m_nAtkCount2++;
+			if (m_nAtkCount2 > 18)
 			{
 				rcAtk = RectMakeCenter(m_fX - 20, m_fY+20, 10, 10);
 			}
-			if (m_nAtkCount == 50)
+			if (m_nAtkCount2 > 30)
 			{
-				rcAtk = RectMakeCenter(-1000, -1000, 10, 10);
-				m_nBasicAtkCount++;
+				rcAtk = RectMakeCenter(-10, -10, -10, -10);
+				m_nBasicAtkCount2++;
 				m_nAtkCount = 0;
 			}
 		}
@@ -688,7 +674,7 @@ void black_Knight::rightFrame()
 {
 	if (m_isAlive && !m_isDying)
 	{
-		if (m_isRight)
+		if (m_isRight && !m_isLeft)
 		{
 			// 기본 idle
 			if (m_nBossState == BOSS_IDLE)
@@ -736,7 +722,7 @@ void black_Knight::rightFrame()
 						m_nMoveCount++;
 						m_nCurrFrameX_Move = 0; 
 						m_nFrameCount_Move = 0;
-						if (m_nMoveCount == 2)
+						if (m_nMoveCount > 2)
 						{
 							m_nBossState = BOSS_ATK;
 							m_isAtk = true;
@@ -753,14 +739,14 @@ void black_Knight::rightFrame()
 					m_nCurrFrameX_Move++;
 					if (m_nCurrFrameX_Move > 6)
 					{
-						m_nMoveCount++;
+						m_nMoveCount_2++;
 						m_nCurrFrameX_Move = 0;
 						m_nFrameCount_Move = 0;
-						if (m_nMoveCount == 2)
+						if (m_nMoveCount_2 > 2)
 						{
 							m_nBossState = BOSS_JUMP_ATK1;
 							m_isJump = true;
-							m_nMoveCount = 0;
+							m_nMoveCount_2 = 0;
 						}
 					}
 				}
@@ -776,6 +762,12 @@ void black_Knight::rightFrame()
 					{
 						m_nCurrFrameX_basicAtk = 0;
 						m_nFrameCount_basicAtk = 0;
+						if (m_nBasicAtkCount > 1)
+						{
+							m_nBasicAtkCount = 0;
+							m_nBossState = BOSS_BACKSTEP;
+							m_isAtk = false;
+						}
 					}
 				}
 			}
@@ -814,31 +806,21 @@ void black_Knight::leftFrame()
 {
 	if (m_isAlive && !m_isDying)
 	{
-		if (!m_isRight)
+		if (!m_isRight && m_isLeft)
 		{
 			m_nFrameCount_Idle++;
 			if (m_nFrameCount_Idle % 10 == 0)
 			{
-				m_nCurrFrameX_Idle--;
-				if (m_nCurrFrameX_Idle < 0)
+				m_nCurrFrameX_Idle++;
+				if (m_nCurrFrameX_Idle > 2)
 				{
-					m_nCurrFrameX_Idle = 2;
+					m_nCurrFrameX_Idle = 0;
 					m_nFrameCount_Idle = 0;
-					m_nEventIdleCount++;
-					if (m_nEventIdleCount > 3)
+					m_nEventIdleCount2++;
+					if (m_nEventIdleCount2 > 3)
 					{
 						m_nBossState = BOSS_MOVE;
 					}
-				}
-			}
-			m_nFrameCount_eventIdle++;
-			if (m_nFrameCount_eventIdle % 10 == 0)
-			{
-				m_nCurrFrameX_eventIdle--;
-				if (m_nCurrFrameX_eventIdle < 0)
-				{
-					m_nCurrFrameX_eventIdle = 2;
-					m_nFrameCount_eventIdle = 0;
 				}
 			}
 			if (m_nBossState == BOSS_MOVE)
@@ -847,17 +829,18 @@ void black_Knight::leftFrame()
 				m_nFrameCount_Move++;
 				if (m_nFrameCount_Move % 10 == 0)
 				{
-					m_nCurrFrameX_Move--;
-					if (m_nCurrFrameX_Move < 0)
+					m_nCurrFrameX_Move++;
+					m_nCurrFrameY_Move = 1;
+					if (m_nCurrFrameX_Move > 6)
 					{
-						m_nMoveCount++;
-						m_nCurrFrameX_Move = 6;
-						m_nFrameCount_Move = 0;
-						if (m_nMoveCount == 2)
+						m_nMoveCount2++;
+						m_nCurrFrameX_Move = 0;
+						//m_nFrameCount_Move = 0;
+						if (m_nMoveCount2 > 1)
 						{
 							m_nBossState = BOSS_ATK;
 							m_isAtk = true;
-							m_nMoveCount = 0;
+							m_nMoveCount2 = 0;
 						}
 					}
 				}
@@ -867,17 +850,17 @@ void black_Knight::leftFrame()
 				m_nFrameCount_Move++;
 				if (m_nFrameCount_Move % 10 == 0)
 				{
-					m_nCurrFrameX_Move--;
-					if (m_nCurrFrameX_Move < 0)
+					m_nCurrFrameX_Move++;
+					if (m_nCurrFrameX_Move > 6)
 					{
-						m_nMoveCount++;
-						m_nCurrFrameX_Move = 6;
+						m_nCurrFrameY_Move = 1;
+						m_nMoveCount2_2++;
 						m_nFrameCount_Move = 0;
-						if (m_nMoveCount == 2)
+						if (m_nMoveCount2_2 > 2)
 						{
 							m_nBossState = BOSS_JUMP_ATK1;
 							m_isJump = true;
-							m_nMoveCount = 0;
+							m_nMoveCount2_2 = 0;
 						}
 					}
 				}
@@ -888,11 +871,17 @@ void black_Knight::leftFrame()
 				if (m_nFrameCount_basicAtk % 10 == 0)
 				{
 					m_nCurrFrameY_basicAtk = 1;
-					m_nCurrFrameX_basicAtk--;
-					if (m_nCurrFrameX_basicAtk < 0)
+					m_nCurrFrameX_basicAtk++;
+					if (m_nCurrFrameX_basicAtk > 4)
 					{
-						m_nCurrFrameX_basicAtk = 4;
+						m_nCurrFrameX_basicAtk = 0;
 						m_nFrameCount_basicAtk = 0;
+						if (m_nBasicAtkCount2 > 1)
+						{
+							m_isAtk = false;
+							m_nBasicAtkCount2 = 0;
+							m_nBossState = BOSS_BACKSTEP;
+						}
 					}
 				}
 			}
@@ -927,52 +916,6 @@ void black_Knight::leftFrame()
 	}
 }
 
-void black_Knight::attackPhase()
-{
-	if (m_isAlive && !m_isDying)
-	{
-		if (m_nBossState == BOSS_ATK)
-		{
-			// 기본공격
-			m_isAtk = true;
-			if (m_nBasicAtkCount == 1)
-			{
-				m_nBasicAtkCount = 0;
-				m_nBossState = BOSS_BACKSTEP;
-				m_isAtk = false;
-				m_isJump = false;
-				m_isFire = false;
-			}
-		}
-		if (m_nBossState == BOSS_SHOOT_ATK1)
-		{
-			// 슈팅공격
-			m_isFire = true;
-			if (m_nShootAtkCount == 1)
-			{
-				m_nShootAtkCount = 0;
-				m_nBossState = BOSS_JUMP_ATK1;
-				m_isAtk = false;
-				m_isJump = true;
-				m_isFire = false;
-			}
-		}
-		if (m_nBossState == BOSS_JUMP_ATK1)
-		{
-			// 점프공격
-			m_isJump = true;
-			if (m_nJumpAtkCount > 2)
-			{
-				m_nJumpAtkCount = 0;
-				m_nBossState = BOSS_MOVE;
-				m_isAtk = false;
-				m_isJump = false;
-				m_isFire = false;
-			}
-		}
-	}
-}
-
 void black_Knight::dieMotion(RECT rcGround)
 {
 	if (m_isAlive)
@@ -980,62 +923,62 @@ void black_Knight::dieMotion(RECT rcGround)
 		RECT rc;
 		if (m_nBossState == BOSS_DIE1)
 		{
-			if (m_isRight)
+			if (m_isRight && !m_isLeft)
 			{
-				m_fGravity += 0.2f;
+				m_fGravity_Die += 0.2f;
 				m_fX -= 2.0f;
-				m_fY -= m_fDieJumpSpeed - m_fGravity;
+				m_fY -= m_fDieJumpSpeed - m_fGravity_Die;
 				m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2,
 					m_fY + m_pImg_Idle->getFrameHeight() / 2,
 					m_pImg_Idle->getFrameWidth(),
 					m_pImg_Idle->getFrameHeight());
 			}
-			else
+			else if (!m_isRight && m_isLeft)
 			{
-				m_fGravity += 0.2f;
+				m_fGravity_Die += 0.2f;
 				m_fX += 2.0f;
-				m_fY -= m_fDieJumpSpeed - m_fGravity;
+				m_fY -= m_fDieJumpSpeed - m_fGravity_Die;
 				m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2,
 					m_fY + m_pImg_Idle->getFrameHeight() / 2,
 					m_pImg_Idle->getFrameWidth(),
 					m_pImg_Idle->getFrameHeight());
 			}
 
-			if (m_fDieJumpSpeed - m_fGravity < 0)
+			if (m_fDieJumpSpeed - m_fGravity_Die < 0)
 			{
 				m_nBossState = BOSS_DIE2;
 			}
 		}
 		if (m_nBossState == BOSS_DIE2)
 		{
-
-			if (m_isRight)
+			if (m_isRight && !m_isLeft)
 			{
-				m_fGravity += 0.2f;
+				m_fGravity_Die += 0.2f;
 				m_fX -= 2.0f;
-				m_fY -= m_fDieJumpSpeed - m_fGravity;
+				m_fY -= m_fDieJumpSpeed - m_fGravity_Die;
 				m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2,
 					m_fY + m_pImg_Idle->getFrameHeight() / 2,
 					m_pImg_Idle->getFrameWidth(),
 					m_pImg_Idle->getFrameHeight());
 			}
-			else
+			else if (!m_isRight && m_isLeft)
 			{
-				m_fGravity += 0.2f;
+				m_fGravity_Die += 0.2f;
 				m_fX += 2.0f;
-				m_fY -= m_fDieJumpSpeed - m_fGravity;
+				m_fY -= m_fDieJumpSpeed - m_fGravity_Die;
 				m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2,
 					m_fY + m_pImg_Idle->getFrameHeight() / 2,
 					m_pImg_Idle->getFrameWidth(),
 					m_pImg_Idle->getFrameHeight());
 			}
 		}
-		if (IntersectRect(&rc, &m_rc, &rcGround))	// 바닥과의 충돌
+		if (m_nBossState == BOSS_DIE2 && m_isAlive && IntersectRect(&rc, &m_rc, &rcGround))	// 바닥과의 충돌
 		{
 			m_isJump = false;
 			m_isAtk = false;
 			m_isFire = false;
-			m_fGravity = 0;
+			m_isDamage = false;
+			m_fGravity_Die = 0;
 			m_fDieJumpSpeed = 0;
 			m_nBossState = BOSS_DIE3;
 			m_fY = rcGround.top - m_pImg_Idle->getFrameHeight();
@@ -1049,47 +992,51 @@ void black_Knight::dieMotion(RECT rcGround)
 
 void black_Knight::damageMotion(RECT rcGround)
 {
-	if (m_isDamage)
+	if (m_isDamage && m_isAlive && !m_isAtk)
 	{
 		RECT rc;
-		m_nDamageTime++;
-		m_nBossState = BOSS_DAMAGE;
 		if (m_isRight)
 		{
-			if (m_nDamageTime < 17)
+			m_fGravity_Damage += 0.2f;
+			m_fX -= 1.0f;
+			m_fY -= m_fDamageJumpSpeed - m_fGravity_Damage;
+			m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2,
+				m_fY + m_pImg_Idle->getFrameHeight() / 2,
+				m_pImg_Idle->getFrameWidth(),
+				m_pImg_Idle->getFrameHeight());
+			if (/*m_nBossState == BOSS_DAMAGE && */m_isAlive &&IntersectRect(&rc, &m_rc, &rcGround))
 			{
-				m_fGravity += 1.0f;
-				m_fX -= 2.0f;
-				m_fY -= m_fDamageJumpSpeed - m_fGravity;
+				m_nBossState = BOSS_MOVE;
+				m_isDamage = false;
+				m_fDamageJumpSpeed = m_fDamageJumpSpeed;
+				m_fGravity_Damage = 0.0f;
+				m_fY = rcGround.top - m_pImg_Idle->getFrameHeight();
 				m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2,
 					m_fY + m_pImg_Idle->getFrameHeight() / 2,
 					m_pImg_Idle->getFrameWidth(),
 					m_pImg_Idle->getFrameHeight());
-				if (IntersectRect(&rc, &m_rc, &rcGround))
-				{
-					m_nBossState = BOSS_MOVE;
-					m_nDamageTime = 0;
-					m_isDamage = false;
-				}
 			}
 		}
-		else
+		if (m_isRight == false)
 		{
-			if (m_nDamageTime < 17)
+			m_fGravity_Damage += 0.2f;
+			m_fX += 1.0f;
+			m_fY -= m_fDamageJumpSpeed - m_fGravity_Damage;
+			m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2,
+				m_fY + m_pImg_Idle->getFrameHeight() / 2,
+				m_pImg_Idle->getFrameWidth(),
+				m_pImg_Idle->getFrameHeight());
+			if (/*m_nBossState == BOSS_DAMAGE &&*/ m_isAlive && IntersectRect(&rc, &m_rc, &rcGround))
 			{
-				m_fGravity += 1.0f;
-				m_fX += 2.0f;
-				m_fY -= m_fDamageJumpSpeed - m_fGravity;
+				m_nBossState = BOSS_MOVE;
+				m_isDamage = false;
+				m_fDamageJumpSpeed = m_fDamageJumpSpeed;
+				m_fGravity_Damage = 0.0f;
+				m_fY = rcGround.top - m_pImg_Idle->getFrameHeight();
 				m_rc = RectMakeCenter(m_fX + m_pImg_Idle->getFrameWidth() / 2,
 					m_fY + m_pImg_Idle->getFrameHeight() / 2,
 					m_pImg_Idle->getFrameWidth(),
 					m_pImg_Idle->getFrameHeight());
-				if (IntersectRect(&rc, &m_rc, &rcGround))
-				{
-					m_nBossState = BOSS_MOVE;
-					m_nDamageTime = 0;
-					m_isDamage = false;
-				}
 			}
 		}
 	}

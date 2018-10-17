@@ -5,8 +5,14 @@ class bulletManager;
 
 enum boss_state
 {
-	BOSS_EVENT_IDLE, BOSS_IDLE, BOSS_MOVE, BOSS_MOVE2,BOSS_DAMAGE, BOSS_ATK, BOSS_JUMP_ATK1, BOSS_JUMP_ATK2,
-	BOSS_SHOOT_ATK1, BOSS_BACKSTEP, BOSS_BACKSTEP2, BOSS_DIE1, BOSS_DIE2, BOSS_DIE3
+	BOSS_EVENT_IDLE, BOSS_IDLE,
+	BOSS_MOVE, BOSS_MOVE2,
+	BOSS_DAMAGE,
+	BOSS_ATK,
+	BOSS_JUMP_ATK1, BOSS_JUMP_ATK2,
+	BOSS_SHOOT_ATK1,
+	BOSS_BACKSTEP,
+	BOSS_DIE1, BOSS_DIE2, BOSS_DIE3
 };
 
 class black_Knight : public enemyInfo
@@ -52,20 +58,30 @@ private:
 
 	bool	m_isAtk;
 	bool	m_isJump;
+	bool	m_isLeft;
 
 	float	m_fBackStepSpeed;
 	float	m_fDamageJumpSpeed;
 	float	m_fDieJumpSpeed;
-
+	float	m_fGravity_BackStep;
+	float	m_fGravity_Damage;
+	float	m_fGravity_Die;
 	int		m_nEventIdleCount;
+	int		m_nEventIdleCount2;
 
 	// 어택 별 카운트 ( 패턴에 필요함 )
 	int		m_nAtkCount;
-	int		m_nDamageTime;
+	int		m_nAtkCount2;
 	int		m_nJumpAtkCount;
+	int		m_nJumpAtkCount2;
 	int		m_nMoveCount;
+	int		m_nMoveCount2;
+	int		m_nMoveCount_2;
+	int		m_nMoveCount2_2;
 	int		m_nBasicAtkCount;
+	int		m_nBasicAtkCount2;
 	int		m_nShootAtkCount;
+	int		m_nShootAtkCount2;
 
 	// 프레임 카운트
 	int		m_nCurrFrameX_eventIdle;
@@ -106,7 +122,6 @@ public:
 	void attack();
 	void rightFrame();
 	void leftFrame();
-	void attackPhase();
 
 	void damage(int damage);
 	void backStep(RECT rcGround);
@@ -114,7 +129,7 @@ public:
 	void dieMotion(RECT rcGround);
 	void damageMotion(RECT rcGround);
 
-
+	inline RECT getRectTemp() { return m_rcTemp; }
 	black_Knight();
 	~black_Knight();
 };
