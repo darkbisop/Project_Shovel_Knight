@@ -128,7 +128,7 @@ void Player::update()
 void Player::render(HDC hdc)
 {
 	//Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
-	//Rectangle(hdc, m_AttackRc.left, m_AttackRc.top, m_AttackRc.right, m_AttackRc.bottom);
+	Rectangle(hdc, m_AttackRc.left, m_AttackRc.top, m_AttackRc.right, m_AttackRc.bottom);
 	//Rectangle(hdc, m_AttackDownRc.left, m_AttackDownRc.top, m_AttackDownRc.right, m_AttackDownRc.bottom);
 
 	ShovelRender(hdc);
@@ -288,7 +288,7 @@ void Player::Animation()
 			m_AttackCount++;
 
 			if (m_AttackCount > 10) {
-				m_AttackRc = RectMake(m_fX - 10, m_fY - 5, 25, 25);
+				m_AttackRc = RectMake(m_fX - 23, m_fY - 5, 25, 25);
 			}
 			if (m_AttackCount > 11) {
 				m_AttackRc = RectMake(-1000, -1000, -1, -1);
