@@ -65,8 +65,8 @@ HRESULT titleScene::init()
 
 	m_rcSelect_Audio = RectMake(m_fX_Audio+10, m_fY_Audio - 5, 80, 15);
 
-	m_rcSound_Audio = RectMake(m_fSoundVolumeX_Audio + 5, 106, 5, 10);
-	m_rcMusic_Audio = RectMake(m_fMusicVolumeX_Audio + 5, 125, 5, 10);
+	m_rcSound_Audio = RectMake(m_fSoundVolumeX_Audio + 30, 106, 5, 10);
+	m_rcMusic_Audio = RectMake(m_fMusicVolumeX_Audio + 30, 125, 5, 10);
 
 	m_rcSoundRange_Audio = RectMake(m_fSoundVolumeX_Audio + 5, 109, 55, 10);
 
@@ -79,7 +79,7 @@ HRESULT titleScene::init()
 	SOUNDMANAGER->addSound("셀렉무브", "Sound/SelectMove.mp3", false, false);
 	SOUNDMANAGER->addSound("스타트", "Sound/SelectStart.mp3", false, false);
 
-	SOUNDMANAGER->play("타이틀", 0.8f);
+	SOUNDMANAGER->play("타이틀", g_MusicVol);
 	return S_OK;
 }
 
@@ -93,6 +93,11 @@ void titleScene::update()
 	selectCollide();
 	optionUpdate();
 	audioUpdate();
+
+	//if (!SOUNDMANAGER->isPlaySound("타이틀")) {
+	//	SOUNDMANAGER->play("타이틀", g_MusicVol);
+	//}
+	//if (KEYMANAGER->isOnceKeyDown(VK_RIGHT)) g_MusicVol += 0.1;
 }
 
 void titleScene::render(HDC hdc)
@@ -361,12 +366,12 @@ void titleScene::audioCollide()
 			if (KEYMANAGER->isOnceKeyDown(VK_RIGHT) && m_rcSound_Audio.right < m_rcSoundRange_Audio.right)
 			{
 				m_fSoundVolumeX_Audio += 5.0f;
-				m_rcSound_Audio = RectMake(m_fSoundVolumeX_Audio + 5, 106, 5, 10);
+				m_rcSound_Audio = RectMake(m_fSoundVolumeX_Audio + 30, 106, 5, 10);
 			}
 			if (KEYMANAGER->isOnceKeyDown(VK_LEFT) && m_rcSound_Audio.left > m_rcSoundRange_Audio.left)
 			{
 				m_fSoundVolumeX_Audio -= 5.0f;
-				m_rcSound_Audio = RectMake(m_fSoundVolumeX_Audio + 5, 106, 5, 10);
+				m_rcSound_Audio = RectMake(m_fSoundVolumeX_Audio + 30, 106, 5, 10);
 			}
 		}
 		if (IntersectRect(&rc, &m_rcMusicVolume_Audio, &m_rcSelect_Audio))
@@ -374,12 +379,17 @@ void titleScene::audioCollide()
 			if (KEYMANAGER->isOnceKeyDown(VK_RIGHT) && m_rcMusic_Audio.right < m_rcSoundRange_Audio.right)
 			{
 				m_fMusicVolumeX_Audio += 5.0f;
-				m_rcMusic_Audio = RectMake(m_fMusicVolumeX_Audio + 5, 125, 5, 10);
+				m_rcMusic_Audio = RectMake(m_fMusicVolumeX_Audio + 30, 125, 5, 10);
+				g_MusicVol += 0.1f;
+				SOUNDMANAGER->setVolume("타이틀", g_MusicVol);
+				SOUNDMANAGER->setVolume("마을", g_MusicVol);
 			}
 			if (KEYMANAGER->isOnceKeyDown(VK_LEFT) && m_rcMusic_Audio.left > m_rcSoundRange_Audio.left)
 			{
 				m_fMusicVolumeX_Audio -= 5.0f;
-				m_rcMusic_Audio = RectMake(m_fMusicVolumeX_Audio + 5, 125, 5, 10);
+				m_rcMusic_Audio = RectMake(m_fMusicVolumeX_Audio + 30, 125, 5, 10);
+				g_MusicVol -= 0.1f;
+				SOUNDMANAGER->setVolume("타이틀", g_MusicVol);
 			}
 		}
 	}

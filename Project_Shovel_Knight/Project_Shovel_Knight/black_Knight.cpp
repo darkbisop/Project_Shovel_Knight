@@ -202,10 +202,12 @@ void black_Knight::update()
 	rightFrame();
 	move();
 	attackPhase();
-	jumpAtk(m_rcTemp);
-	backStep(m_rcTemp);
-	dieMotion(m_rcTemp);
-	damageMotion(m_rcTemp);
+	for (int i = 0; i < MAPMANAGER->getMapVectorRcSize(); i++) {
+		jumpAtk(MAPMANAGER->getMapVectorRc(i));
+		backStep(MAPMANAGER->getMapVectorRc(i));
+		dieMotion(MAPMANAGER->getMapVectorRc(i));
+		damageMotion(MAPMANAGER->getMapVectorRc(i));
+	}
 }
 
 void black_Knight::render(HDC hdc)

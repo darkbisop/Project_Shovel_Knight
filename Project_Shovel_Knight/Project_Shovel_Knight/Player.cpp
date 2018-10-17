@@ -401,7 +401,7 @@ void Player::Animation()
 		}
 	}
 
-	if (Hp <= 0) m_isDead = true;
+	//if (Hp <= 0) m_isDead = true;
 }
 
 void Player::FireBallMove()

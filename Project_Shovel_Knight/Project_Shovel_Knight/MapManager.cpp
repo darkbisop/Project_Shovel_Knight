@@ -60,7 +60,7 @@ HRESULT MapManager::init(void)
 
 	CheckMapRect();
 	PushRect();
-	SOUNDMANAGER->play("마을", 0.9f);
+	SOUNDMANAGER->play("마을", g_MusicVol);
 
 	return S_OK;
 }
