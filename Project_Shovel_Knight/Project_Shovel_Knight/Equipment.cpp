@@ -63,6 +63,11 @@ void Equipment::setItemEffect()
 				PLAYER->setEquipFlameWand(true);
 			}
 			else PLAYER->setEquipFlameWand(false);
+
+			if (m_Equipment[i]._item->getWeaponType() == TYPE_ACCESSORY) {
+				PLAYER->setEquipInvi(true);
+			}
+			else PLAYER->setEquipInvi(false);
 		}
 	}
 }

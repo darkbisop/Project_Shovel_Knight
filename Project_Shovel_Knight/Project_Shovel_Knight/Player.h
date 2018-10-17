@@ -12,7 +12,7 @@ struct FireBall
 
 enum State
 {
-	P_APPEAR, P_IDLE, P_MOVE, P_ATTACK, P_DOWNATTACK, P_MAGIC, P_JUMP, P_LADDERUP, P_LADDERSTOP, P_DAMAGED, P_DEAD
+	P_APPEAR, P_IDLE, P_MOVE, P_ATTACK, P_DOWNATTACK, P_MAGIC, P_JUMP, P_LADDERUP, P_LADDERSTOP, P_DAMAGED, P_DEAD, P_INVISIBLE
 };
 
 class Player : public singletonBase<Player>
@@ -42,6 +42,7 @@ private:
 	image*	m_DamagedImg;
 	image*	m_AppearImg;
 	image*	m_DeathImg;
+	image*	m_InvisibleImg;
 	
 
 	image*	m_Number_1;
@@ -78,6 +79,7 @@ private:
 	bool	m_isAppear;
 	bool	m_isFalling;
 	bool	m_isDead;
+	bool	m_isInvisible;
 
 	bool	m_isMovingMap;
 	bool	m_isCheck;
@@ -86,6 +88,7 @@ private:
 	bool	m_isFireLeft;
 
 	bool	m_EquipFlameWand;
+	bool	m_EquipInvi;
 	bool	m_isPlusHp;
 	
 	int		Money;
@@ -151,6 +154,9 @@ public:
 
 	inline bool getEquipFlameWand() { return m_EquipFlameWand; }
 	inline void setEquipFlameWand(bool a) { m_EquipFlameWand = a; }
+
+	inline bool getEquipInvi() { return m_EquipInvi; }
+	inline void setEquipInvi(bool a) { m_EquipInvi = a; }
 
 	inline Inventory* getInventory() { return m_inventory; }
 

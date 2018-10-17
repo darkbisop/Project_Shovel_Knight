@@ -71,6 +71,13 @@ private:
 	int		m_ReverseFrameX;
 	int		m_CheckSaveFrame;
 	int		m_screenFrame;
+
+	int		m_CastleBG_X;
+	int		m_CastleBG_Y;
+	int		m_BG_2_X;
+	int		m_BG_2_y;
+	int		m_BG_X;
+	int		m_BG_y;
 	
 	bool	MovingCamera[24];
 	bool	MapOn[24];

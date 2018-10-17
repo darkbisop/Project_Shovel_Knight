@@ -20,6 +20,7 @@ HRESULT Player::init()
 	m_HpBar4 = IMAGEMANAGER->addImage("PlayerHP", "image/Player/PlayerHP.bmp", 24, 8, 3, 1, true, RGB(255, 0, 255));
 	m_HpBar5 = IMAGEMANAGER->addImage("PlayerHP", "image/Player/PlayerHP.bmp", 24, 8, 3, 1, true, RGB(255, 0, 255));
 	m_HpKAn = IMAGEMANAGER->addImage("HPKAN", "image/Player/HPKAN.bmp", 8, 8, 1, 1, true, RGB(255, 0, 255));
+	m_InvisibleImg = IMAGEMANAGER->addImage("Player_Invisible", "image/Player/Player_Invisible.bmp", 360, 33, 9, 1, true, RGB(255, 0, 255));
 
 	m_Number_1 = IMAGEMANAGER->addImage("Number", "image/Number.bmp", 70, 7, 10, 1, true, RGB(255, 0, 255));
 	m_Number_2 = IMAGEMANAGER->addImage("Number", "image/Number.bmp", 70, 7, 10, 1, true, RGB(255, 0, 255));
@@ -70,6 +71,7 @@ HRESULT Player::init()
 	m_isFalling = false;
 	m_isDead = false;
 	m_isCheck = false;
+	m_isInvisible = false;
 
 	m_isMovingMap = false;
 	m_isAfterLoad = false;
@@ -126,7 +128,7 @@ void Player::update()
 void Player::render(HDC hdc)
 {
 	//Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
-	Rectangle(hdc, m_AttackRc.left, m_AttackRc.top, m_AttackRc.right, m_AttackRc.bottom);
+	//Rectangle(hdc, m_AttackRc.left, m_AttackRc.top, m_AttackRc.right, m_AttackRc.bottom);
 	//Rectangle(hdc, m_AttackDownRc.left, m_AttackDownRc.top, m_AttackDownRc.right, m_AttackDownRc.bottom);
 
 	ShovelRender(hdc);
@@ -139,10 +141,10 @@ void Player::render(HDC hdc)
 
 	//SetTextColor(hdc, RGB(255, 255, 255));
 	//SetBkColor(hdc, RGB(255, 0, 255));
-	char str[64];
-	wsprintf(str, "%d", Hp);
-	//sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
-	TextOut(hdc, m_fX - 100, m_fY, str, strlen(str));
+	//char str[64];
+	//wsprintf(str, "%d", Hp);
+	////sprintf_s(str, "x : %f, y : %f", m_fX, m_fY);
+	//TextOut(hdc, m_fX - 100, m_fY, str, strlen(str));
 }
 
 void Player::KeyProcess()
@@ -174,7 +176,7 @@ void Player::KeyProcess()
 				m_State = P_MOVE;
 			}
 
-			if (m_isMovingMap == false)m_fX -= m_fSpeed;
+			if (m_isMovingMap == false) m_fX -= m_fSpeed;
 			m_isRight = false;
 		}
 	}
@@ -204,33 +206,12 @@ void Player::KeyProcess()
 			m_State = P_MOVE;
 		}
 	}
-	/*if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && m_isRight == true && m_isMovingMap) {
-		m_State = P_MOVE;
-	}
-	if (KEYMANAGER->isStayKeyDown(VK_LEFT) && m_isRight == false && m_isMovingMap) {
-		m_State = P_MOVE;
-	}*/
-	/*if (KEYMANAGER->isStayKeyDown(VK_UP) && m_isMovingMap && m_State == P_LADDERUP) {
-		m_State = P_LADDERUP;
-	}
-	else if (KEYMANAGER->isStayKeyDown(VK_DOWN) && m_isMovingMap && m_State == P_LADDERUP) {
-		m_State = P_LADDERUP;
-	}
-	else if (KEYMANAGER->isStayKeyDown(VK_DOWN) && m_isMovingMap && m_State == P_DOWNATTACK) {
-		m_State = P_DOWNATTACK;
-	}
-
-	else if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && m_isMovingMap && m_State == P_DOWNATTACK) {
-		m_State = P_DOWNATTACK;
-	}
-	else if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && m_isMovingMap && m_State == P_JUMP) {
-		m_State = P_JUMP;
-	}*/
 }
 
 void Player::Animation()
 {
 	if (m_isAppear) {
+		
 		m_AppearTime++;
 		m_State = P_APPEAR;
 		if (!SOUNDMANAGER->isPlaySound("플레이어등장")) {
@@ -242,6 +223,7 @@ void Player::Animation()
 			m_fY -= sinf(40) * 6.0f;
 		}
 		else if (m_AppearTime >= 110) {
+			m_isMovingMap = false;
 			m_isAppear = false;
 			m_AppearTime = 0;
 			SOUNDMANAGER->play("게임배경음", 0.9f);
@@ -368,6 +350,21 @@ void Player::Animation()
 		}
 	}
 
+	else if (m_isInvisible) {
+		m_State = P_INVISIBLE;
+		m_FrameCount++;
+		if (m_FrameCount % 13 == 0) {
+			m_CurrFrameX++;
+			m_InvisibleImg->setFrameX(m_CurrFrameX);
+
+			if (m_CurrFrameX >= 8) {
+				m_CurrFrameX = 0;
+				m_isInvisible = false;
+				m_invincibleTime = true;
+			}
+		}
+	}
+
 	if (m_isDamaged == true) {
 		m_State = P_DAMAGED;
 		m_DamagedTime++;
@@ -426,6 +423,10 @@ void Player::FireBallMove()
 				}
 			}
 		}
+	}
+	
+	if (m_EquipInvi == true) {
+		if (KEYMANAGER->isOnceKeyDown('V')) m_isInvisible = true;
 	}
 
 	for (v_IterBullet = v_Bullet.begin(); v_IterBullet != v_Bullet.end();) {
@@ -550,6 +551,10 @@ void Player::ShovelRender(HDC hdc)
 
 	else if (m_State == P_DEAD) {
 		if (m_isRight) m_DeathImg->frameRender(hdc, m_fX - 5, m_fY - 7, m_DEADCount, 0);
+	}
+
+	else if (m_State == P_INVISIBLE) {
+		m_InvisibleImg->frameRender(hdc, m_fX + 1, m_fY - 9, m_CurrFrameX, 0);
 	}
 
 	for (v_IterBullet = v_Bullet.begin(); v_IterBullet != v_Bullet.end(); v_IterBullet++) {

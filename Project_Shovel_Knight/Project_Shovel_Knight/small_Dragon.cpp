@@ -15,7 +15,7 @@ HRESULT small_Dragon::init(float x, float y, smallDG_State phase)
 	m_fSpeed = 1.0f;
 	m_nCurrFrameX_Move = 0;
 	m_nCurrFrameY_Move = 0;
-	m_nLife = 3;
+	m_nLife = 2;
 	m_nPower = 1;
 	m_nFrameCount_Move = 0;
 	m_nScalar = 1;
@@ -73,11 +73,11 @@ void small_Dragon::render(HDC hdc)
 	{
 		if (m_pSmallDG_State == smallDG_UPDOWN)
 		{
-			Rectangle(hdc, m_rcUpDownRange.left, m_rcUpDownRange.top, m_rcUpDownRange.right, m_rcUpDownRange.bottom);
+			//Rectangle(hdc, m_rcUpDownRange.left, m_rcUpDownRange.top, m_rcUpDownRange.right, m_rcUpDownRange.bottom);
 		}
 		if (m_pSmallDG_State == smallDG_STRAIGHT)
 		{
-			Rectangle(hdc, m_rcStraightRange.left, m_rcStraightRange.top, m_rcStraightRange.right, m_rcStraightRange.bottom);
+			//Rectangle(hdc, m_rcStraightRange.left, m_rcStraightRange.top, m_rcStraightRange.right, m_rcStraightRange.bottom);
 		}
 		if (!m_isDamage)
 		{
@@ -164,7 +164,7 @@ void small_Dragon::move()
 				m_fX -= m_fSpeed;
 				m_fY += 0;
 				m_rc = RectMakeCenter(m_fX + m_pImg_Move->getFrameWidth() / 2 * m_nScalar, m_fY + m_pImg_Move->getFrameHeight() / 2 * m_nScalar,
-					m_pImg_Move->getFrameWidth() * m_nScalar, m_pImg_Move->getFrameHeight() * m_nScalar);
+					20, 20);
 			}
 		}
 		if (m_pSmallDG_State == smallDG_UPDOWN)
@@ -190,7 +190,7 @@ void small_Dragon::move()
 				m_fX -= 0;
 				m_fY -= m_fSpeed;
 				m_rc = RectMakeCenter(m_fX + m_pImg_Move->getFrameWidth() / 2 * m_nScalar, m_fY + m_pImg_Move->getFrameHeight() / 2 * m_nScalar,
-					m_pImg_Move->getFrameWidth() * m_nScalar, m_pImg_Move->getFrameHeight() * m_nScalar);
+					20, 20);
 				if (m_isRight)
 				{
 					m_nCurrFrameY_Move = 0;
@@ -205,7 +205,7 @@ void small_Dragon::move()
 				m_fX -= 0;
 				m_fY += m_fSpeed;
 				m_rc = RectMakeCenter(m_fX + m_pImg_Move->getFrameWidth() / 2 * m_nScalar, m_fY + m_pImg_Move->getFrameHeight() / 2 * m_nScalar,
-					m_pImg_Move->getFrameWidth() * m_nScalar, m_pImg_Move->getFrameHeight() * m_nScalar);
+					20, 20);
 				if (m_isRight)
 				{
 					m_nCurrFrameY_Move = 0;
@@ -243,14 +243,14 @@ void small_Dragon::move()
 				m_fX = m_destX + cosf(m_fRightAngle) * 25.0f;
 				m_fY = m_destY - sinf(m_fRightAngle) * 10.0f;
 				m_rc = RectMakeCenter(m_fX + m_pImg_Move->getFrameWidth() / 2 * m_nScalar, m_fY + m_pImg_Move->getFrameHeight() / 2 * m_nScalar,
-					m_pImg_Move->getFrameWidth() * m_nScalar, m_pImg_Move->getFrameHeight() * m_nScalar);
+					20, 20);
 			}
 			if (!m_isRight)
 			{
 				m_fX = m_destX + cosf(m_fLeftAngle) * 25.0f;
 				m_fY = m_destY - sinf(m_fLeftAngle) * 10.0f;
 				m_rc = RectMakeCenter(m_fX + m_pImg_Move->getFrameWidth() / 2 * m_nScalar, m_fY + m_pImg_Move->getFrameHeight() / 2 * m_nScalar,
-					m_pImg_Move->getFrameWidth() * m_nScalar, m_pImg_Move->getFrameHeight() * m_nScalar);
+					20, 20);
 			}
 		}
 		

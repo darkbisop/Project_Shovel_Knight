@@ -54,6 +54,13 @@ HRESULT MapManager::init(void)
 	m_ScreenRVS = true;
 	m_ScreenRVSFrame = 10;
 
+	m_CastleBG_X = 0;
+	m_CastleBG_Y = 634;
+	m_BG_2_X = 0;
+	m_BG_2_y = 648;
+	m_BG_X = 0;
+	m_BG_y = 666;
+
 	for (vIterSaveRC = vSaveRect.begin(); vIterSaveRC != vSaveRect.end(); vIterSaveRC++) {
 		vIterSaveRC->m_CheckSaveFrame = 0;
 	}
@@ -95,22 +102,25 @@ void MapManager::render(HDC hdc)
 {
 
 	IMAGEMANAGER->findImage("SkyBG")->render(_empty->getMemDC(), (int)m_Camera.x , (int)m_Camera.y);
-	if (CurrMapNum == 0 || CurrMapNum == 1) {
-		BackGround_Castle->loopRender(_empty->getMemDC(), &RectMake(0, 634, 2500, 176), -(int)m_Camera.x * 0.8f, 0);
+	
+	if (CurrMapNum == 0 || CurrMapNum == 1 || CurrMapNum == 3 || CurrMapNum == 4 || CurrMapNum == 16 || 
+		CurrMapNum == 17 || CurrMapNum == 18 || CurrMapNum == 19 ||CurrMapNum == 21 || CurrMapNum == 22 || CurrMapNum == 23) {
+		BackGround_Castle->loopRender(_empty->getMemDC(), &RectMake(m_CastleBG_X, m_CastleBG_Y, 2500, 176), -(int)m_Camera.x * 0.8f, 0);
 		Back_3_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 714, 2500, 108), -(int)m_Camera.x * 0.8f, 0);
-		Back_2_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 648, 2500, 176), -(int)m_Camera.x * 0.5f, 0);
-		Back_Ground->loopRender(_empty->getMemDC(), &RectMake(0, 666, 2500, 199), -(int)m_Camera.x * 0.3f, 0);
+		Back_2_Ground->loopRender(_empty->getMemDC(), &RectMake(m_BG_2_X, m_BG_2_y, 2500, 176), -(int)m_Camera.x * 0.5f, 0);
+		Back_Ground->loopRender(_empty->getMemDC(), &RectMake(m_BG_X, m_BG_y, 2500, 199), -(int)m_Camera.x * 0.3f, 0);
 	}
+	
 	
 	if (MapOn[11] == true) IMAGEMANAGER->findImage("ShopBG")->render(_empty->getMemDC(), 0, 12);
 
-	Rectangle(_empty->getMemDC(), CheckChangeMapRect[15].left, CheckChangeMapRect[15].top, CheckChangeMapRect[15].right, CheckChangeMapRect[15].bottom);
+	//Rectangle(_empty->getMemDC(), CheckChangeMapRect[15].left, CheckChangeMapRect[15].top, CheckChangeMapRect[15].right, CheckChangeMapRect[15].bottom);
 
 	CurrMap();
 
-	for (vIterLDRRC = vLadderRect.begin(); vIterLDRRC != vLadderRect.end(); vIterLDRRC++) {
+	/*for (vIterLDRRC = vLadderRect.begin(); vIterLDRRC != vLadderRect.end(); vIterLDRRC++) {
 		Rectangle(_empty->getMemDC(), vIterLDRRC->_rc.left, vIterLDRRC->_rc.top, vIterLDRRC->_rc.right, vIterLDRRC->_rc.bottom);
-	}
+	}*/
 
 	m_pObjectMgr->render(_empty->getMemDC());
 	m_pEnemyMgr->render(_empty->getMemDC());
@@ -124,7 +134,7 @@ void MapManager::render(HDC hdc)
 	if (m_ScreenRVS) IMAGEMANAGER->findImage("ScreenClose")->frameRender(_empty->getMemDC(), 0, 0, m_ScreenRVSFrame, 0);
 
 	for (vIterSaveRC = vSaveRect.begin(); vIterSaveRC != vSaveRect.end(); vIterSaveRC++) {
-		Rectangle(_empty->getMemDC(), vIterSaveRC->_rc.left, vIterSaveRC->_rc.top, vIterSaveRC->_rc.right, vIterSaveRC->_rc.bottom);
+		//Rectangle(_empty->getMemDC(), vIterSaveRC->_rc.left, vIterSaveRC->_rc.top, vIterSaveRC->_rc.right, vIterSaveRC->_rc.bottom);
 		if (vIterSaveRC->SaveCheck == true) IMAGEMANAGER->findImage("Check")->frameRender(_empty->getMemDC(), vIterSaveRC->_rc.left - 7, vIterSaveRC->_rc.top - 1, vIterSaveRC->m_CheckSaveFrame, 0);
 	}
 
@@ -149,11 +159,11 @@ void MapManager::render(HDC hdc)
 
 	//TIMEMANAGER->render(hdc);
 	
-	char str[64];
+	//char str[64];
 
-	wsprintf(str, "x : %d", ScreenSFXREV2);
-	//sprintf_s(str, "x : %f, y : %f", PLAYER->getPlayerX(), PLAYER->getPlayerY());
-		TextOut(hdc, PLAYER->getPlayerX(), PLAYER->getPlayerY() - 100, str, strlen(str));
+	//wsprintf(str, "x : %d", ScreenSFXREV2);
+	////sprintf_s(str, "x : %f, y : %f", PLAYER->getPlayerX(), PLAYER->getPlayerY());
+	//	TextOut(hdc, PLAYER->getPlayerX(), PLAYER->getPlayerY() - 100, str, strlen(str));
 	
 }
 
@@ -263,9 +273,12 @@ void MapManager::CollisionCheck_ChangeMapRect()
 	if (CurrMapNum == 100) {
 		RECT rc;
 		if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &CheckChangeMapRect[24])) {
+			
 			ScreenSFXOn = true;
+			PLAYER->setIsMovingMap(true);
 
 			if (ScreenSFXOn && m_CurrFrameX == 8) {
+				PLAYER->setIsMovingMap(false);
 				SOUNDMANAGER->stop("¸¶À»");
 				MapOn[0] = true;
 				MapOn[11] == false;
@@ -602,6 +615,37 @@ void MapManager::CollisionCheck_ChangeMapRect()
 
 void MapManager::MovingMap()
 {
+
+	if (CurrMapNum == 0 || CurrMapNum == 1) {
+		m_CastleBG_X = 0;
+		m_CastleBG_Y = 634;
+		m_BG_2_X = 0;
+		m_BG_2_y = 648;
+		m_BG_X = 0;
+		m_BG_y = 666;
+	}
+	else if (CurrMapNum == 3 || CurrMapNum == 4) {
+		m_BG_2_X = 2000;
+		m_BG_2_y = 480;
+		m_BG_X = 2000;
+		m_BG_y = 458;
+	}
+
+	else if (CurrMapNum == 16 || CurrMapNum == 17 || CurrMapNum == 18 || CurrMapNum == 19) {
+		m_BG_2_X = 4000;
+		m_BG_2_y = 510;
+		m_BG_X = 4000;
+		m_BG_y = 488;
+	}
+
+	else if (CurrMapNum == 21 || CurrMapNum == 22 || CurrMapNum == 23) {
+		m_CastleBG_X = 5600;
+		m_CastleBG_Y = 60;
+		m_BG_2_X = 5800;
+		m_BG_2_y = 60;
+		m_BG_X = 5800;
+		m_BG_y = 40;
+	}
 	// ##### 0 --> 1  #####
 	if (MovingCamera[0] == true && CurrMapNum == 0) {
 		if (m_Camera.x < 1600) {
