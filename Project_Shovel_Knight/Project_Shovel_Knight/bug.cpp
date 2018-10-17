@@ -38,6 +38,7 @@ HRESULT bug::init(float x, float y)
 	m_tempRc = RectMakeCenter(WINSIZEX / 2, 330, m_fRange, 20);
 
 	EFFECTMANAGER->addEffect("bug_effect", "image/effect/enemy_effect.bmp", 120, 16, 24, 16, 10, 10);
+	EFFECTMANAGER->addEffect("Object_collideEffect", "image/Player/Object_collideEffect.bmp", 168, 10, 42, 10, 10, 10);
 
 	return S_OK;
 }

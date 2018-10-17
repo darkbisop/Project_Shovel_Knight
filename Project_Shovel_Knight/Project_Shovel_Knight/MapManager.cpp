@@ -639,11 +639,11 @@ void MapManager::MovingMap()
 	}
 
 	else if (CurrMapNum == 21 || CurrMapNum == 22 || CurrMapNum == 23) {
-		m_CastleBG_X = 5600;
+		m_CastleBG_X = 5100;
 		m_CastleBG_Y = 60;
-		m_BG_2_X = 5800;
+		m_BG_2_X = 5600;
 		m_BG_2_y = 60;
-		m_BG_X = 5800;
+		m_BG_X = 5600;
 		m_BG_y = 40;
 	}
 	// ##### 0 --> 1  #####

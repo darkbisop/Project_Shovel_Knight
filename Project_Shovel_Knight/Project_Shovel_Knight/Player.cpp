@@ -662,6 +662,7 @@ void Player::DownATKCollision(RECT x)
 {
 	RECT rc;
 	if (IntersectRect(&rc, &m_AttackDownRc, &x)) {
+		EFFECTMANAGER->play("Object_collideEffect", m_AttackDownRc.left - 13, m_AttackDownRc.top);
 		if (m_AttackDownRc.bottom > x.top - 20) {
 			gravity = 0;
 			jumpSpeed += 0.1f;
@@ -676,6 +677,7 @@ void Player::DownATKtoOBJCollision(RECT x)
 {
 	RECT rc;
 	if (IntersectRect(&rc, &m_AttackDownRc, &x)) {
+		EFFECTMANAGER->play("Object_collideEffect", m_AttackDownRc.left - 13, m_AttackDownRc.top);
 		if (m_AttackDownRc.bottom > x.top - 20) {
 			gravity = 0;
 			jumpSpeed = 0;
