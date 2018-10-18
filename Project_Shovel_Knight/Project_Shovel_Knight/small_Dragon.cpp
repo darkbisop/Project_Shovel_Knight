@@ -83,13 +83,13 @@ void small_Dragon::render(HDC hdc)
 		{
 			if (m_pSmallDG_State == smallDG_CIRCLE)
 			{
-				Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
+				//Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
 				m_pImg_Move->frameRender(hdc, m_fX, m_fY,
 					m_nCurrFrameX_Move, m_nCurrFrameY_Move);
 			}
 			if (m_pSmallDG_State == smallDG_STRAIGHT)
 			{
-				Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
+				//Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
 				if (m_isRight)
 				{
 					m_pImg_Move->frameRender(hdc, m_fX, m_fY,
@@ -103,7 +103,7 @@ void small_Dragon::render(HDC hdc)
 			}
 			if (m_pSmallDG_State == smallDG_UPDOWN)
 			{
-				Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
+				//Rectangle(hdc, m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
 				if (m_isRight)
 				{
 					m_pImg_Move->frameRender(hdc, m_fX, m_fY,
