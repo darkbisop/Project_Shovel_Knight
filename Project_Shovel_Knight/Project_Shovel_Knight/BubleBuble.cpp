@@ -58,7 +58,7 @@ void BubleBuble::update()
 void BubleBuble::render(HDC hdc)
 {
 	if (_isAlive) {
-		Rectangle(hdc, m_rangeRC.left, m_rangeRC.top, m_rangeRC.right, m_rangeRC.bottom);
+		//Rectangle(hdc, m_rangeRC.left, m_rangeRC.top, m_rangeRC.right, m_rangeRC.bottom);
 		m_img->frameRender(hdc, m_fX, m_fY, m_nCurrFrameX, 0);
 	}
 }

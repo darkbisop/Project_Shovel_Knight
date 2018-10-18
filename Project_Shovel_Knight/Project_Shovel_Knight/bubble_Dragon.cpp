@@ -96,8 +96,8 @@ void bubble_Dragon::render(HDC hdc)
 {
 	if (m_isAlive)
 	{
-		Rectangle(hdc, m_rc_Head.left, m_rc_Head.top, m_rc_Head.right, m_rc_Head.bottom);
-		Rectangle(hdc, m_rc_Body.left, m_rc_Body.top, m_rc_Body.right, m_rc_Body.bottom);
+		//Rectangle(hdc, m_rc_Head.left, m_rc_Head.top, m_rc_Head.right, m_rc_Head.bottom);
+		//Rectangle(hdc, m_rc_Body.left, m_rc_Body.top, m_rc_Body.right, m_rc_Body.bottom);
 		if (bubbleDG_state == BUBBLEDG_IDLE)
 		{
 			m_pImg_Idle->frameRender(hdc, m_fX, m_fY, m_nCurrFrameX_Idle, m_nCurrFrameY_Idle);
