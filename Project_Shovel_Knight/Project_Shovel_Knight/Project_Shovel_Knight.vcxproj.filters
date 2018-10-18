@@ -273,6 +273,9 @@
     <ClInclude Include="TestScene.h">
       <Filter>메인게임\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="endingScene.h">
+      <Filter>메인게임\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -441,6 +444,9 @@
       <Filter>메인게임\오브젝트\오브젝트들</Filter>
     </ClCompile>
     <ClCompile Include="TestScene.cpp">
+      <Filter>메인게임\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="endingScene.cpp">
       <Filter>메인게임\Scene</Filter>
     </ClCompile>
   </ItemGroup>

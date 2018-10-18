@@ -139,7 +139,7 @@ void enemyManager::setBlackKnight()
 	if (MAPMANAGER->getMapOn(23)) {
 		black_Knight* pBlack;
 		pBlack = new black_Knight;
-		pBlack->init(6680, 150);
+		pBlack->init(6680, 166);
 		m_VecBlack.push_back(pBlack);
 	}
 }

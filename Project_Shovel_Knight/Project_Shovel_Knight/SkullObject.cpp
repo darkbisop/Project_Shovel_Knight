@@ -82,7 +82,7 @@ void SkullObject::update()
 
 void SkullObject::render(HDC hdc)
 {
-	Rectangle(hdc, _rc.left, _rc.top, _rc.right, _rc.bottom);
+	//Rectangle(hdc, _rc.left, _rc.top, _rc.right, _rc.bottom);
 	m_Img->render(hdc, m_fX, m_fY);
 }
 

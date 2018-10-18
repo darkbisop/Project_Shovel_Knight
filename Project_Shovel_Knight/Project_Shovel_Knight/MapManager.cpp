@@ -616,6 +616,10 @@ void MapManager::CollisionCheck_ChangeMapRect()
 
 void MapManager::MovingMap()
 {
+	if (KEYMANAGER->isOnceKeyDown('3')) {
+		SOUNDMANAGER->stop("게임배경음");
+		SCENEMANAGER->changeScene("endingScene");
+	}
 
 	if (CurrMapNum == 0 || CurrMapNum == 1) {
 		m_CastleBG_X = 0;
@@ -1749,6 +1753,7 @@ void MapManager::CollisionEnemy()
 		RECT rc;
 		if (PLAYER->getInvincibleTime() == false) {
 			if (IntersectRect(&rc, &PLAYER->getPlayerRect(), &(*iter)->getRect())) {
+				PLAYER->setHp(PLAYER->getHP() - 1);
 				PLAYER->setIsDamaged(true);
 				PLAYER->setInvincibleTime(true);
 			}

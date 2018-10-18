@@ -37,6 +37,7 @@ private:
 
 
 	// 보스 체력 UI
+	image*	m_pImg_UI;
 	image*	m_pImg_Hp_1;
 	image*	m_pImg_Hp_2;
 	image*	m_pImg_Hp_3;
@@ -53,11 +54,13 @@ private:
 
 	RECT	m_rcRange;
 	RECT	m_rcTemp;
-
+	RECT	m_rcWall;
 	RECT	rcAtk;
 
 	bool	m_isAtk;
 	bool	m_isJump;
+	bool	m_isbackStep;
+	bool	m_isDamageJump;
 	bool	m_isLeft;
 
 	float	m_fBackStepSpeed;

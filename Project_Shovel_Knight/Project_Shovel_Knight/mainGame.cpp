@@ -3,6 +3,7 @@
 #include "playScene.h"
 #include "titleScene.h"
 #include "TestScene.h"
+#include "endingScene.h"
 
 void mainGame::setBackBuffer()
 {
@@ -31,6 +32,9 @@ HRESULT mainGame::init()
 
 	m_PlayScene = new PlayScene;
 	SCENEMANAGER->addScene("PlayScene", m_PlayScene);
+
+	m_endingScene = new endingScene;
+	SCENEMANAGER->addScene("endingScene", m_endingScene);
 
 	SCENEMANAGER->changeScene("TestScene");
 

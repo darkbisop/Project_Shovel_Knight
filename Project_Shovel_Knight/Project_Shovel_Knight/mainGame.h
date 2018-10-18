@@ -3,6 +3,7 @@
 class PlayScene;
 class titleScene;
 class TestScene;
+class endingScene;
 
 class mainGame
 {
@@ -19,6 +20,7 @@ private:
 	PlayScene*		m_PlayScene;
 	titleScene*		m_titleScene;
 	TestScene*		m_TestScene;
+	endingScene*	m_endingScene;
 
 public:
 	HRESULT init();
